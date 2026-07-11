@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0e14" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <title>Пульс — интервальный таймер</title>
+    <style>
+      :root {
+        --bg: #090b10;
+        --panel: rgba(21, 25, 35, 0.88);
+        --panel-2: #171c27;
+        --line: rgba(255, 255, 255, 0.1);
+        --muted: #929aac;
+        --text: #f6f7fb;
+        --green: #6ef0a8;
+        --orange: #ffb454;
+        --blue: #90c3ff;
+        --red: #ff6e79;
+        --accent: #6ef0a8;
+        --accent-rgb: 110, 240, 168;
+        --accent-2: #90c3ff;
+        --accent-2-rgb: 144, 195, 255;
+        --radius: 26px;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; background: var(--bg); }
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(circle at 10% -20%, rgba(var(--accent-2-rgb), 0.3), transparent 38rem),
+          radial-gradient(circle at 110% 30%, rgba(var(--accent-rgb), 0.23), transparent 32rem),
+          var(--bg);
+      }
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .app { width: min(1200px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 48px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 25px; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .brand-mark { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; color: #07120d; background: var(--accent); font-weight: 900; font-size: 21px; box-shadow: 0 8px 28px rgba(var(--accent-rgb), .30); transition: .35s ease; }
+      .brand h1 { font-size: 18px; margin: 0; letter-spacing: .02em; }
+      .brand p { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
+      .top-actions { display: flex; gap: 9px; }
+      .icon-button, .small-button { border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--text); border-radius: 12px; min-height: 40px; padding: 0 13px; transition: .18s ease; }
+      .icon-button:hover, .small-button:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.09); }
+      .icon-button.is-active { border-color: rgba(var(--accent-rgb), .7); color: var(--accent); background: rgba(var(--accent-rgb), .12); box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .09); }
+      .icon-button:disabled { cursor: not-allowed; opacity: .36; }
+      .install-button { display: none; }
+      .mobile-nav { display: none; }
+      .workspace { display: grid; grid-template-columns: minmax(0, 1.24fr) minmax(340px, .76fr); gap: 20px; }
+      .card { border: 1px solid var(--line); background: var(--panel); box-shadow: 0 18px 70px rgba(0,0,0,.24); backdrop-filter: blur(16px); border-radius: var(--radius); }
+
+      .timer-card { min-height: 625px; padding: 26px; position: relative; overflow: hidden; display: flex; flex-direction: column; background: linear-gradient(145deg, rgba(var(--accent-rgb), .17), transparent 46%), var(--panel); transition: background .5s ease; }
+      .timer-card::after { content: ""; position: absolute; width: 310px; height: 310px; right: -125px; bottom: -135px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--accent-rgb), .25), transparent 66%); pointer-events: none; z-index: 0; transition: background .5s ease; }
+      .timer-card > * { position: relative; z-index: 1; }
+      .timer-heading, .section-heading, .estimate { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+      .eyebrow { color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+      .timer-heading h2 { font-size: 20px; margin: 5px 0 0; letter-spacing: -.02em; }
+      .sound-indicator { border: 0; padding: 4px 0; font: inherit; font-size: 12px; color: var(--muted); display: flex; gap: 7px; align-items: center; background: transparent; text-align: right; }
+      .sound-indicator:hover { color: var(--text); }
+      .sound-dot { width: 8px; height: 8px; background: var(--accent); box-shadow: 0 0 12px var(--accent); border-radius: 50%; }
+      .sport-strip { display: flex; align-items: center; gap: 10px; min-height: 58px; margin: 16px 0 0; padding: 9px 12px; border-radius: 17px; border: 1px solid rgba(var(--accent-rgb), .34); background: linear-gradient(105deg, rgba(var(--accent-rgb), .23), rgba(var(--accent-2-rgb), .12)); transition: .45s ease; }
+      .sport-icon { width: 38px; height: 38px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 12px; background: rgba(5, 9, 14, .32); font-size: 22px; }
+      .sport-copy { min-width: 0; }
+      .sport-copy small { display: block; color: rgba(255,255,255,.68); font-size: 9px; font-weight: 800; letter-spacing: .13em; }
+      .sport-copy strong { display: block; margin-top: 2px; font-size: 14px; letter-spacing: -.01em; }
+      .sport-motto { margin-left: auto; max-width: 132px; color: rgba(255,255,255,.76); font-size: 11px; text-align: right; line-height: 1.25; }
+      .gesture-panel { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 8px; border-radius: 15px; border: 1px solid rgba(var(--accent-rgb), .32); background: rgba(5, 9, 14, .25); }
+      .gesture-panel[hidden] { display: none; }
+      .gesture-video { width: 68px; height: 48px; object-fit: cover; border-radius: 10px; transform: scaleX(-1); background: #080b10; }
+      .gesture-panel strong { display: block; font-size: 11px; }
+      .gesture-panel span { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; line-height: 1.3; }
+      .circle-wrap { width: min(100%, 390px); aspect-ratio: 1; margin: 14px auto 0; position: relative; display: grid; place-items: center; }
+      .ring { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+      .ring-bg, .ring-progress { fill: none; stroke-width: 7; }
+      .ring-bg { stroke: rgba(255,255,255,.08); }
+      .ring-progress { stroke: var(--accent); stroke-linecap: round; stroke-dasharray: 879.65; stroke-dashoffset: 0; transition: stroke-dashoffset .25s linear, stroke .25s, filter .25s; filter: drop-shadow(0 0 7px rgba(var(--accent-rgb), .58)); }
+      .timer-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+      .phase-chip { border: 1px solid rgba(var(--accent-rgb),.32); background: rgba(var(--accent-rgb),.1); color: var(--accent); padding: 7px 12px; border-radius: 99px; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .time { font-variant-numeric: tabular-nums; font-weight: 800; letter-spacing: -.075em; line-height: .9; font-size: clamp(66px, 10vw, 104px); margin: 16px 0 10px; }
+      .round { font-size: 14px; color: #d3d8e4; }
+      .next { color: var(--muted); font-size: 13px; margin-top: 7px; }
+      .progress-label { display: flex; justify-content: space-between; align-items: center; margin: 7px 3px 11px; color: var(--muted); font-size: 12px; }
+      .round-progress { display: flex; align-items: center; gap: 7px; margin-bottom: 22px; }
+      .round-dot { height: 7px; flex: 1; background: rgba(255,255,255,.12); border-radius: 99px; overflow: hidden; transition: .2s ease; }
+      .round-dot.done { background: var(--accent); }
+      .round-dot.current { background: linear-gradient(90deg, var(--accent) 0 55%, rgba(var(--accent-rgb),.22) 55%); }
+      .timer-actions { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1.35fr 1fr; gap: 10px; margin-top: auto; }
+      .action { min-height: 54px; border-radius: 15px; border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,.04); font-weight: 750; transition: transform .15s, background .15s, border .15s; }
+      .action:hover { transform: translateY(-1px); background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.24); }
+      .action.primary { background: var(--accent); color: #07120d; border-color: var(--accent); box-shadow: 0 10px 26px rgba(var(--accent-rgb), .25); }
+      .action.primary:hover { filter: brightness(1.1); }
+      .timer-footnote { margin: 16px 2px 0; color: var(--muted); font-size: 12px; text-align: center; }
+
+      .setup-card { padding: 24px; }
+      .section-heading { margin-bottom: 17px; }
+      .section-heading h2 { margin: 3px 0 0; font-size: 20px; letter-spacing: -.02em; }
+      .section-heading .small-button { min-height: 34px; font-size: 12px; }
+      .field { margin-bottom: 14px; }
+      .field label { display: block; color: var(--muted); font-size: 12px; font-weight: 700; margin: 0 0 7px 2px; }
+      .text-input { width: 100%; color: var(--text); border-radius: 13px; background: #10141e; border: 1px solid var(--line); padding: 12px 13px; outline: none; }
+      .text-input:focus { border-color: rgba(144,195,255,.75); box-shadow: 0 0 0 3px rgba(144,195,255,.1); }
+      .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .metric { border: 1px solid var(--line); padding: 11px 12px; border-radius: 15px; background: rgba(255,255,255,.025); }
+      .metric.wide { grid-column: span 2; }
+      .metric-title { display: flex; justify-content: space-between; gap: 7px; align-items: center; color: #d8dce5; font-size: 12px; font-weight: 700; }
+      .metric-title span:last-child { color: var(--muted); font-size: 10px; }
+      .stepper { display: grid; grid-template-columns: 31px 1fr 31px; gap: 6px; margin-top: 9px; }
+      .stepper button { height: 31px; border: 1px solid var(--line); background: #202634; color: #f5f6fa; border-radius: 9px; font-size: 17px; line-height: 1; }
+      .stepper button:hover { background: #2b3344; }
+      .stepper input { width: 100%; min-width: 0; appearance: textfield; color: var(--text); border: 0; background: transparent; text-align: center; font-variant-numeric: tabular-nums; font-size: 17px; font-weight: 800; outline: none; }
+      .stepper input::-webkit-inner-spin-button, .stepper input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+      .round-editor { border-top: 1px solid var(--line); margin-top: 17px; padding-top: 16px; }
+      .plan-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+      .plan-heading h3 { font-size: 14px; margin: 2px 0 0; }
+      .plan-heading p { margin: 5px 0 0; max-width: 230px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+      .plan-heading .small-button { flex: 0 0 auto; min-height: 32px; padding: 0 9px; font-size: 11px; }
+      .round-plan { display: grid; gap: 7px; margin-top: 12px; }
+      .plan-row { display: grid; grid-template-columns: minmax(74px, 1.25fr) minmax(68px, .8fr) minmax(68px, .8fr); gap: 7px; align-items: center; padding: 9px 10px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.025); }
+      .plan-name { min-width: 0; }
+      .plan-name strong { display: block; font-size: 12px; }
+      .plan-name span { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .plan-field { display: grid; grid-template-columns: 1fr auto; align-items: center; min-width: 0; padding: 8px 8px 8px 10px; border-radius: 10px; background: #10141e; border: 1px solid rgba(255,255,255,.08); }
+      .plan-field span { color: var(--muted); font-size: 10px; }
+      .plan-field input { min-width: 0; width: 100%; appearance: textfield; color: var(--text); border: 0; outline: 0; background: transparent; text-align: center; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+      .plan-field input::-webkit-inner-spin-button, .plan-field input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+      .plan-finish { padding: 8px; text-align: center; color: var(--muted); font-size: 11px; }
+      .advanced { border-top: 1px solid var(--line); margin-top: 17px; padding-top: 16px; }
+      .advanced-title { font-size: 12px; font-weight: 800; color: #dce1ea; letter-spacing: .02em; margin-bottom: 10px; }
+      .estimate { padding: 11px 12px; background: rgba(144,195,255,.08); border: 1px solid rgba(144,195,255,.15); color: var(--blue); border-radius: 13px; font-size: 12px; }
+      .estimate strong { color: #d8e9ff; font-size: 14px; font-variant-numeric: tabular-nums; }
+      .save-button { margin-top: 14px; width: 100%; min-height: 44px; border: 1px solid rgba(144,195,255,.32); color: var(--blue); background: rgba(144,195,255,.08); border-radius: 13px; font-weight: 800; }
+      .save-button:hover { background: rgba(144,195,255,.16); }
+      .sound-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 11px; }
+      .sound-option { min-height: 68px; padding: 10px; text-align: left; color: var(--text); background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 13px; transition: .18s ease; }
+      .sound-option:hover, .sound-option.active { transform: translateY(-1px); background: rgba(var(--accent-rgb), .11); border-color: rgba(var(--accent-rgb), .58); }
+      .sound-option span { display: block; font-size: 16px; margin-bottom: 4px; }
+      .sound-option strong { display: block; font-size: 11px; }
+      .sound-option small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; line-height: 1.2; }
+
+      .presets { margin-top: 20px; padding: 23px; }
+      .presets h2, .history h2 { margin: 4px 0 0; font-size: 19px; letter-spacing: -.02em; }
+      .preset-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; margin-top: 17px; }
+      .preset { text-align: left; min-height: 78px; padding: 11px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.025); color: var(--text); transition: .15s; }
+      .preset:hover, .preset.active { transform: translateY(-1px); background: rgba(var(--accent-rgb),.11); border-color: rgba(var(--accent-rgb),.52); }
+      .preset .emoji { font-size: 17px; margin-bottom: 6px; display: block; }
+      .preset strong { display: block; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .preset small { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; }
+
+      .history { margin-top: 20px; padding: 23px; }
+      .history-head { display: flex; align-items: center; justify-content: space-between; }
+      .history-empty { color: var(--muted); font-size: 13px; margin: 17px 0 2px; }
+      .history-list { display: grid; gap: 8px; margin-top: 16px; }
+      .history-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 13px; border-radius: 13px; background: rgba(255,255,255,.035); }
+      .history-item strong { display: block; font-size: 13px; }
+      .history-item span { color: var(--muted); font-size: 11px; margin-top: 3px; display: block; }
+      .history-item time { color: var(--accent); font-size: 12px; font-weight: 800; white-space: nowrap; }
+      .toast { position: fixed; left: 50%; bottom: 23px; transform: translate(-50%, 90px); background: #edfdf4; color: #0b3320; border-radius: 99px; padding: 11px 15px; font-size: 13px; font-weight: 750; box-shadow: 0 12px 34px rgba(0,0,0,.3); transition: .22s ease; z-index: 4; }
+      .toast.show { transform: translate(-50%, 0); }
+      .sound-dialog { width: min(100% - 28px, 500px); padding: 0; color: var(--text); border: 1px solid rgba(255,255,255,.14); border-radius: 25px; background: #141925; box-shadow: 0 26px 90px rgba(0,0,0,.55); }
+      .sound-dialog::backdrop { background: rgba(0,0,0,.58); backdrop-filter: blur(4px); }
+      .sound-dialog-card { padding: 22px; }
+      .sound-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+      .sound-dialog h2 { margin: 3px 0 0; font-size: 20px; }
+      .sound-dialog p { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
+      .dialog-close { display: grid; width: 34px; height: 34px; place-items: center; flex: 0 0 auto; color: var(--muted); border: 1px solid var(--line); border-radius: 11px; background: rgba(255,255,255,.04); font-size: 18px; }
+      .dialog-close:hover { color: var(--text); background: rgba(255,255,255,.1); }
+      .sound-dialog .sound-options { margin-top: 17px; }
+      .sound-preview { width: 100%; min-height: 49px; margin-top: 12px; color: #07120d; border: 0; border-radius: 14px; background: var(--accent); font-weight: 850; }
+      .flash { animation: flash .45s ease-out; }
+      @keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),.52); } 100% { box-shadow: 0 0 0 22px rgba(var(--accent-rgb),0); } }
+      .muted-button { color: #6e7788; }
+
+      @media (max-width: 850px) {
+        .workspace { grid-template-columns: 1fr; }
+        .timer-card { min-height: 560px; }
+        .preset-grid { grid-template-columns: repeat(5, 1fr); }
+      }
+      @media (max-width: 580px) {
+        body { padding-bottom: env(safe-area-inset-bottom); }
+        .app { width: min(100% - 20px, 550px); padding: max(12px, env(safe-area-inset-top)) 0 calc(25px + env(safe-area-inset-bottom)); }
+        .topbar { position: sticky; z-index: 3; top: 0; margin: 0 -10px 10px; padding: 8px 10px; background: rgba(9,11,16,.84); backdrop-filter: blur(18px); }
+        .brand-mark { width: 36px; height: 36px; border-radius: 12px; font-size: 18px; }
+        .brand p { display: none; }
+        .top-actions { gap: 6px; }
+        .icon-button { min-width: 40px; min-height: 40px; padding: 0 9px; }
+        .icon-button span { display: none; }
+        .top-actions #fullscreenButton { display: none; }
+        .install-button { display: inline-flex; align-items: center; justify-content: center; }
+        .mobile-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 10px; }
+        .mobile-nav a { min-height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 11px; color: #cfd5e1; background: rgba(255,255,255,.035); text-decoration: none; font-size: 11px; font-weight: 800; }
+        .timer-card, .setup-card, .presets, .history { padding: 18px; border-radius: 21px; }
+        .timer-card { min-height: calc(100svh - 123px); }
+        .sport-strip { min-height: 53px; margin-top: 11px; padding: 8px 10px; }
+        .sport-motto { max-width: 112px; font-size: 10px; }
+        .gesture-panel { margin-top: 8px; }
+        .circle-wrap { width: min(100%, 340px); }
+        .timer-actions { padding-bottom: 2px; }
+        .action { min-height: 58px; font-size: 15px; }
+        .timer-footnote { margin-bottom: 2px; }
+        .preset-grid { grid-template-columns: repeat(2, 1fr); }
+        .preset { min-height: 65px; }
+        .preset .emoji { display: inline; margin-right: 5px; }
+        .preset strong { display: inline; }
+        .preset small { margin-top: 5px; }
+        .plan-row { grid-template-columns: 1.18fr .9fr .9fr; padding: 8px; gap: 5px; }
+        .plan-field { padding-left: 6px; padding-right: 5px; }
+        .sound-option { min-height: 62px; }
+        .sound-dialog { width: 100%; max-width: none; margin: auto 0 0; border-radius: 24px 24px 0 0; }
+        .sound-dialog-card { padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app" id="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">P</div>
+          <div>
+            <h1>Пульс</h1>
+            <p>Интервальный таймер для тренировок</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="soundToggle" aria-label="Включить или выключить звук">🔊 <span>Звук</span></button>
+          <button class="icon-button" id="soundTestButton" aria-label="Открыть выбор звука">🔔 <span>Звуки</span></button>
+          <button class="icon-button" id="gestureToggle" aria-label="Включить бесконтактное управление жестом перед камерой">🖐 <span>Жест</span></button>
+          <button class="icon-button install-button" id="installButton" aria-label="Установить приложение на телефон">⇩ <span>Установить</span></button>
+          <button class="icon-button" id="fullscreenButton" aria-label="Открыть полноэкранный режим">⛶ <span>Фокус</span></button>
+        </div>
+      </header>
+
+      <nav class="mobile-nav" aria-label="Разделы приложения">
+        <a href="#timerCard">Таймер</a>
+        <a href="#setupCard">План</a>
+        <a href="#presetsCard">Пресеты</a>
+      </nav>
+
+      <section class="workspace">
+        <section class="card timer-card" id="timerCard" aria-live="polite">
+          <div class="timer-heading">
+            <div>
+              <div class="eyebrow">Текущая тренировка</div>
+              <h2 id="displayTitle">Силовая база</h2>
+            </div>
+            <button class="sound-indicator" id="soundOpenButton" aria-label="Открыть выбор звука"><i class="sound-dot" id="soundDot"></i><span id="soundStatus">сигналы включены</span></button>
+          </div>
+
+          <div class="sport-strip" id="sportStrip">
+            <span class="sport-icon" id="sportIcon">🏋️</span>
+            <div class="sport-copy"><small>СПОРТИВНЫЙ РЕЖИМ</small><strong id="sportLabel">Сила</strong></div>
+            <span class="sport-motto" id="sportMotto">Контроль веса и длинное восстановление</span>
+          </div>
+          <div class="gesture-panel" id="gesturePanel" hidden>
+            <video class="gesture-video" id="gestureVideo" muted playsinline></video>
+            <div><strong>Жест перед камерой включён</strong><span>Сделайте два быстрых взмаха рукой — таймер запустится или остановится.</span></div>
+          </div>
+
+          <div class="circle-wrap">
+            <svg class="ring" viewBox="0 0 300 300" aria-hidden="true">
+              <circle class="ring-bg" cx="150" cy="150" r="140"></circle>
+              <circle class="ring-progress" id="ringProgress" cx="150" cy="150" r="140"></circle>
+            </svg>
+            <div class="timer-center">
+              <div class="phase-chip" id="phaseChip">готовность</div>
+              <div class="time" id="timeDisplay">00:45</div>
+              <div class="round" id="roundDisplay">Нажмите «Старт»</div>
+              <div class="next" id="nextDisplay">Дальше: подход 1</div>
+            </div>
+          </div>
+
+          <div class="progress-label"><span>Прогресс подходов</span><span id="progressCount">0 / 5</span></div>
+          <div class="round-progress" id="roundProgress" aria-label="Прогресс подходов"></div>
+          <div class="timer-actions">
+            <button class="action" id="resetButton">Сбросить</button>
+            <button class="action primary" id="startButton">▶ Старт</button>
+            <button class="action" id="skipButton">Пропустить</button>
+          </div>
+          <p class="timer-footnote" id="footerHint">Каждый 3-й отдых — удлинённый. Меняйте схему справа.</p>
+        </section>
+
+        <section class="card setup-card" id="setupCard" aria-label="Настройка тренировки">
+          <div class="section-heading">
+            <div>
+              <div class="eyebrow">Конструктор</div>
+              <h2>Своя схема</h2>
+            </div>
+            <button class="small-button" id="notificationButton">🔔 Напомнить</button>
+          </div>
+          <div class="field">
+            <label for="workoutName">Название тренировки</label>
+            <input class="text-input" id="workoutName" maxlength="36" value="Силовая база" placeholder="Например, ноги — сила" />
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-title">Базовый подход <span>сек.</span></div>
+              <div class="stepper">
+                <button data-adjust="work" data-delta="-5" aria-label="Уменьшить длительность подхода">−</button>
+                <input id="work" type="number" min="5" max="3600" step="5" value="45" inputmode="numeric" />
+                <button data-adjust="work" data-delta="5" aria-label="Увеличить длительность подхода">+</button>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-title">Базовая пауза <span>сек.</span></div>
+              <div class="stepper">
+                <button data-adjust="rest" data-delta="-5" aria-label="Уменьшить отдых">−</button>
+                <input id="rest" type="number" min="0" max="3600" step="5" value="120" inputmode="numeric" />
+                <button data-adjust="rest" data-delta="5" aria-label="Увеличить отдых">+</button>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-title">Подходов <span>шт.</span></div>
+              <div class="stepper">
+                <button data-adjust="rounds" data-delta="-1" aria-label="Уменьшить число подходов">−</button>
+                <input id="rounds" type="number" min="1" max="99" step="1" value="5" inputmode="numeric" />
+                <button data-adjust="rounds" data-delta="1" aria-label="Увеличить число подходов">+</button>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-title">Длинный отдых <span>сек.</span></div>
+              <div class="stepper">
+                <button data-adjust="longRest" data-delta="-5" aria-label="Уменьшить длинный отдых">−</button>
+                <input id="longRest" type="number" min="0" max="3600" step="5" value="180" inputmode="numeric" />
+                <button data-adjust="longRest" data-delta="5" aria-label="Увеличить длинный отдых">+</button>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-title">Длинный после <span>подходов</span></div>
+              <div class="stepper">
+                <button data-adjust="longRestEvery" data-delta="-1" aria-label="Уменьшить период длинного отдыха">−</button>
+                <input id="longRestEvery" type="number" min="0" max="99" step="1" value="3" inputmode="numeric" />
+                <button data-adjust="longRestEvery" data-delta="1" aria-label="Увеличить период длинного отдыха">+</button>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-title">Подготовка <span>сек.</span></div>
+              <div class="stepper">
+                <button data-adjust="prep" data-delta="-5" aria-label="Уменьшить подготовку">−</button>
+                <input id="prep" type="number" min="0" max="600" step="5" value="10" inputmode="numeric" />
+                <button data-adjust="prep" data-delta="5" aria-label="Увеличить подготовку">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="round-editor">
+            <div class="plan-heading">
+              <div>
+                <h3>Индивидуальные интервалы</h3>
+                <p>Настройте работу и паузу после каждого подхода отдельно. Это важнее общей схемы.</p>
+              </div>
+              <button class="small-button" id="fillPlanButton">Заполнить по схеме</button>
+            </div>
+            <div class="round-plan" id="roundPlan" aria-label="Индивидуальные интервалы подходов"></div>
+          </div>
+          <div class="advanced">
+            <div class="estimate"><span>Примерная длительность</span><strong id="estimate">10:15</strong></div>
+            <button class="save-button" id="saveButton">Сохранить эту схему</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="card presets" id="presetsCard">
+        <div class="eyebrow">10 спортивных сценариев</div>
+        <h2>Быстрый старт под вид тренировки</h2>
+        <div class="preset-grid" id="presetGrid"></div>
+      </section>
+
+      <section class="card history">
+        <div class="history-head"><div><div class="eyebrow">История</div><h2>Завершённые тренировки</h2></div><button class="small-button muted-button" id="clearHistory">Очистить</button></div>
+        <div id="historyContent"></div>
+      </section>
+    </main>
+    <dialog class="sound-dialog" id="soundDialog" aria-labelledby="soundDialogTitle">
+      <div class="sound-dialog-card">
+        <div class="sound-dialog-head">
+          <div><div class="eyebrow">НАСТРОЙКИ ТАЙМЕРА</div><h2 id="soundDialogTitle">Выберите настоящий звук</h2></div>
+          <button class="dialog-close" id="soundCloseButton" aria-label="Закрыть выбор звука">×</button>
+        </div>
+        <p>Это реальные аудиозаписи, а не короткий синтетический писк. Нажмите на вариант — он проиграет старт подхода и переход в отдых.</p>
+        <div class="sound-options" id="soundOptions" aria-label="Выбор звука таймера"></div>
+        <button class="sound-preview" id="soundPairTest">▶ Повторить выбранную пару</button>
+      </div>
+    </dialog>
+    <div class="toast" id="toast" role="status"></div>
+
+    <script>
+      const presets = [
+        { id: 'strength', icon: '🏋️', name: 'Сила', detail: '45с · 2:00 · ×5', work: 45, rest: 120, rounds: 5, longRest: 180, longRestEvery: 3, prep: 10 },
+        { id: 'muscle', icon: '💪', name: 'Гипертрофия', detail: '40с · 1:30 · ×4', work: 40, rest: 90, rounds: 4, longRest: 120, longRestEvery: 2, prep: 10 },
+        { id: 'tabata', icon: '⚡', name: 'Табата', detail: '20с · 10с · ×8', work: 20, rest: 10, rounds: 8, longRest: 0, longRestEvery: 0, prep: 10 },
+        { id: 'crossfit', icon: '🔥', name: 'Кроссфит', detail: '1:00 · 1:00 · ×10', work: 60, rest: 60, rounds: 10, longRest: 90, longRestEvery: 5, prep: 10 },
+        { id: 'running', icon: '🏃', name: 'Бег', detail: '2:00 · 1:00 · ×6', work: 120, rest: 60, rounds: 6, longRest: 90, longRestEvery: 3, prep: 15 },
+        { id: 'boxing', icon: '🥊', name: 'Бокс', detail: '3:00 · 1:00 · ×6', work: 180, rest: 60, rounds: 6, longRest: 90, longRestEvery: 3, prep: 10 },
+        { id: 'swim', icon: '🏊', name: 'Плавание', detail: '1:00 · 0:30 · ×10', work: 60, rest: 30, rounds: 10, longRest: 60, longRestEvery: 5, prep: 10 },
+        { id: 'cycling', icon: '🚴', name: 'Велосипед', detail: '3:00 · 2:00 · ×5', work: 180, rest: 120, rounds: 5, longRest: 180, longRestEvery: 3, prep: 15 },
+        { id: 'tennis', icon: '🎾', name: 'Теннис', detail: '45с · 30с · ×8', work: 45, rest: 30, rounds: 8, longRest: 60, longRestEvery: 4, prep: 10 },
+        { id: 'mobility', icon: '🧘', name: 'Мобилити', detail: '45с · 15с · ×12', work: 45, rest: 15, rounds: 12, longRest: 30, longRestEvery: 6, prep: 10 },
+      ];
+      const sportThemes = {
+        strength: { accent: '#6ef0a8', accentRgb: '110, 240, 168', secondary: '#73b6ff', secondaryRgb: '115, 182, 255', label: 'Сила', motto: 'Контроль веса и длинное восстановление' },
+        muscle: { accent: '#ffab5c', accentRgb: '255, 171, 92', secondary: '#ff6fae', secondaryRgb: '255, 111, 174', label: 'Гипертрофия', motto: 'Объём, темп и качественные повторения' },
+        tabata: { accent: '#ff5f71', accentRgb: '255, 95, 113', secondary: '#ff3bc8', secondaryRgb: '255, 59, 200', label: 'Табата', motto: 'Максимум мощности за короткий интервал' },
+        crossfit: { accent: '#c7f34b', accentRgb: '199, 243, 75', secondary: '#ffbf4b', secondaryRgb: '255, 191, 75', label: 'Кроссфит', motto: 'Работа на пределе. Ритм решает всё' },
+        running: { accent: '#44d8ff', accentRgb: '68, 216, 255', secondary: '#4d80ff', secondaryRgb: '77, 128, 255', label: 'Бег', motto: 'Скорость, дыхание и ровный темп' },
+        boxing: { accent: '#ff5668', accentRgb: '255, 86, 104', secondary: '#ffaf47', secondaryRgb: '255, 175, 71', label: 'Бокс', motto: 'Раунд за раундом. Держите темп' },
+        swim: { accent: '#59f2df', accentRgb: '89, 242, 223', secondary: '#5685ff', secondaryRgb: '86, 133, 255', label: 'Плавание', motto: 'Дистанция, техника, чистое дыхание' },
+        cycling: { accent: '#aa75ff', accentRgb: '170, 117, 255', secondary: '#40ddff', secondaryRgb: '64, 221, 255', label: 'Велосипед', motto: 'Каденс, мощность и восстановление' },
+        tennis: { accent: '#d7ff4f', accentRgb: '215, 255, 79', secondary: '#50d7ff', secondaryRgb: '80, 215, 255', label: 'Теннис', motto: 'Реакция, ноги и следующий розыгрыш' },
+        mobility: { accent: '#d39cff', accentRgb: '211, 156, 255', secondary: '#ffae9b', secondaryRgb: '255, 174, 155', label: 'Мобилити', motto: 'Плавное движение и контроль тела' },
+      };
+      const soundProfiles = [
+        { id: 'ring', icon: '🥊', name: 'Ринг', detail: 'реальный усиленный колокол · 1,7 сек.', cues: { prep: [{ file: 'assets/boxing-start-loud.wav', rate: .82 }], work: [{ file: 'assets/boxing-start-loud.wav' }], rest: [{ file: 'assets/boxing-start-loud.wav', rate: .84 }], complete: [{ file: 'assets/boxing-start-loud.wav' }, { file: 'assets/boxing-start-loud.wav', delay: 1.9 }] } },
+        { id: 'gong', icon: '🔔', name: 'Гонг', detail: 'настоящий глубокий гонг · 5,6 сек.', cues: { prep: [{ file: 'assets/gong.wav', rate: .82, volume: .75 }], work: [{ file: 'assets/gong.wav' }], rest: [{ file: 'assets/gong.wav', rate: .86 }], complete: [{ file: 'assets/gong.wav' }, { file: 'assets/gong.wav', delay: 3.0, rate: .9, volume: .8 }] } },
+        { id: 'whistle', icon: '📣', name: 'Свисток тренера', detail: 'настоящий длинный свист · 2,1 сек.', cues: { prep: [{ file: 'assets/coach-whistle.wav', rate: .82, volume: .78 }], work: [{ file: 'assets/coach-whistle.wav' }], rest: [{ file: 'assets/coach-whistle.wav', rate: .90 }], complete: [{ file: 'assets/coach-whistle.wav' }, { file: 'assets/coach-whistle.wav', delay: 2.3 }] } },
+        { id: 'chime', icon: '✨', name: 'Чистый колокол', detail: 'усиленный тройной звон · 1,8 сек.', cues: { prep: [{ file: 'assets/clear-bell-loud.wav', rate: .8, volume: .82 }], work: [{ file: 'assets/clear-bell-loud.wav' }, { file: 'assets/clear-bell-loud.wav', delay: .67 }, { file: 'assets/clear-bell-loud.wav', delay: 1.34 }], rest: [{ file: 'assets/clear-bell-loud.wav', rate: .85 }, { file: 'assets/clear-bell-loud.wav', delay: .72, rate: .85 }], complete: [{ file: 'assets/clear-bell-loud.wav' }, { file: 'assets/clear-bell-loud.wav', delay: .65 }, { file: 'assets/clear-bell-loud.wav', delay: 1.3 }, { file: 'assets/clear-bell-loud.wav', delay: 1.95 }] } },
+      ];
+
+      function numberInRange(value, min, max, fallback) {
+        const number = Number(value);
+        return Number.isFinite(number) ? clamp(number, min, max) : fallback;
+      }
+      function automaticRest(config, completedRound) {
+        return config.longRest > 0 && config.longRestEvery > 0 && completedRound < config.rounds && completedRound % config.longRestEvery === 0 ? config.longRest : config.rest;
+      }
+      function defaultRoundPlan(config) {
+        return Array.from({ length: config.rounds }, (_, index) => ({
+          work: config.work,
+          rest: index === config.rounds - 1 ? 0 : automaticRest(config, index + 1),
+        }));
+      }
+      function normalizeConfig(input = {}) {
+        const config = { ...presets[0], ...input };
+        config.name = input.name || config.name || 'Моя тренировка';
+        config.work = numberInRange(config.work, 5, 3600, 45);
+        config.rest = numberInRange(config.rest, 0, 3600, 120);
+        config.rounds = numberInRange(config.rounds, 1, 99, 5);
+        config.longRest = numberInRange(config.longRest, 0, 3600, 0);
+        config.longRestEvery = numberInRange(config.longRestEvery, 0, 99, 0);
+        config.prep = numberInRange(config.prep, 0, 600, 10);
+        const savedPlan = Array.isArray(input.roundPlan) ? input.roundPlan : [];
+        const fallbackPlan = defaultRoundPlan(config);
+        config.roundPlan = fallbackPlan.map((fallback, index) => {
+          const saved = savedPlan[index];
+          if (!saved) return fallback;
+          return {
+            work: numberInRange(saved.work, 5, 3600, fallback.work),
+            rest: index === config.rounds - 1 ? 0 : numberInRange(saved.rest, 0, 3600, fallback.rest),
+          };
+        });
+        return config;
+      }
+
+      const storedConfig = JSON.parse(localStorage.getItem('pulse-config') || 'null');
+      const state = {
+        config: normalizeConfig(storedConfig || { name: 'Силовая база', ...presets[0] }),
+        phase: 'ready',
+        round: 1,
+        secondsLeft: 45,
+        phaseDuration: 45,
+        endAt: null,
+        timer: null,
+        muted: localStorage.getItem('pulse-muted') === 'true',
+        soundProfile: localStorage.getItem('pulse-sound-profile') || 'ring',
+        history: JSON.parse(localStorage.getItem('pulse-history') || '[]'),
+        wakeLock: null,
+        activePreset: storedConfig?.id || 'strength',
+        gesture: { enabled: false, stream: null, timer: null, canvas: null, context: null, previousFrame: null, lastBurstAt: 0, lastTriggeredAt: 0 },
+      };
+
+      const el = (id) => document.getElementById(id);
+      const fields = ['work', 'rest', 'rounds', 'longRest', 'longRestEvery', 'prep'];
+      const phaseMeta = {
+        ready: { label: 'готовность', tone: 'secondary' },
+        prep: { label: 'подготовка', tone: 'secondary' },
+        work: { label: 'подход', tone: 'accent' },
+        rest: { label: 'отдых', tone: 'secondary' },
+        complete: { label: 'готово', tone: 'accent' },
+      };
+      const circumference = 2 * Math.PI * 140;
+      let audioContext;
+      let toastTimer;
+      const activeSamples = new Set();
+      const samplePools = new Map();
+
+      function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+      function colorWithAlpha(hex, alpha) {
+        const value = hex.replace('#', '');
+        const red = parseInt(value.slice(0, 2), 16);
+        const green = parseInt(value.slice(2, 4), 16);
+        const blue = parseInt(value.slice(4, 6), 16);
+        return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+      }
+      function getSportTheme() { return sportThemes[state.config.id] || sportThemes.strength; }
+      function applySportTheme() {
+        const theme = getSportTheme();
+        const rootStyle = document.documentElement.style;
+        rootStyle.setProperty('--accent', theme.accent);
+        rootStyle.setProperty('--accent-rgb', theme.accentRgb);
+        rootStyle.setProperty('--accent-2', theme.secondary);
+        rootStyle.setProperty('--accent-2-rgb', theme.secondaryRgb);
+        el('sportIcon').textContent = state.config.icon || presets.find((preset) => preset.id === state.config.id)?.icon || '⚡';
+        el('sportLabel').textContent = theme.label;
+        el('sportMotto').textContent = theme.motto;
+        return theme;
+      }
+      function getSoundProfile() { return soundProfiles.find((profile) => profile.id === state.soundProfile) || soundProfiles[0]; }
+      function renderSoundOptions() {
+        const selected = getSoundProfile();
+        el('soundOptions').innerHTML = soundProfiles.map((profile) => `<button class="sound-option ${profile.id === selected.id ? 'active' : ''}" data-sound="${profile.id}"><span>${profile.icon}</span><strong>${profile.name}</strong><small>${profile.detail}</small></button>`).join('');
+      }
+      function selectSoundProfile(id) {
+        if (!soundProfiles.some((profile) => profile.id === id)) return;
+        state.soundProfile = id;
+        localStorage.setItem('pulse-sound-profile', id);
+        renderSoundOptions();
+        if (!state.muted) { unlockSampleAudio(); previewSelectedSound(); }
+        showToast(`Выбрано: ${getSoundProfile().name}`);
+      }
+      function previewSelectedSound() {
+        beep('work');
+        setTimeout(() => beep('rest'), 3200);
+      }
+      function openSoundDialog() {
+        renderSoundOptions();
+        const dialog = el('soundDialog');
+        if (typeof dialog.showModal === 'function') dialog.showModal();
+        else dialog.setAttribute('open', '');
+      }
+      function closeSoundDialog() {
+        const dialog = el('soundDialog');
+        if (typeof dialog.close === 'function') dialog.close();
+        else dialog.removeAttribute('open');
+      }
+      function preloadSoundAssets() {
+        if (typeof Audio === 'undefined') return;
+        const files = new Set(soundProfiles.flatMap((profile) => Object.values(profile.cues).flatMap((cues) => cues.map((cue) => cue.file))));
+        files.forEach((file) => {
+          if (samplePools.has(file)) return;
+          const pool = Array.from({ length: 5 }, () => {
+            const audio = new Audio(file);
+            audio.preload = 'auto';
+            audio.load();
+            return audio;
+          });
+          samplePools.set(file, pool);
+        });
+      }
+      function unlockSampleAudio() {
+        if (typeof Audio === 'undefined') return;
+        preloadSoundAssets();
+        samplePools.forEach((pool) => pool.forEach((sample) => {
+          sample.muted = true;
+          const start = sample.play();
+          if (start?.then) start.then(() => {
+            sample.pause();
+            sample.currentTime = 0;
+            sample.muted = false;
+          }).catch(() => { sample.muted = false; });
+        }));
+      }
+      function takeSample(file) {
+        const pool = samplePools.get(file) || [];
+        const available = pool.find((sample) => sample.muted || sample.paused || sample.ended);
+        if (available) return available;
+        const sample = new Audio(file);
+        sample.preload = 'auto';
+        pool.push(sample);
+        samplePools.set(file, pool);
+        return sample;
+      }
+      function renderGestureToggle() {
+        const button = el('gestureToggle');
+        const supported = Boolean(navigator.mediaDevices?.getUserMedia) && window.isSecureContext;
+        button.disabled = !supported;
+        button.classList.toggle('is-active', state.gesture.enabled);
+        button.innerHTML = state.gesture.enabled ? '🖐 <span>Камера: вкл</span>' : '🖐 <span>Жест</span>';
+        button.title = supported ? 'Два быстрых взмаха рукой перед фронтальной камерой запускают или останавливают таймер' : 'Для жеста нужна камера и HTTPS-ссылка';
+      }
+      function triggerCameraGesture() {
+        const now = Date.now();
+        if (now - state.gesture.lastTriggeredAt < 2500 || state.phase === 'complete') return;
+        state.gesture.lastTriggeredAt = now;
+        const wasRunning = Boolean(state.timer);
+        startOrPause();
+        showToast(wasRunning ? 'Таймер остановлен жестом' : 'Таймер запущен жестом');
+      }
+      function checkCameraGesture() {
+        const { videoWidth, videoHeight, readyState } = el('gestureVideo');
+        if (!state.gesture.enabled || readyState < 2 || !videoWidth || !videoHeight) return;
+        const canvas = state.gesture.canvas;
+        const context = state.gesture.context;
+        context.drawImage(el('gestureVideo'), 0, 0, canvas.width, canvas.height);
+        const frame = context.getImageData(0, 0, canvas.width, canvas.height).data;
+        const previous = state.gesture.previousFrame;
+        state.gesture.previousFrame = frame;
+        if (!previous) return;
+        let changedPixels = 0;
+        for (let index = 0; index < frame.length; index += 4) {
+          const difference = Math.abs(frame[index] - previous[index]) + Math.abs(frame[index + 1] - previous[index + 1]) + Math.abs(frame[index + 2] - previous[index + 2]);
+          if (difference > 105) changedPixels += 1;
+        }
+        const motionLevel = changedPixels / (frame.length / 4);
+        if (motionLevel < .13) return;
+        const now = Date.now();
+        if (now - state.gesture.lastBurstAt < 260) return;
+        if (state.gesture.lastBurstAt && now - state.gesture.lastBurstAt < 1600) {
+          state.gesture.lastBurstAt = 0;
+          triggerCameraGesture();
+          return;
+        }
+        state.gesture.lastBurstAt = now;
+      }
+      function stopCameraGesture() {
+        clearInterval(state.gesture.timer);
+        state.gesture.stream?.getTracks().forEach((track) => track.stop());
+        Object.assign(state.gesture, { enabled: false, stream: null, timer: null, canvas: null, context: null, previousFrame: null, lastBurstAt: 0 });
+        el('gestureVideo').srcObject = null;
+        el('gesturePanel').hidden = true;
+        renderGestureToggle();
+      }
+      async function toggleCameraGesture() {
+        if (!navigator.mediaDevices?.getUserMedia || !window.isSecureContext) { showToast('Для жеста откройте HTTPS-ссылку в браузере телефона'); return; }
+        if (state.gesture.enabled) {
+          stopCameraGesture();
+          showToast('Управление жестом выключено');
+          return;
+        }
+        try {
+          prepareAudio();
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } }, audio: false });
+          const video = el('gestureVideo');
+          video.srcObject = stream;
+          await video.play();
+          const canvas = document.createElement('canvas');
+          canvas.width = 72; canvas.height = 54;
+          Object.assign(state.gesture, { enabled: true, stream, canvas, context: canvas.getContext('2d'), previousFrame: null, lastBurstAt: 0 });
+          el('gesturePanel').hidden = false;
+          state.gesture.timer = setInterval(checkCameraGesture, 120);
+          renderGestureToggle();
+          showToast('Камера включена: сделайте два взмаха рукой');
+        } catch (_) { showToast('Не удалось включить камеру для жеста'); }
+      }
+      function formatTime(total) {
+        total = Math.max(0, Math.ceil(total));
+        const mins = Math.floor(total / 60).toString().padStart(2, '0');
+        const secs = (total % 60).toString().padStart(2, '0');
+        return `${mins}:${secs}`;
+      }
+      function plural(value, words) {
+        const mod10 = value % 10, mod100 = value % 100;
+        if (mod10 === 1 && mod100 !== 11) return words[0];
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return words[1];
+        return words[2];
+      }
+      function phaseDuration(phase) {
+        if (phase === 'prep') return state.config.prep;
+        const roundPlan = state.config.roundPlan[state.round - 1] || { work: state.config.work, rest: state.config.rest };
+        if (phase === 'work') return roundPlan.work;
+        if (phase === 'rest') return roundPlan.rest;
+        return roundPlan.work;
+      }
+      function getNextText() {
+        if (state.phase === 'ready') return state.config.prep > 0 ? `Сначала: подготовка ${formatTime(state.config.prep)}` : 'Дальше: подход 1';
+        if (state.phase === 'prep') return 'Дальше: подход 1';
+        if (state.phase === 'work') {
+          if (state.round === state.config.rounds) return 'Дальше: завершение тренировки';
+          return `Дальше: пауза ${formatTime(phaseDuration('rest'))}`;
+        }
+        if (state.phase === 'rest') return `Дальше: подход ${state.round + 1}`;
+        if (state.phase === 'complete') return 'Отличная работа. Схему можно запустить снова.';
+        return '';
+      }
+      function setInputsFromConfig() {
+        el('workoutName').value = state.config.name;
+        fields.forEach((key) => { el(key).value = state.config[key]; });
+        renderRoundPlan();
+      }
+      function basicConfigFromInputs() {
+        const config = { ...state.config, name: el('workoutName').value.trim() || 'Моя тренировка' };
+        fields.forEach((key) => {
+          const input = el(key);
+          config[key] = clamp(Number(input.value) || 0, Number(input.min), Number(input.max));
+          input.value = config[key];
+        });
+        return config;
+      }
+      function rawRoundPlanFromEditor() {
+        const workInputs = el('roundPlan').querySelectorAll('[data-plan="work"]');
+        const restInputs = el('roundPlan').querySelectorAll('[data-plan="rest"]');
+        if (!workInputs.length) return [];
+        return Array.from(workInputs, (workInput, index) => ({ work: workInput.value, rest: restInputs[index]?.value ?? 0 }));
+      }
+      function planFromEditor(config) {
+        const editorPlan = rawRoundPlanFromEditor();
+        return normalizeConfig({ ...config, roundPlan: editorPlan.length ? editorPlan : state.config.roundPlan }).roundPlan;
+      }
+      function configFromInputs() {
+        const config = basicConfigFromInputs();
+        return normalizeConfig({ ...config, roundPlan: planFromEditor(config) });
+      }
+      function renderRoundPlan(useDefaults = false) {
+        const basics = basicConfigFromInputs();
+        const plan = useDefaults ? defaultRoundPlan(normalizeConfig(basics)) : planFromEditor(basics);
+        state.config.roundPlan = plan;
+        el('roundPlan').innerHTML = plan.map((entry, index) => {
+          const isLast = index === plan.length - 1;
+          return `<div class="plan-row"><div class="plan-name"><strong>Подход ${index + 1}</strong><span>${isLast ? 'завершение тренировки' : `пауза после ${index + 1}-го`}</span></div><label class="plan-field"><input data-plan="work" type="number" min="5" max="3600" step="5" value="${entry.work}" aria-label="Время работы, подход ${index + 1}" inputmode="numeric" /><span>сек</span></label>${isLast ? '<div class="plan-finish">финиш</div>' : `<label class="plan-field"><input data-plan="rest" type="number" min="0" max="3600" step="5" value="${entry.rest}" aria-label="Пауза после подхода ${index + 1}" inputmode="numeric" /><span>сек</span></label>`}</div>`;
+        }).join('');
+      }
+      function resizeRoundPlan() {
+        const basics = basicConfigFromInputs();
+        const existing = rawRoundPlanFromEditor();
+        if (basics.rounds > existing.length && existing.length && Number(existing[existing.length - 1].rest) === 0) {
+          existing[existing.length - 1].rest = automaticRest(normalizeConfig(basics), existing.length);
+        }
+        state.config.roundPlan = normalizeConfig({ ...basics, roundPlan: existing.length ? existing : state.config.roundPlan }).roundPlan;
+        renderRoundPlan();
+      }
+      function estimateWorkout(config = state.config) {
+        const normalized = normalizeConfig(config);
+        return normalized.prep + normalized.roundPlan.reduce((total, entry) => total + entry.work + entry.rest, 0);
+      }
+      function updateEstimate() { el('estimate').textContent = formatTime(estimateWorkout(configFromInputs())); }
+      function renderProgress() {
+        const completed = state.phase === 'complete' ? state.config.rounds : state.phase === 'work' ? state.round - 1 : state.phase === 'rest' ? state.round : 0;
+        el('progressCount').textContent = `${completed} / ${state.config.rounds}`;
+        el('roundProgress').innerHTML = Array.from({ length: state.config.rounds }, (_, i) => {
+          const position = i + 1;
+          let className = 'round-dot';
+          if (position <= completed) className += ' done';
+          else if (state.phase === 'work' && position === state.round) className += ' current';
+          return `<span class="${className}"></span>`;
+        }).join('');
+      }
+      function render() {
+        const meta = phaseMeta[state.phase] || phaseMeta.ready;
+        const theme = applySportTheme();
+        const phaseColor = meta.tone === 'secondary' ? theme.secondary : theme.accent;
+        const duration = state.phaseDuration || 1;
+        const progress = state.phase === 'ready' || state.phase === 'complete' ? 0 : clamp(1 - state.secondsLeft / duration, 0, 1);
+        el('displayTitle').textContent = state.config.name;
+        el('timeDisplay').textContent = state.phase === 'complete' ? '✓' : formatTime(state.secondsLeft);
+        el('phaseChip').textContent = meta.label;
+        el('phaseChip').style.color = phaseColor;
+        el('phaseChip').style.borderColor = colorWithAlpha(phaseColor, .48);
+        el('phaseChip').style.background = colorWithAlpha(phaseColor, .12);
+        el('ringProgress').style.stroke = phaseColor;
+        el('ringProgress').style.filter = `drop-shadow(0 0 9px ${colorWithAlpha(phaseColor, .64)})`;
+        el('ringProgress').style.strokeDasharray = circumference;
+        el('ringProgress').style.strokeDashoffset = circumference * (1 - progress);
+        el('roundDisplay').textContent = state.phase === 'ready' ? 'Нажмите «Старт»' : state.phase === 'prep' ? 'Приготовьтесь' : state.phase === 'complete' ? `${state.config.rounds} ${plural(state.config.rounds, ['подход', 'подхода', 'подходов'])} выполнено` : `Подход ${state.round} из ${state.config.rounds}`;
+        el('nextDisplay').textContent = getNextText();
+        el('startButton').textContent = state.phase === 'complete' ? '↻ Ещё раз' : state.timer ? 'Ⅱ Пауза' : state.phase === 'ready' ? '▶ Старт' : '▶ Продолжить';
+        el('skipButton').disabled = state.phase === 'ready' || state.phase === 'complete';
+        el('skipButton').style.opacity = state.phase === 'ready' || state.phase === 'complete' ? '.42' : '1';
+        el('footerHint').textContent = 'У каждого подхода — своё время работы и паузы. Меняйте план до старта.';
+        el('soundDot').style.background = state.muted ? '#6e7788' : theme.accent;
+        el('soundDot').style.boxShadow = state.muted ? 'none' : `0 0 12px ${theme.accent}`;
+        el('soundStatus').textContent = state.muted ? 'сигналы выключены' : `${getSoundProfile().name} · включён`;
+        el('soundToggle').innerHTML = state.muted ? '🔇 <span>Без звука</span>' : '🔊 <span>Звук</span>';
+        renderGestureToggle();
+        renderProgress();
+        renderPresetButtons();
+      }
+      function renderPresetButtons() {
+        el('presetGrid').innerHTML = presets.map((preset) => `<button class="preset ${state.activePreset === preset.id ? 'active' : ''}" data-preset="${preset.id}"><span class="emoji">${preset.icon}</span><strong>${preset.name}</strong><small>${preset.detail}</small></button>`).join('');
+      }
+      function renderHistory() {
+        const content = el('historyContent');
+        if (!state.history.length) {
+          content.innerHTML = '<p class="history-empty">Завершённые тренировки будут появляться здесь. История хранится на этом устройстве.</p>';
+          return;
+        }
+        content.innerHTML = `<div class="history-list">${state.history.slice(0, 5).map((item) => `<div class="history-item"><div><strong>${escapeHtml(item.name)}</strong><span>${item.rounds} ${plural(item.rounds, ['подход', 'подхода', 'подходов'])} · ${item.date}</span></div><time>${item.duration}</time></div>`).join('')}</div>`;
+      }
+      function escapeHtml(value) { return value.replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#039;', '"':'&quot;' }[char])); }
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        el('toast').textContent = message;
+        el('toast').classList.add('show');
+        toastTimer = setTimeout(() => el('toast').classList.remove('show'), 2800);
+      }
+      function saveConfig() {
+        state.config = configFromInputs();
+        localStorage.setItem('pulse-config', JSON.stringify(state.config));
+        showToast('Схема сохранена на этом устройстве');
+        if (state.phase === 'ready' || state.phase === 'complete') resetTimer(false);
+        else render();
+      }
+      function prepareAudio() {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        return audioContext;
+      }
+      function bellStrike(frequency, offset, intensity = 1, stretch = 1) {
+        const now = audioContext.currentTime + offset;
+        const partials = [
+          [1, .34, 2.45],
+          [2.71, .13, 1.86],
+          [4.09, .075, 1.43],
+          [5.43, .042, .94],
+          [8.12, .018, .65],
+        ];
+        partials.forEach(([ratio, volume, decay]) => {
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          const duration = decay * stretch;
+          oscillator.type = 'sine';
+          oscillator.frequency.value = frequency * ratio;
+          gain.gain.setValueAtTime(.0001, now);
+          gain.gain.exponentialRampToValueAtTime(volume * intensity, now + .012);
+          gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+          oscillator.connect(gain).connect(audioContext.destination);
+          oscillator.start(now);
+          oscillator.stop(now + duration + .03);
+        });
+      }
+      function gongStrike(frequency, offset, intensity = 1) {
+        const now = audioContext.currentTime + offset;
+        [[1, .30, 3.4], [1.48, .12, 2.6], [2.04, .08, 2.25], [2.61, .04, 1.7], [3.88, .018, 1.25]].forEach(([ratio, volume, duration]) => {
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          oscillator.type = 'sine';
+          oscillator.frequency.value = frequency * ratio;
+          gain.gain.setValueAtTime(.0001, now);
+          gain.gain.exponentialRampToValueAtTime(volume * intensity, now + .025);
+          gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+          oscillator.connect(gain).connect(audioContext.destination);
+          oscillator.start(now);
+          oscillator.stop(now + duration + .04);
+        });
+      }
+      function whistleStrike(frequency, offset, duration = 1.25) {
+        const now = audioContext.currentTime + offset;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        const vibrato = audioContext.createOscillator();
+        const vibratoGain = audioContext.createGain();
+        oscillator.type = 'square';
+        oscillator.frequency.setValueAtTime(frequency, now);
+        oscillator.frequency.linearRampToValueAtTime(frequency * 1.045, now + duration * .45);
+        oscillator.frequency.linearRampToValueAtTime(frequency * .985, now + duration);
+        vibrato.frequency.value = 5.4;
+        vibratoGain.gain.value = 17;
+        gain.gain.setValueAtTime(.0001, now);
+        gain.gain.exponentialRampToValueAtTime(.12, now + .025);
+        gain.gain.exponentialRampToValueAtTime(.09, now + duration * .75);
+        gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+        vibrato.connect(vibratoGain).connect(oscillator.frequency);
+        oscillator.connect(gain).connect(audioContext.destination);
+        oscillator.start(now); vibrato.start(now);
+        oscillator.stop(now + duration + .03); vibrato.stop(now + duration + .03);
+      }
+      function sirenStrike(offset, duration = 1.6) {
+        const now = audioContext.currentTime + offset;
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = 'sawtooth';
+        oscillator.frequency.setValueAtTime(590, now);
+        oscillator.frequency.linearRampToValueAtTime(1080, now + duration * .48);
+        oscillator.frequency.linearRampToValueAtTime(670, now + duration);
+        gain.gain.setValueAtTime(.0001, now);
+        gain.gain.exponentialRampToValueAtTime(.095, now + .03);
+        gain.gain.exponentialRampToValueAtTime(.075, now + duration * .8);
+        gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
+        oscillator.connect(gain).connect(audioContext.destination);
+        oscillator.start(now); oscillator.stop(now + duration + .03);
+      }
+      function playBellCue(kind) {
+        const patterns = {
+          prep: [[659, 0, .62, .72], [784, .34, .62, .72]],
+          work: [[880, 0, .95, 1], [1175, .38, 1.04, 1]],
+          rest: [[587, 0, 1.06, 1.1], [740, .44, 1.1, 1.1]],
+          complete: [[659, 0, .8, .85], [880, .40, .96, .9], [1175, .80, 1.12, 1]],
+        };
+        (patterns[kind] || patterns.prep).forEach(([frequency, offset, intensity, stretch]) => bellStrike(frequency, offset, intensity, stretch));
+      }
+      function playGongCue(kind) {
+        const patterns = { prep: [[262, 0, .55]], work: [[330, 0, 1]], rest: [[220, 0, 1.12]], complete: [[220, 0, .82], [330, 1.05, 1.05]] };
+        (patterns[kind] || patterns.prep).forEach(([frequency, offset, intensity]) => gongStrike(frequency, offset, intensity));
+      }
+      function playWhistleCue(kind) {
+        const patterns = { prep: [[1568, 0, .65]], work: [[2093, 0, 1.18], [2093, 1.05, 1.18]], rest: [[1568, 0, 1.38], [1568, 1.18, 1.12]], complete: [[2093, 0, .8], [2093, .82, .8], [2093, 1.64, .9]] };
+        (patterns[kind] || patterns.prep).forEach(([frequency, offset, duration]) => whistleStrike(frequency, offset, duration));
+      }
+      function playSirenCue(kind) {
+        const patterns = { prep: [[0, .85]], work: [[0, 1.7]], rest: [[0, 2.05]], complete: [[0, 1.2], [1.35, 1.2]] };
+        (patterns[kind] || patterns.prep).forEach(([offset, duration]) => sirenStrike(offset, duration));
+      }
+      function playRecordedCue(kind) {
+        const profile = getSoundProfile();
+        const cues = profile.cues[kind] || profile.cues.prep;
+        cues.forEach((cue) => {
+          setTimeout(() => {
+            const sample = takeSample(cue.file);
+            sample.pause();
+            sample.currentTime = 0;
+            sample.muted = false;
+            sample.volume = cue.volume ?? 1;
+            sample.playbackRate = cue.rate ?? 1;
+            activeSamples.add(sample);
+            sample.onended = () => activeSamples.delete(sample);
+            sample.play().catch(() => {
+              activeSamples.delete(sample);
+              try { prepareAudio(); playBellCue(kind); } catch (_) { /* Browser audio is unavailable. */ }
+            });
+          }, (cue.delay || 0) * 1000);
+        });
+      }
+      function beep(kind = 'prep') {
+        if (state.muted) return;
+        try {
+          if (typeof Audio !== 'undefined') { playRecordedCue(kind); return; }
+          prepareAudio(); playBellCue(kind);
+        } catch (_) { /* Audio is optional. */ }
+      }
+      function launchBeep() {
+        if (state.muted) return;
+        try {
+          prepareAudio();
+          const now = audioContext.currentTime;
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          oscillator.type = 'sine';
+          oscillator.frequency.value = 1175;
+          gain.gain.setValueAtTime(.0001, now);
+          gain.gain.exponentialRampToValueAtTime(.62, now + .01);
+          gain.gain.exponentialRampToValueAtTime(.0001, now + .18);
+          oscillator.connect(gain).connect(audioContext.destination);
+          oscillator.start(now); oscillator.stop(now + .19);
+        } catch (_) { /* A launch beep is optional when browser audio is unavailable. */ }
+      }
+      function notify(title, body) {
+        if ('Notification' in window && Notification.permission === 'granted' && document.hidden) new Notification(title, { body });
+      }
+      async function requestWakeLock() {
+        if (!('wakeLock' in navigator) || state.wakeLock) return;
+        try { state.wakeLock = await navigator.wakeLock.request('screen'); } catch (_) { /* Browser may refuse in background. */ }
+      }
+      async function releaseWakeLock() {
+        try { await state.wakeLock?.release(); } catch (_) { /* already released */ }
+        state.wakeLock = null;
+      }
+      function startPhase(phase, cueDelay = 0) {
+        state.phase = phase;
+        state.phaseDuration = phaseDuration(phase);
+        state.secondsLeft = state.phaseDuration;
+        state.endAt = Date.now() + state.phaseDuration * 1000;
+        clearInterval(state.timer);
+        state.timer = setInterval(tick, 200);
+        const playTransitionCue = phase === 'work' ? 'work' : phase === 'rest' ? 'rest' : null;
+        if (playTransitionCue) {
+          if (cueDelay) setTimeout(() => { if (state.phase === phase && state.timer) beep(playTransitionCue); }, cueDelay);
+          else beep(playTransitionCue);
+        }
+        navigator.vibrate?.(phase === 'work' ? [85, 55, 105] : phase === 'rest' ? [120, 55, 120] : [70, 40, 70]);
+        el('timerCard').classList.remove('flash'); void el('timerCard').offsetWidth; el('timerCard').classList.add('flash');
+        render();
+      }
+      function tick() {
+        state.secondsLeft = Math.max(0, (state.endAt - Date.now()) / 1000);
+        render();
+        if (state.secondsLeft <= 0) advancePhase();
+      }
+      function advancePhase() {
+        clearInterval(state.timer); state.timer = null;
+        if (state.phase === 'prep') { startPhase('work'); return; }
+        if (state.phase === 'work') {
+          if (state.round >= state.config.rounds) { completeWorkout(); return; }
+          startPhase('rest'); return;
+        }
+        if (state.phase === 'rest') { state.round += 1; startPhase('work'); }
+      }
+      function completeWorkout() {
+        clearInterval(state.timer); state.timer = null;
+        state.phase = 'complete'; state.secondsLeft = 0; state.phaseDuration = 1; state.endAt = null;
+        beep('complete'); navigator.vibrate?.([100, 50, 100, 50, 180]);
+        notify('Тренировка завершена', `${state.config.name}: ${state.config.rounds} подходов выполнено.`);
+        state.history.unshift({ name: state.config.name, rounds: state.config.rounds, duration: formatTime(estimateWorkout()), date: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
+        state.history = state.history.slice(0, 20);
+        localStorage.setItem('pulse-history', JSON.stringify(state.history));
+        releaseWakeLock(); render(); renderHistory(); showToast('Тренировка сохранена в историю');
+      }
+      function startOrPause() {
+        if (state.phase === 'complete') { resetTimer(); return; }
+        if (state.timer) {
+          state.secondsLeft = Math.max(0, (state.endAt - Date.now()) / 1000);
+          clearInterval(state.timer); state.timer = null; state.endAt = null; render(); return;
+        }
+        requestWakeLock();
+        if (state.phase === 'ready') {
+          state.config = configFromInputs();
+          state.round = 1;
+          unlockSampleAudio();
+          launchBeep();
+          startPhase(state.config.prep > 0 ? 'prep' : 'work', state.config.prep > 0 ? 0 : 150);
+        } else {
+          state.endAt = Date.now() + state.secondsLeft * 1000;
+          state.timer = setInterval(tick, 200); render();
+        }
+      }
+      function resetTimer(showMessage = true) {
+        clearInterval(state.timer); state.timer = null; state.phase = 'ready'; state.round = 1;
+        state.secondsLeft = state.config.roundPlan[0]?.work || state.config.work; state.phaseDuration = state.secondsLeft; state.endAt = null;
+        releaseWakeLock(); render();
+        if (showMessage) showToast('Таймер сброшен');
+      }
+      function applyPreset(id) {
+        const preset = presets.find((item) => item.id === id);
+        if (!preset) return;
+        state.config = normalizeConfig({ ...preset, name: preset.name });
+        state.activePreset = id;
+        setInputsFromConfig();
+        localStorage.setItem('pulse-config', JSON.stringify(state.config));
+        updateEstimate(); resetTimer(false); showToast(`Выбрано: ${preset.name}`);
+      }
+      function adjustField(key, delta) {
+        const input = el(key);
+        input.value = clamp((Number(input.value) || 0) + Number(delta), Number(input.min), Number(input.max));
+        state.activePreset = null;
+        if (key === 'rounds') resizeRoundPlan();
+        updateEstimate();
+      }
+
+      document.querySelectorAll('[data-adjust]').forEach((button) => button.addEventListener('click', () => adjustField(button.dataset.adjust, button.dataset.delta)));
+      fields.forEach((key) => el(key).addEventListener('input', () => {
+        state.activePreset = null;
+        if (key === 'rounds') resizeRoundPlan();
+        updateEstimate();
+      }));
+      el('workoutName').addEventListener('input', () => { state.activePreset = null; });
+      el('roundPlan').addEventListener('input', () => { state.activePreset = null; state.config.roundPlan = configFromInputs().roundPlan; updateEstimate(); });
+      el('fillPlanButton').addEventListener('click', () => { state.activePreset = null; renderRoundPlan(true); updateEstimate(); showToast('Все подходы заполнены по базовой схеме'); });
+      el('startButton').addEventListener('click', startOrPause);
+      el('resetButton').addEventListener('click', () => resetTimer());
+      el('skipButton').addEventListener('click', () => { if (state.phase !== 'ready' && state.phase !== 'complete') advancePhase(); });
+      el('saveButton').addEventListener('click', saveConfig);
+      el('presetGrid').addEventListener('click', (event) => { const button = event.target.closest('[data-preset]'); if (button) applyPreset(button.dataset.preset); });
+      el('soundToggle').addEventListener('click', () => { state.muted = !state.muted; localStorage.setItem('pulse-muted', state.muted); render(); });
+      el('soundOptions').addEventListener('click', (event) => { const button = event.target.closest('[data-sound]'); if (button) selectSoundProfile(button.dataset.sound); });
+      el('soundTestButton').addEventListener('click', openSoundDialog);
+      el('soundOpenButton').addEventListener('click', openSoundDialog);
+      el('soundCloseButton').addEventListener('click', closeSoundDialog);
+      el('soundPairTest').addEventListener('click', () => {
+        if (state.muted) { showToast('Сначала включите звук'); return; }
+        unlockSampleAudio();
+        previewSelectedSound();
+        showToast('Проверка: старт подхода → переход в отдых');
+      });
+      el('soundDialog').addEventListener('click', (event) => { if (event.target === el('soundDialog')) closeSoundDialog(); });
+      el('gestureToggle').addEventListener('click', toggleCameraGesture);
+      el('fullscreenButton').addEventListener('click', async () => {
+        try { if (document.fullscreenElement) await document.exitFullscreen(); else await el('timerCard').requestFullscreen(); } catch (_) { showToast('Полноэкранный режим недоступен'); }
+      });
+      el('notificationButton').addEventListener('click', async () => {
+        if (!('Notification' in window)) { showToast('Уведомления не поддерживаются браузером'); return; }
+        const permission = await Notification.requestPermission();
+        showToast(permission === 'granted' ? 'Уведомления включены' : 'Разрешение на уведомления не получено');
+      });
+      el('clearHistory').addEventListener('click', () => { state.history = []; localStorage.removeItem('pulse-history'); renderHistory(); showToast('История очищена'); });
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && state.timer) tick(); });
+      document.addEventListener('fullscreenchange', () => { el('fullscreenButton').innerHTML = document.fullscreenElement ? '× <span>Выйти</span>' : '⛶ <span>Фокус</span>'; });
+      let deferredInstallPrompt;
+      window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstallPrompt = event; });
+      window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; showToast('Пульс установлен на устройство'); });
+      el('installButton').addEventListener('click', async () => {
+        if (!deferredInstallPrompt) { showToast('На iPhone: «Поделиться» → «На экран Домой»'); return; }
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+      });
+      if ('serviceWorker' in navigator && window.isSecureContext) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+      }
+
+      preloadSoundAssets(); renderSoundOptions(); setInputsFromConfig(); updateEstimate(); resetTimer(false); renderHistory();
+    </script>
+  </body>
+</html>
