@@ -1,0 +1,8 @@
+{
+  "appId": "com.wallcov.pulse",
+  "appName": "Пульс",
+  "webDir": "native-web",
+  "server": {
+    "iosScheme": "https"
+  }
+}

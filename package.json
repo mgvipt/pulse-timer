@@ -1,0 +1,18 @@
+{
+  "name": "pulse-timer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Пульс — интервальный таймер для веба и мобильных устройств",
+  "scripts": {
+    "build:native": "node scripts/build-native.mjs",
+    "ios:sync": "node scripts/sync-ios.mjs",
+    "ios:open": "npm run ios:sync && open ios/App/App.xcworkspace"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/ios": "^7.4.4"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.4"
+  }
+}
