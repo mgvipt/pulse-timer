@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pulse-timer-v7';
+const CACHE_NAME = 'pulse-timer-v8';
 const APP_SHELL = [
   './', './index.html', './manifest.json', './icon.svg',
   './assets/boxing-start-loud.wav', './assets/boxing-rest-loud.wav', './assets/clear-bell-loud.wav',
@@ -17,6 +17,10 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  // Private sync responses contain the user's workout data. They must always
+  // go directly to the HTTPS API and never enter the offline app cache.
+  if (url.origin !== self.location.origin || url.pathname.startsWith('/v1/')) return;
   event.respondWith(
     fetch(event.request)
       .then((response) => {

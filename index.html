@@ -178,6 +178,22 @@
       .dialog-close:hover { color: var(--text); background: rgba(255,255,255,.1); }
       .sound-dialog .sound-options { margin-top: 17px; }
       .sound-preview { width: 100%; min-height: 49px; margin-top: 12px; color: #07120d; border: 0; border-radius: 14px; background: var(--accent); font-weight: 850; }
+      .sync-status { display: flex; align-items: flex-start; gap: 10px; margin: 17px 0; padding: 13px; border: 1px solid rgba(var(--accent-rgb), .3); border-radius: 14px; background: rgba(var(--accent-rgb), .08); }
+      .sync-status i { width: 9px; height: 9px; flex: 0 0 auto; margin-top: 5px; border-radius: 99px; background: var(--muted); }
+      .sync-status i.ready { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+      .sync-status i.error { background: var(--orange); box-shadow: 0 0 12px var(--orange); }
+      .sync-status strong, .sync-status span { display: block; }
+      .sync-status strong { font-size: 12px; }
+      .sync-status span { margin-top: 3px; color: var(--muted); font-size: 11px; line-height: 1.35; }
+      .sync-section { margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--line); }
+      .sync-section h3 { margin: 0; font-size: 14px; }
+      .sync-section p { margin-top: 5px; }
+      .sync-code { width: 100%; min-height: 74px; margin-top: 10px; padding: 10px; resize: none; color: #dcecff; border: 1px solid rgba(144,195,255,.28); border-radius: 12px; background: #0d121c; font: 600 11px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
+      .sync-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+      .sync-actions button, .sync-primary { min-height: 43px; border-radius: 12px; font-weight: 800; }
+      .sync-primary { width: 100%; margin-top: 10px; border: 0; color: #07120d; background: var(--accent); }
+      .sync-secondary { border: 1px solid var(--line); color: var(--text); background: rgba(255,255,255,.05); }
+      .sync-warning { margin-top: 11px !important; color: #ffcf8d !important; }
       .flash { animation: flash .45s ease-out; }
       @keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb),.52); } 100% { box-shadow: 0 0 0 22px rgba(var(--accent-rgb),0); } }
       .muted-button { color: #6e7788; }
@@ -197,6 +213,7 @@
         .icon-button { min-width: 40px; min-height: 40px; padding: 0 9px; }
         .icon-button span { display: none; }
         .top-actions #fullscreenButton { display: none; }
+        .top-actions #soundTestButton { display: none; }
         .install-button { display: inline-flex; align-items: center; justify-content: center; }
         .mobile-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 10px; }
         .mobile-nav a { min-height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 11px; color: #cfd5e1; background: rgba(255,255,255,.035); text-decoration: none; font-size: 11px; font-weight: 800; }
@@ -235,6 +252,7 @@
         <div class="top-actions">
           <button class="icon-button" id="soundToggle" aria-label="Включить или выключить звук">🔊 <span>Звук</span></button>
           <button class="icon-button" id="soundTestButton" aria-label="Открыть выбор звука">🔔 <span>Звуки</span></button>
+          <button class="icon-button" id="syncButton" aria-label="Подключить синхронизацию между устройствами">☁ <span>Синхр.</span></button>
           <button class="icon-button" id="gestureToggle" aria-label="Включить бесконтактное управление жестом перед камерой">🖐 <span>Жест</span></button>
           <button class="icon-button install-button" id="installButton" aria-label="Установить приложение на телефон">⇩ <span>Установить</span></button>
           <button class="icon-button" id="fullscreenButton" aria-label="Открыть полноэкранный режим">⛶ <span>Фокус</span></button>
@@ -391,6 +409,33 @@
         <button class="sound-preview" id="soundPairTest">▶ Повторить выбранную пару</button>
       </div>
     </dialog>
+    <dialog class="sound-dialog" id="syncDialog" aria-labelledby="syncDialogTitle">
+      <div class="sound-dialog-card">
+        <div class="sound-dialog-head">
+          <div><div class="eyebrow">ОБЩЕЕ ПРОСТРАНСТВО</div><h2 id="syncDialogTitle">Синхронизация устройств</h2></div>
+          <button class="dialog-close" id="syncCloseButton" aria-label="Закрыть синхронизацию">×</button>
+        </div>
+        <div class="sync-status"><i id="syncStateDot"></i><div><strong id="syncStateTitle">Синхронизация не подключена</strong><span id="syncStateText">Подключите телефон и веб-версию одним защищённым кодом.</span></div></div>
+        <section class="sync-section" id="syncCreatePanel">
+          <h3>Это первое устройство</h3>
+          <p>Создам защищённое пространство без почты и пароля. В него попадут схема тренировки, звук и история.</p>
+          <button class="sync-primary" id="syncEnableButton">Включить синхронизацию</button>
+        </section>
+        <section class="sync-section" id="syncJoinPanel">
+          <h3>Подключить второе устройство</h3>
+          <p>Вставьте код, который показан на уже подключённом устройстве. Код никому не передавайте.</p>
+          <textarea class="sync-code" id="syncJoinCode" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Вставьте защищённый код"></textarea>
+          <button class="sync-primary" id="syncJoinButton">Подключить и загрузить данные</button>
+        </section>
+        <section class="sync-section" id="syncPairedPanel" hidden>
+          <h3>Подключённые устройства</h3>
+          <p>Изменения сохраняются автоматически. Откройте этот код на втором устройстве, затем вставьте его в поле выше.</p>
+          <textarea class="sync-code" id="syncPairCode" rows="3" readonly hidden></textarea>
+          <div class="sync-actions"><button class="sync-secondary" id="syncRevealButton">Показать код</button><button class="sync-secondary" id="syncCopyButton" hidden>Скопировать код</button></div>
+          <p class="sync-warning">Код — это ключ к этой тренировочной истории. Не отправляйте его в общий чат.</p>
+        </section>
+      </div>
+    </dialog>
     <div class="toast" id="toast" role="status"></div>
 
     <script>
@@ -461,6 +506,9 @@
       }
 
       const storedConfig = JSON.parse(localStorage.getItem('pulse-config') || 'null');
+      const SYNC_API_URL = 'https://api.pulse.wallcov.com.ua/v1';
+      const SYNC_ACCOUNT_KEY = 'pulse-sync-account';
+      const SYNC_META_KEY = 'pulse-sync-meta';
       const state = {
         config: normalizeConfig(storedConfig || { name: 'Силовая база', ...presets[0] }),
         phase: 'ready',
@@ -491,6 +539,200 @@
       let toastTimer;
       const activeSamples = new Set();
       const samplePools = new Map();
+      let syncAccount = readStoredJson(SYNC_ACCOUNT_KEY);
+      const syncMeta = { configUpdatedAt: 0, preferencesUpdatedAt: 0, historyClearedAt: 0, lastSyncedAt: 0, ...readStoredJson(SYNC_META_KEY) };
+      const syncState = { busy: false, timer: null, lastError: '', pendingDocument: null };
+
+      function readStoredJson(key) {
+        try { return JSON.parse(localStorage.getItem(key) || 'null') || {}; } catch (_) { return {}; }
+      }
+      function validSyncTimestamp(value) { return Number.isInteger(value) && value >= 1577836800000 && value <= 4102444800000; }
+      function randomSyncToken(bytes) {
+        const values = new Uint8Array(bytes);
+        crypto.getRandomValues(values);
+        let binary = '';
+        values.forEach((value) => { binary += String.fromCharCode(value); });
+        return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+      }
+      function createSyncAccount() { return { userId: randomSyncToken(18), secret: randomSyncToken(32) }; }
+      function pairingCode() { return syncAccount ? `${syncAccount.userId}.${syncAccount.secret}` : ''; }
+      function validPairingCode(value) { return /^[A-Za-z0-9_-]{20,80}\.[A-Za-z0-9_-]{20,80}$/.test(value); }
+      function persistSyncMeta() { localStorage.setItem(SYNC_META_KEY, JSON.stringify(syncMeta)); }
+      function persistSyncAccount() { localStorage.setItem(SYNC_ACCOUNT_KEY, JSON.stringify(syncAccount)); }
+      function localSyncDocument() {
+        return {
+          schema: 1,
+          config: validSyncTimestamp(syncMeta.configUpdatedAt) ? { value: state.config, updatedAt: syncMeta.configUpdatedAt } : null,
+          preferences: validSyncTimestamp(syncMeta.preferencesUpdatedAt) ? { value: { muted: state.muted, soundProfile: state.soundProfile }, updatedAt: syncMeta.preferencesUpdatedAt } : null,
+          history: state.history.filter((item) => typeof item.id === 'string' && validSyncTimestamp(item.updatedAt)).map((item) => ({ id: item.id, name: item.name, rounds: item.rounds, duration: item.duration, date: item.date, updatedAt: item.updatedAt })),
+          historyClearedAt: validSyncTimestamp(syncMeta.historyClearedAt) ? syncMeta.historyClearedAt : 0,
+        };
+      }
+      function newerSyncRecord(first, second) {
+        if (!first) return second || null;
+        if (!second) return first;
+        return second.updatedAt > first.updatedAt ? second : first;
+      }
+      function mergeSyncDocuments(first, second) {
+        const historyClearedAt = Math.max(first.historyClearedAt || 0, second.historyClearedAt || 0);
+        const historyById = new Map();
+        [...first.history, ...second.history].forEach((item) => {
+          const current = historyById.get(item.id);
+          if (!current || item.updatedAt > current.updatedAt) historyById.set(item.id, item);
+        });
+        const history = [...historyById.values()].filter((item) => item.updatedAt > historyClearedAt).sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 100);
+        return { schema: 1, config: newerSyncRecord(first.config, second.config), preferences: newerSyncRecord(first.preferences, second.preferences), history, historyClearedAt };
+      }
+      function markLocalStateForFirstSync() {
+        const timestamp = Date.now();
+        syncMeta.configUpdatedAt = timestamp;
+        syncMeta.preferencesUpdatedAt = timestamp;
+        state.history = state.history.map((item) => ({ ...item, id: typeof item.id === 'string' ? item.id : randomSyncToken(18), updatedAt: validSyncTimestamp(item.updatedAt) ? item.updatedAt : timestamp }));
+        localStorage.setItem('pulse-history', JSON.stringify(state.history));
+        persistSyncMeta();
+      }
+      function touchConfigSync() { syncMeta.configUpdatedAt = Date.now(); persistSyncMeta(); queueSync(); }
+      function touchPreferencesSync() { syncMeta.preferencesUpdatedAt = Date.now(); persistSyncMeta(); queueSync(); }
+      function touchHistorySync() { persistSyncMeta(); queueSync(); }
+      function applySyncDocument(document) {
+        if (!document || document.schema !== 1) return;
+        if (document.config?.value) {
+          state.config = normalizeConfig(document.config.value);
+          state.activePreset = state.config.id || null;
+          syncMeta.configUpdatedAt = document.config.updatedAt;
+          localStorage.setItem('pulse-config', JSON.stringify(state.config));
+          setInputsFromConfig();
+          updateEstimate();
+          if (state.phase === 'ready' || state.phase === 'complete') resetTimer(false);
+        }
+        if (document.preferences?.value) {
+          state.muted = Boolean(document.preferences.value.muted);
+          state.soundProfile = soundProfiles.some((profile) => profile.id === document.preferences.value.soundProfile) ? document.preferences.value.soundProfile : 'ring';
+          syncMeta.preferencesUpdatedAt = document.preferences.updatedAt;
+          localStorage.setItem('pulse-muted', state.muted);
+          localStorage.setItem('pulse-sound-profile', state.soundProfile);
+        }
+        state.history = document.history || [];
+        syncMeta.historyClearedAt = document.historyClearedAt || 0;
+        localStorage.setItem('pulse-history', JSON.stringify(state.history));
+        persistSyncMeta();
+        renderSoundOptions(); render(); renderHistory();
+      }
+      function syncErrorMessage(error) {
+        if (error?.message === 'Failed to fetch') return 'Сервер синхронизации пока недоступен.';
+        return error?.message || 'Не удалось синхронизировать данные.';
+      }
+      function renderSyncStatus() {
+        const connected = Boolean(syncAccount?.userId && syncAccount?.secret);
+        const dot = el('syncStateDot');
+        const title = el('syncStateTitle');
+        const text = el('syncStateText');
+        const button = el('syncButton');
+        if (!connected) {
+          dot.className = ''; title.textContent = 'Синхронизация не подключена'; text.textContent = 'Подключите телефон и веб-версию одним защищённым кодом.';
+          button.classList.remove('is-active'); return;
+        }
+        button.classList.add('is-active');
+        if (syncState.busy) {
+          dot.className = ''; title.textContent = 'Синхронизируем изменения'; text.textContent = 'План и история обновляются между вашими устройствами.';
+        } else if (syncState.lastError) {
+          dot.className = 'error'; title.textContent = 'Не удалось связаться с облаком'; text.textContent = `${syncState.lastError} Данные остались на этом устройстве.`;
+        } else {
+          dot.className = 'ready'; title.textContent = 'Устройства синхронизированы';
+          text.textContent = syncMeta.lastSyncedAt ? `Последнее обновление: ${new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' }).format(new Date(syncMeta.lastSyncedAt))}.` : 'Подключение защищено личным кодом.';
+        }
+      }
+      function renderSyncDialog() {
+        const connected = Boolean(syncAccount?.userId && syncAccount?.secret);
+        el('syncCreatePanel').hidden = connected;
+        el('syncPairedPanel').hidden = !connected;
+        renderSyncStatus();
+      }
+      async function syncRequest(path, options = {}) {
+        const response = await fetch(`${SYNC_API_URL}${path}`, {
+          method: options.method || 'GET',
+          headers: { Authorization: `Bearer ${pairingCode()}`, ...(options.body ? { 'Content-Type': 'application/json' } : {}) },
+          body: options.body ? JSON.stringify(options.body) : undefined,
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.error || 'Сервер синхронизации ответил с ошибкой.');
+        return payload;
+      }
+      async function syncNow(announce = false) {
+        if (!syncAccount || syncState.busy) return;
+        if (!navigator.onLine) { syncState.lastError = 'Нет подключения к интернету.'; renderSyncDialog(); return; }
+        syncState.busy = true; syncState.lastError = ''; renderSyncDialog();
+        try {
+          await syncRequest('/account', { method: 'POST' });
+          const result = await syncRequest('/snapshot', { method: 'PUT', body: { data: localSyncDocument() } });
+          applySyncDocument(result.data);
+          syncMeta.lastSyncedAt = Date.now(); persistSyncMeta();
+          if (announce) showToast('Данные синхронизированы');
+        } catch (error) {
+          syncState.lastError = syncErrorMessage(error);
+          if (announce) showToast(syncState.lastError);
+        } finally {
+          syncState.busy = false; renderSyncDialog();
+        }
+      }
+      async function pullRemoteChanges() {
+        if (!syncAccount || syncState.busy || state.timer || !navigator.onLine) return;
+        syncState.busy = true; syncState.lastError = ''; renderSyncStatus();
+        try {
+          const remote = await syncRequest('/snapshot');
+          const merged = mergeSyncDocuments(localSyncDocument(), remote.data);
+          const hasLocalChanges = JSON.stringify(merged) !== JSON.stringify(remote.data);
+          applySyncDocument(merged);
+          syncMeta.lastSyncedAt = Date.now(); persistSyncMeta();
+          if (hasLocalChanges) queueSync();
+        } catch (error) {
+          syncState.lastError = syncErrorMessage(error);
+        } finally {
+          syncState.busy = false; renderSyncStatus();
+        }
+      }
+      function queueSync() {
+        if (!syncAccount) return;
+        clearTimeout(syncState.timer);
+        syncState.timer = setTimeout(() => syncNow(false), 700);
+      }
+      async function enableSync() {
+        if (!syncAccount) {
+          syncAccount = createSyncAccount();
+          persistSyncAccount();
+          markLocalStateForFirstSync();
+        }
+        el('syncPairCode').hidden = true; el('syncCopyButton').hidden = true;
+        await syncNow(true);
+      }
+      async function joinSync() {
+        const code = el('syncJoinCode').value.trim();
+        if (!validPairingCode(code)) { showToast('Вставьте полный защищённый код.'); return; }
+        const [userId, secret] = code.split('.');
+        const previous = syncAccount;
+        syncAccount = { userId, secret };
+        try {
+          const remote = await syncRequest('/snapshot');
+          const merged = mergeSyncDocuments(localSyncDocument(), remote.data);
+          applySyncDocument(merged);
+          persistSyncAccount();
+          syncMeta.lastSyncedAt = Date.now(); syncState.lastError = ''; persistSyncMeta();
+          el('syncJoinCode').value = '';
+          renderSyncDialog(); showToast('Устройство подключено и данные загружены');
+          if (JSON.stringify(merged) !== JSON.stringify(remote.data)) queueSync();
+        } catch (error) {
+          syncAccount = previous;
+          syncState.lastError = syncErrorMessage(error);
+          renderSyncDialog(); showToast(syncState.lastError);
+        }
+      }
+      async function copyPairingCode() {
+        const code = pairingCode();
+        try { await navigator.clipboard.writeText(code); showToast('Код скопирован'); }
+        catch (_) { el('syncPairCode').focus(); el('syncPairCode').select(); showToast('Скопируйте выделенный код'); }
+      }
+      function openSyncDialog() { renderSyncDialog(); el('syncDialog').showModal(); }
+      function closeSyncDialog() { el('syncDialog').close(); }
 
       function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
       function colorWithAlpha(hex, alpha) {
@@ -522,6 +764,7 @@
         if (!soundProfiles.some((profile) => profile.id === id)) return;
         state.soundProfile = id;
         localStorage.setItem('pulse-sound-profile', id);
+        touchPreferencesSync();
         renderSoundOptions();
         if (!state.muted) { unlockSampleAudio(); previewSelectedSound(); }
         showToast(`Выбрано: ${getSoundProfile().name}`);
@@ -793,7 +1036,8 @@
       function saveConfig() {
         state.config = configFromInputs();
         localStorage.setItem('pulse-config', JSON.stringify(state.config));
-        showToast('Схема сохранена на этом устройстве');
+        touchConfigSync();
+        showToast(syncAccount ? 'Схема сохранена и отправлена на устройства' : 'Схема сохранена на этом устройстве');
         if (state.phase === 'ready' || state.phase === 'complete') resetTimer(false);
         else render();
       }
@@ -986,9 +1230,10 @@
         state.phase = 'complete'; state.secondsLeft = 0; state.phaseDuration = 1; state.endAt = null;
         beep('complete'); navigator.vibrate?.([100, 50, 100, 50, 180]);
         notify('Тренировка завершена', `${state.config.name}: ${state.config.rounds} подходов выполнено.`);
-        state.history.unshift({ name: state.config.name, rounds: state.config.rounds, duration: formatTime(estimateWorkout()), date: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
+        state.history.unshift({ id: randomSyncToken(18), updatedAt: Date.now(), name: state.config.name, rounds: state.config.rounds, duration: formatTime(estimateWorkout()), date: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
         state.history = state.history.slice(0, 20);
         localStorage.setItem('pulse-history', JSON.stringify(state.history));
+        touchHistorySync();
         releaseWakeLock(); render(); renderHistory(); showToast('Тренировка сохранена в историю');
       }
       function startOrPause() {
@@ -1022,6 +1267,7 @@
         state.activePreset = id;
         setInputsFromConfig();
         localStorage.setItem('pulse-config', JSON.stringify(state.config));
+        touchConfigSync();
         updateEstimate(); resetTimer(false); showToast(`Выбрано: ${preset.name}`);
       }
       function adjustField(key, delta) {
@@ -1046,11 +1292,18 @@
       el('skipButton').addEventListener('click', () => { if (state.phase !== 'ready' && state.phase !== 'complete') advancePhase(); });
       el('saveButton').addEventListener('click', saveConfig);
       el('presetGrid').addEventListener('click', (event) => { const button = event.target.closest('[data-preset]'); if (button) applyPreset(button.dataset.preset); });
-      el('soundToggle').addEventListener('click', () => { state.muted = !state.muted; localStorage.setItem('pulse-muted', state.muted); render(); });
+      el('soundToggle').addEventListener('click', () => { state.muted = !state.muted; localStorage.setItem('pulse-muted', state.muted); touchPreferencesSync(); render(); });
       el('soundOptions').addEventListener('click', (event) => { const button = event.target.closest('[data-sound]'); if (button) selectSoundProfile(button.dataset.sound); });
       el('soundTestButton').addEventListener('click', openSoundDialog);
       el('soundOpenButton').addEventListener('click', openSoundDialog);
       el('soundCloseButton').addEventListener('click', closeSoundDialog);
+      el('syncButton').addEventListener('click', openSyncDialog);
+      el('syncCloseButton').addEventListener('click', closeSyncDialog);
+      el('syncEnableButton').addEventListener('click', enableSync);
+      el('syncJoinButton').addEventListener('click', joinSync);
+      el('syncRevealButton').addEventListener('click', () => { el('syncPairCode').value = pairingCode(); el('syncPairCode').hidden = false; el('syncCopyButton').hidden = false; });
+      el('syncCopyButton').addEventListener('click', copyPairingCode);
+      el('syncDialog').addEventListener('click', (event) => { if (event.target === el('syncDialog')) closeSyncDialog(); });
       el('soundPairTest').addEventListener('click', () => {
         if (state.muted) { showToast('Сначала включите звук'); return; }
         unlockSampleAudio();
@@ -1067,8 +1320,8 @@
         const permission = await Notification.requestPermission();
         showToast(permission === 'granted' ? 'Уведомления включены' : 'Разрешение на уведомления не получено');
       });
-      el('clearHistory').addEventListener('click', () => { state.history = []; localStorage.removeItem('pulse-history'); renderHistory(); showToast('История очищена'); });
-      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && state.timer) tick(); });
+      el('clearHistory').addEventListener('click', () => { state.history = []; syncMeta.historyClearedAt = Date.now(); localStorage.removeItem('pulse-history'); touchHistorySync(); renderHistory(); showToast(syncAccount ? 'История очищена на всех устройствах' : 'История очищена'); });
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && state.timer) tick(); if (document.visibilityState === 'visible') pullRemoteChanges(); });
       document.addEventListener('fullscreenchange', () => { el('fullscreenButton').innerHTML = document.fullscreenElement ? '× <span>Выйти</span>' : '⛶ <span>Фокус</span>'; });
       let deferredInstallPrompt;
       window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstallPrompt = event; });
@@ -1083,7 +1336,12 @@
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
       }
 
-      preloadSoundAssets(); renderSoundOptions(); setInputsFromConfig(); updateEstimate(); resetTimer(false); renderHistory();
+      window.addEventListener('online', () => { syncState.lastError = ''; syncNow(false); });
+      preloadSoundAssets(); renderSoundOptions(); setInputsFromConfig(); updateEstimate(); resetTimer(false); renderHistory(); renderSyncDialog();
+      if (syncAccount) {
+        setTimeout(pullRemoteChanges, 450);
+        setInterval(() => { if (document.visibilityState === 'visible') pullRemoteChanges(); }, 15000);
+      }
     </script>
   </body>
 </html>
