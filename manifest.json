@@ -1,8 +1,8 @@
 {
-  "name": "Пульс — интервальный таймер",
+  "name": "Пульс — інтервальний таймер",
   "short_name": "Пульс",
-  "description": "Громкий интервальный таймер для тренировок",
-  "lang": "ru",
+  "description": "Гучний інтервальний таймер для тренувань",
+  "lang": "uk",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#090b10",

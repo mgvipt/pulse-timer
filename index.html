@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="uk">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icon.svg" />
-    <title>Пульс — интервальный таймер</title>
+    <title>Пульс — інтервальний таймер</title>
     <style>
       :root {
         --bg: #090b10;
@@ -229,42 +229,43 @@
           <div class="brand-mark">P</div>
           <div>
             <h1>Пульс</h1>
-            <p>Интервальный таймер для тренировок</p>
+            <p data-i18n="brand.tagline">Інтервальний таймер для тренувань</p>
           </div>
         </div>
         <div class="top-actions">
-          <button class="icon-button" id="soundToggle" aria-label="Включить или выключить звук">🔊 <span>Звук</span></button>
-          <button class="icon-button" id="soundTestButton" aria-label="Открыть выбор звука">🔔 <span>Звуки</span></button>
-          <button class="icon-button" id="gestureToggle" aria-label="Включить бесконтактное управление жестом перед камерой">🖐 <span>Жест</span></button>
-          <button class="icon-button install-button" id="installButton" aria-label="Установить приложение на телефон">⇩ <span>Установить</span></button>
-          <button class="icon-button" id="fullscreenButton" aria-label="Открыть полноэкранный режим">⛶ <span>Фокус</span></button>
+          <button class="icon-button" id="soundToggle" aria-label="Увімкнути або вимкнути звук" data-i18n-aria-label="aria.soundToggle">🔊 <span>Звук</span></button>
+          <button class="icon-button" id="soundTestButton" aria-label="Відкрити вибір звуку" data-i18n-aria-label="aria.soundPicker">🔔 <span>Звуки</span></button>
+          <button class="icon-button" id="gestureToggle" aria-label="Увімкнути безконтактне керування жестом перед камерою" data-i18n-aria-label="aria.gesture">🖐 <span>Жест</span></button>
+          <button class="icon-button" id="languageToggle" aria-label="Змінити мову">🌐 <span>UA</span></button>
+          <button class="icon-button install-button" id="installButton" aria-label="Встановити застосунок на телефон" data-i18n-aria-label="aria.install">⇩ <span>Установить</span></button>
+          <button class="icon-button" id="fullscreenButton" aria-label="Відкрити повноекранний режим" data-i18n-aria-label="aria.focus">⛶ <span>Фокус</span></button>
         </div>
       </header>
 
-      <nav class="mobile-nav" aria-label="Разделы приложения">
-        <a href="#timerCard">Таймер</a>
-        <a href="#setupCard">План</a>
-        <a href="#presetsCard">Пресеты</a>
+      <nav class="mobile-nav" aria-label="Розділи застосунку" data-i18n-aria-label="aria.navigation">
+        <a href="#timerCard" data-i18n="nav.timer">Таймер</a>
+        <a href="#setupCard" data-i18n="nav.plan">План</a>
+        <a href="#presetsCard" data-i18n="nav.presets">Пресети</a>
       </nav>
 
       <section class="workspace">
         <section class="card timer-card" id="timerCard" aria-live="polite">
           <div class="timer-heading">
             <div>
-              <div class="eyebrow">Текущая тренировка</div>
-              <h2 id="displayTitle">Силовая база</h2>
+              <div class="eyebrow" data-i18n="timer.currentWorkout">Поточне тренування</div>
+              <h2 id="displayTitle">Силова база</h2>
             </div>
-            <button class="sound-indicator" id="soundOpenButton" aria-label="Открыть выбор звука"><i class="sound-dot" id="soundDot"></i><span id="soundStatus">сигналы включены</span></button>
+            <button class="sound-indicator" id="soundOpenButton" aria-label="Відкрити вибір звуку" data-i18n-aria-label="aria.soundPicker"><i class="sound-dot" id="soundDot"></i><span id="soundStatus">сигнали увімкнено</span></button>
           </div>
 
           <div class="sport-strip" id="sportStrip">
             <span class="sport-icon" id="sportIcon">🏋️</span>
-            <div class="sport-copy"><small>СПОРТИВНЫЙ РЕЖИМ</small><strong id="sportLabel">Сила</strong></div>
-            <span class="sport-motto" id="sportMotto">Контроль веса и длинное восстановление</span>
+            <div class="sport-copy"><small data-i18n="timer.sportMode">СПОРТИВНИЙ РЕЖИМ</small><strong id="sportLabel">Сила</strong></div>
+            <span class="sport-motto" id="sportMotto">Контроль ваги та тривале відновлення</span>
           </div>
           <div class="gesture-panel" id="gesturePanel" hidden>
             <video class="gesture-video" id="gestureVideo" muted playsinline></video>
-            <div><strong>Жест перед камерой включён</strong><span>Сделайте два быстрых взмаха рукой — таймер запустится или остановится.</span></div>
+            <div><strong data-i18n="gesture.activeTitle">Жест перед камерою ввімкнено</strong><span data-i18n="gesture.activeCopy">Зробіть два швидкі помахи рукою — таймер запуститься або зупиниться.</span></div>
           </div>
 
           <div class="circle-wrap">
@@ -273,38 +274,38 @@
               <circle class="ring-progress" id="ringProgress" cx="150" cy="150" r="140"></circle>
             </svg>
             <div class="timer-center">
-              <div class="phase-chip" id="phaseChip">готовность</div>
+              <div class="phase-chip" id="phaseChip">готовність</div>
               <div class="time" id="timeDisplay">00:45</div>
-              <div class="round" id="roundDisplay">Нажмите «Старт»</div>
-              <div class="next" id="nextDisplay">Дальше: подход 1</div>
+              <div class="round" id="roundDisplay">Натисніть «Старт»</div>
+              <div class="next" id="nextDisplay">Далі: підхід 1</div>
             </div>
           </div>
 
-          <div class="progress-label"><span>Прогресс подходов</span><span id="progressCount">0 / 5</span></div>
-          <div class="round-progress" id="roundProgress" aria-label="Прогресс подходов"></div>
+          <div class="progress-label"><span data-i18n="timer.progress">Прогрес підходів</span><span id="progressCount">0 / 5</span></div>
+          <div class="round-progress" id="roundProgress" aria-label="Прогрес підходів" data-i18n-aria-label="timer.progress"></div>
           <div class="timer-actions">
-            <button class="action" id="resetButton">Сбросить</button>
+            <button class="action" id="resetButton" data-i18n="actions.reset">Скинути</button>
             <button class="action primary" id="startButton">▶ Старт</button>
-            <button class="action" id="skipButton">Пропустить</button>
+            <button class="action" id="skipButton" data-i18n="actions.skip">Пропустити</button>
           </div>
-          <p class="timer-footnote" id="footerHint">Каждый 3-й отдых — удлинённый. Меняйте схему справа.</p>
+          <p class="timer-footnote" id="footerHint">У кожного підходу — свій час роботи та паузи. Змінюйте план до старту.</p>
         </section>
 
-        <section class="card setup-card" id="setupCard" aria-label="Настройка тренировки">
+        <section class="card setup-card" id="setupCard" aria-label="Налаштування тренування" data-i18n-aria-label="aria.setup">
           <div class="section-heading">
             <div>
-              <div class="eyebrow">Конструктор</div>
-              <h2>Своя схема</h2>
+              <div class="eyebrow" data-i18n="setup.builder">Конструктор</div>
+              <h2 data-i18n="setup.title">Власна схема</h2>
             </div>
-            <button class="small-button" id="notificationButton">🔔 Напомнить</button>
+            <button class="small-button" id="notificationButton">🔔 <span data-i18n="actions.remind">Нагадати</span></button>
           </div>
           <div class="field">
-            <label for="workoutName">Название тренировки</label>
-            <input class="text-input" id="workoutName" maxlength="36" value="Силовая база" placeholder="Например, ноги — сила" />
+            <label for="workoutName" data-i18n="setup.workoutName">Назва тренування</label>
+            <input class="text-input" id="workoutName" maxlength="36" value="Силова база" placeholder="Наприклад, ноги — сила" data-i18n-placeholder="setup.workoutPlaceholder" />
           </div>
           <div class="metrics">
             <div class="metric">
-              <div class="metric-title">Базовый подход <span>сек.</span></div>
+              <div class="metric-title"><span data-i18n="metrics.work">Базовий підхід</span> <span data-i18n="units.seconds">сек.</span></div>
               <div class="stepper">
                 <button data-adjust="work" data-delta="-5" aria-label="Уменьшить длительность подхода">−</button>
                 <input id="work" type="number" min="5" max="3600" step="5" value="45" inputmode="numeric" />
@@ -312,7 +313,7 @@
               </div>
             </div>
             <div class="metric">
-              <div class="metric-title">Базовая пауза <span>сек.</span></div>
+              <div class="metric-title"><span data-i18n="metrics.rest">Базова пауза</span> <span data-i18n="units.seconds">сек.</span></div>
               <div class="stepper">
                 <button data-adjust="rest" data-delta="-5" aria-label="Уменьшить отдых">−</button>
                 <input id="rest" type="number" min="0" max="3600" step="5" value="120" inputmode="numeric" />
@@ -320,7 +321,7 @@
               </div>
             </div>
             <div class="metric">
-              <div class="metric-title">Подходов <span>шт.</span></div>
+              <div class="metric-title"><span data-i18n="metrics.rounds">Підходів</span> <span data-i18n="units.pieces">шт.</span></div>
               <div class="stepper">
                 <button data-adjust="rounds" data-delta="-1" aria-label="Уменьшить число подходов">−</button>
                 <input id="rounds" type="number" min="1" max="99" step="1" value="5" inputmode="numeric" />
@@ -328,7 +329,7 @@
               </div>
             </div>
             <div class="metric">
-              <div class="metric-title">Длинный отдых <span>сек.</span></div>
+              <div class="metric-title"><span data-i18n="metrics.longRest">Довгий відпочинок</span> <span data-i18n="units.seconds">сек.</span></div>
               <div class="stepper">
                 <button data-adjust="longRest" data-delta="-5" aria-label="Уменьшить длинный отдых">−</button>
                 <input id="longRest" type="number" min="0" max="3600" step="5" value="180" inputmode="numeric" />
@@ -336,7 +337,7 @@
               </div>
             </div>
             <div class="metric">
-              <div class="metric-title">Длинный после <span>подходов</span></div>
+              <div class="metric-title"><span data-i18n="metrics.longRestEvery">Довгий після</span> <span data-i18n="metrics.rounds">підходів</span></div>
               <div class="stepper">
                 <button data-adjust="longRestEvery" data-delta="-1" aria-label="Уменьшить период длинного отдыха">−</button>
                 <input id="longRestEvery" type="number" min="0" max="99" step="1" value="3" inputmode="numeric" />
@@ -344,7 +345,7 @@
               </div>
             </div>
             <div class="metric">
-              <div class="metric-title">Подготовка <span>сек.</span></div>
+              <div class="metric-title"><span data-i18n="metrics.prep">Підготовка</span> <span data-i18n="units.seconds">сек.</span></div>
               <div class="stepper">
                 <button data-adjust="prep" data-delta="-5" aria-label="Уменьшить подготовку">−</button>
                 <input id="prep" type="number" min="0" max="600" step="5" value="10" inputmode="numeric" />
@@ -355,45 +356,99 @@
           <div class="round-editor">
             <div class="plan-heading">
               <div>
-                <h3>Индивидуальные интервалы</h3>
-                <p>Настройте работу и паузу после каждого подхода отдельно. Это важнее общей схемы.</p>
+                <h3 data-i18n="plan.title">Індивідуальні інтервали</h3>
+                <p data-i18n="plan.description">Налаштуйте роботу та паузу після кожного підходу окремо. Це важливіше за загальну схему.</p>
               </div>
-              <button class="small-button" id="fillPlanButton">Заполнить по схеме</button>
+              <button class="small-button" id="fillPlanButton" data-i18n="actions.fillPlan">Заповнити за схемою</button>
             </div>
-            <div class="round-plan" id="roundPlan" aria-label="Индивидуальные интервалы подходов"></div>
+            <div class="round-plan" id="roundPlan" aria-label="Індивідуальні інтервали підходів" data-i18n-aria-label="plan.aria"></div>
           </div>
           <div class="advanced">
-            <div class="estimate"><span>Примерная длительность</span><strong id="estimate">10:15</strong></div>
-            <button class="save-button" id="saveButton">Сохранить эту схему</button>
+            <div class="estimate"><span data-i18n="setup.estimate">Орієнтовна тривалість</span><strong id="estimate">10:15</strong></div>
+            <button class="save-button" id="saveButton" data-i18n="actions.savePlan">Зберегти цю схему</button>
           </div>
         </section>
       </section>
 
       <section class="card presets" id="presetsCard">
-        <div class="eyebrow">10 спортивных сценариев</div>
-        <h2>Быстрый старт под вид тренировки</h2>
+        <div class="eyebrow" data-i18n="presets.eyebrow">10 спортивних сценаріїв</div>
+        <h2 data-i18n="presets.title">Швидкий старт під вид тренування</h2>
         <div class="preset-grid" id="presetGrid"></div>
       </section>
 
       <section class="card history">
-        <div class="history-head"><div><div class="eyebrow">История</div><h2>Завершённые тренировки</h2></div><button class="small-button muted-button" id="clearHistory">Очистить</button></div>
+        <div class="history-head"><div><div class="eyebrow" data-i18n="history.eyebrow">Історія</div><h2 data-i18n="history.title">Завершені тренування</h2></div><button class="small-button muted-button" id="clearHistory" data-i18n="actions.clear">Очистити</button></div>
         <div id="historyContent"></div>
       </section>
     </main>
     <dialog class="sound-dialog" id="soundDialog" aria-labelledby="soundDialogTitle">
       <div class="sound-dialog-card">
         <div class="sound-dialog-head">
-          <div><div class="eyebrow">НАСТРОЙКИ ТАЙМЕРА</div><h2 id="soundDialogTitle">Выберите настоящий звук</h2></div>
-          <button class="dialog-close" id="soundCloseButton" aria-label="Закрыть выбор звука">×</button>
+          <div><div class="eyebrow" data-i18n="sound.settings">НАЛАШТУВАННЯ ТАЙМЕРА</div><h2 id="soundDialogTitle" data-i18n="sound.title">Оберіть справжній звук</h2></div>
+          <button class="dialog-close" id="soundCloseButton" aria-label="Закрити вибір звуку" data-i18n-aria-label="sound.close">×</button>
         </div>
-        <p>Это реальные аудиозаписи, а не короткий синтетический писк. Нажмите на вариант — он проиграет старт подхода и переход в отдых.</p>
-        <div class="sound-options" id="soundOptions" aria-label="Выбор звука таймера"></div>
-        <button class="sound-preview" id="soundPairTest">▶ Повторить выбранную пару</button>
+        <p data-i18n="sound.description">Це реальні аудіозаписи, а не короткий синтетичний писк. Натисніть на варіант — він відтворить старт підходу та перехід у відпочинок.</p>
+        <div class="sound-options" id="soundOptions" aria-label="Вибір звуку таймера" data-i18n-aria-label="sound.aria"></div>
+        <button class="sound-preview" id="soundPairTest">▶ <span data-i18n="sound.repeat">Повторити вибрану пару</span></button>
       </div>
     </dialog>
     <div class="toast" id="toast" role="status"></div>
 
     <script>
+      let appLanguage = localStorage.getItem('pulse-language') === 'ru' ? 'ru' : 'uk';
+      const translations = {
+        uk: {
+          meta: { title: 'Пульс — інтервальний таймер' },
+          brand: { tagline: 'Інтервальний таймер для тренувань' },
+          nav: { timer: 'Таймер', plan: 'План', presets: 'Пресети' },
+          aria: { navigation: 'Розділи застосунку', setup: 'Налаштування тренування', soundToggle: 'Увімкнути або вимкнути звук', soundPicker: 'Відкрити вибір звуку', gesture: 'Увімкнути безконтактне керування жестом перед камерою', install: 'Встановити застосунок на телефон', focus: 'Відкрити повноекранний режим' },
+          controls: { sound: 'Звук', muted: 'Без звуку', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Камера: увімк.', install: 'Встановити', focus: 'Фокус', exitFocus: 'Вийти', language: 'Змінити мову' },
+          timer: { currentWorkout: 'Поточне тренування', sportMode: 'СПОРТИВНИЙ РЕЖИМ', progress: 'Прогрес підходів', ready: 'готовність', pressStart: 'Натисніть «Старт»', getReady: 'Приготуйтеся', completed: '{{count}} {{rounds}} виконано', roundOf: 'Підхід {{round}} з {{total}}', footer: 'У кожного підходу — свій час роботи та паузи. Змінюйте план до старту.', soundOn: '{{sound}} · увімкнено', soundOff: 'сигнали вимкнено' },
+          phase: { ready: 'готовність', prep: 'підготовка', work: 'підхід', rest: 'відпочинок', complete: 'готово' },
+          gesture: { activeTitle: 'Жест перед камерою ввімкнено', activeCopy: 'Зробіть два швидкі помахи рукою — таймер запуститься або зупиниться.', title: 'Два швидкі помахи рукою перед фронтальною камерою запускають або зупиняють таймер', unavailable: 'Для жесту потрібні камера та HTTPS-посилання', stopped: 'Таймер зупинено жестом', started: 'Таймер запущено жестом', https: 'Для жесту відкрийте HTTPS-посилання в браузері телефона', disabled: 'Керування жестом вимкнено', cameraOn: 'Камеру ввімкнено: зробіть два помахи рукою', cameraError: 'Не вдалося ввімкнути камеру для жесту' },
+          setup: { builder: 'Конструктор', title: 'Власна схема', workoutName: 'Назва тренування', workoutPlaceholder: 'Наприклад, ноги — сила', estimate: 'Орієнтовна тривалість', defaultWorkout: 'Моє тренування' },
+          metrics: { work: 'Базовий підхід', rest: 'Базова пауза', rounds: 'Підходів', longRest: 'Довгий відпочинок', longRestEvery: 'Довгий після', prep: 'Підготовка' },
+          units: { seconds: 'сек.', pieces: 'шт.', roundForms: 'підхід|підходи|підходів' },
+          plan: { title: 'Індивідуальні інтервали', description: 'Налаштуйте роботу та паузу після кожного підходу окремо. Це важливіше за загальну схему.', aria: 'Індивідуальні інтервали підходів', round: 'Підхід {{round}}', finish: 'завершення тренування', pauseAfter: 'пауза після {{round}}-го', workAria: 'Час роботи, підхід {{round}}', restAria: 'Пауза після підходу {{round}}', finishShort: 'фініш' },
+          actions: { reset: 'Скинути', start: 'Старт', pause: 'Пауза', continue: 'Продовжити', again: 'Ще раз', skip: 'Пропустити', remind: 'Нагадати', fillPlan: 'Заповнити за схемою', savePlan: 'Зберегти цю схему', clear: 'Очистити' },
+          presets: { eyebrow: '10 спортивних сценаріїв', title: 'Швидкий старт під вид тренування', strength: 'Сила', muscle: 'Гіпертрофія', tabata: 'Табата', crossfit: 'Кросфіт', running: 'Біг', boxing: 'Бокс', swim: 'Плавання', cycling: 'Велосипед', tennis: 'Теніс', mobility: 'Мобільність' },
+          themes: { strength: 'Контроль ваги та тривале відновлення', muscle: 'Об’єм, темп і якісні повторення', tabata: 'Максимум потужності за короткий інтервал', crossfit: 'Робота на межі. Ритм вирішує все', running: 'Швидкість, дихання та рівний темп', boxing: 'Раунд за раундом. Тримайте темп', swim: 'Дистанція, техніка, чисте дихання', cycling: 'Каденс, потужність і відновлення', tennis: 'Реакція, ноги та наступний розіграш', mobility: 'Плавний рух і контроль тіла' },
+          history: { eyebrow: 'Історія', title: 'Завершені тренування', empty: 'Завершені тренування з’являться тут. Історія зберігається на цьому пристрої.' },
+          sound: { settings: 'НАЛАШТУВАННЯ ТАЙМЕРА', title: 'Оберіть справжній звук', close: 'Закрити вибір звуку', description: 'Це реальні аудіозаписи, а не короткий синтетичний писк. Натисніть на варіант — він відтворить старт підходу та перехід у відпочинок.', aria: 'Вибір звуку таймера', repeat: 'Повторити вибрану пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистий дзвін', ringDetail: 'справжній посилений дзвін · 1,7 сек.', gongDetail: 'справжній глибокий гонг · 5,6 сек.', whistleDetail: 'справжній довгий свист · 2,1 сек.', chimeDetail: 'посилений потрійний дзвін · 1,8 сек.' },
+          next: { prep: 'Спочатку: підготовка {{time}}', round: 'Далі: підхід {{round}}', pause: 'Далі: пауза {{time}}', finish: 'Далі: завершення тренування', complete: 'Чудова робота. Схему можна запустити знову.' },
+          notify: { completeTitle: 'Тренування завершено', completeBody: '{{name}}: виконано {{count}} {{rounds}}.' },
+          messages: { soundSelected: 'Обрано: {{sound}}', configSaved: 'Схему збережено на цьому пристрої', completedSaved: 'Тренування збережено в історію', reset: 'Таймер скинуто', presetSelected: 'Обрано: {{preset}}', planFilled: 'Усі підходи заповнено за базовою схемою', enableSound: 'Спочатку ввімкніть звук', soundCheck: 'Перевірка: старт підходу → перехід у відпочинок', fullscreenUnavailable: 'Повноекранний режим недоступний', notificationsUnsupported: 'Сповіщення не підтримуються браузером', notificationsOn: 'Сповіщення ввімкнено', notificationDenied: 'Дозвіл на сповіщення не отримано', historyCleared: 'Історію очищено', installed: 'Пульс встановлено на пристрій', installIos: 'На iPhone: «Поділитися» → «На початковий екран»' }
+        },
+        ru: {
+          meta: { title: 'Пульс — интервальный таймер' },
+          brand: { tagline: 'Интервальный таймер для тренировок' },
+          nav: { timer: 'Таймер', plan: 'План', presets: 'Пресеты' },
+          aria: { navigation: 'Разделы приложения', setup: 'Настройка тренировки', soundToggle: 'Включить или выключить звук', soundPicker: 'Открыть выбор звука', gesture: 'Включить бесконтактное управление жестом перед камерой', install: 'Установить приложение на телефон', focus: 'Открыть полноэкранный режим' },
+          controls: { sound: 'Звук', muted: 'Без звука', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Камера: вкл', install: 'Установить', focus: 'Фокус', exitFocus: 'Выйти', language: 'Сменить язык' },
+          timer: { currentWorkout: 'Текущая тренировка', sportMode: 'СПОРТИВНЫЙ РЕЖИМ', progress: 'Прогресс подходов', ready: 'готовность', pressStart: 'Нажмите «Старт»', getReady: 'Приготовьтесь', completed: '{{count}} {{rounds}} выполнено', roundOf: 'Подход {{round}} из {{total}}', footer: 'У каждого подхода — своё время работы и паузы. Меняйте план до старта.', soundOn: '{{sound}} · включён', soundOff: 'сигналы выключены' },
+          phase: { ready: 'готовность', prep: 'подготовка', work: 'подход', rest: 'отдых', complete: 'готово' },
+          gesture: { activeTitle: 'Жест перед камерой включён', activeCopy: 'Сделайте два быстрых взмаха рукой — таймер запустится или остановится.', title: 'Два быстрых взмаха рукой перед фронтальной камерой запускают или останавливают таймер', unavailable: 'Для жеста нужна камера и HTTPS-ссылка', stopped: 'Таймер остановлен жестом', started: 'Таймер запущен жестом', https: 'Для жеста откройте HTTPS-ссылку в браузере телефона', disabled: 'Управление жестом выключено', cameraOn: 'Камера включена: сделайте два взмаха рукой', cameraError: 'Не удалось включить камеру для жеста' },
+          setup: { builder: 'Конструктор', title: 'Своя схема', workoutName: 'Название тренировки', workoutPlaceholder: 'Например, ноги — сила', estimate: 'Примерная длительность', defaultWorkout: 'Моя тренировка' },
+          metrics: { work: 'Базовый подход', rest: 'Базовая пауза', rounds: 'Подходов', longRest: 'Длинный отдых', longRestEvery: 'Длинный после', prep: 'Подготовка' },
+          units: { seconds: 'сек.', pieces: 'шт.', roundForms: 'подход|подхода|подходов' },
+          plan: { title: 'Индивидуальные интервалы', description: 'Настройте работу и паузу после каждого подхода отдельно. Это важнее общей схемы.', aria: 'Индивидуальные интервалы подходов', round: 'Подход {{round}}', finish: 'завершение тренировки', pauseAfter: 'пауза после {{round}}-го', workAria: 'Время работы, подход {{round}}', restAria: 'Пауза после подхода {{round}}', finishShort: 'финиш' },
+          actions: { reset: 'Сбросить', start: 'Старт', pause: 'Пауза', continue: 'Продолжить', again: 'Ещё раз', skip: 'Пропустить', remind: 'Напомнить', fillPlan: 'Заполнить по схеме', savePlan: 'Сохранить эту схему', clear: 'Очистить' },
+          presets: { eyebrow: '10 спортивных сценариев', title: 'Быстрый старт под вид тренировки', strength: 'Сила', muscle: 'Гипертрофия', tabata: 'Табата', crossfit: 'Кроссфит', running: 'Бег', boxing: 'Бокс', swim: 'Плавание', cycling: 'Велосипед', tennis: 'Теннис', mobility: 'Мобилити' },
+          themes: { strength: 'Контроль веса и длинное восстановление', muscle: 'Объём, темп и качественные повторения', tabata: 'Максимум мощности за короткий интервал', crossfit: 'Работа на пределе. Ритм решает всё', running: 'Скорость, дыхание и ровный темп', boxing: 'Раунд за раундом. Держите темп', swim: 'Дистанция, техника, чистое дыхание', cycling: 'Каденс, мощность и восстановление', tennis: 'Реакция, ноги и следующий розыгрыш', mobility: 'Плавное движение и контроль тела' },
+          history: { eyebrow: 'История', title: 'Завершённые тренировки', empty: 'Завершённые тренировки будут появляться здесь. История хранится на этом устройстве.' },
+          sound: { settings: 'НАСТРОЙКИ ТАЙМЕРА', title: 'Выберите настоящий звук', close: 'Закрыть выбор звука', description: 'Это реальные аудиозаписи, а не короткий синтетический писк. Нажмите на вариант — он проиграет старт подхода и переход в отдых.', aria: 'Выбор звука таймера', repeat: 'Повторить выбранную пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистый колокол', ringDetail: 'реальный усиленный колокол · 1,7 сек.', gongDetail: 'настоящий глубокий гонг · 5,6 сек.', whistleDetail: 'настоящий длинный свист · 2,1 сек.', chimeDetail: 'усиленный тройной звон · 1,8 сек.' },
+          next: { prep: 'Сначала: подготовка {{time}}', round: 'Дальше: подход {{round}}', pause: 'Дальше: пауза {{time}}', finish: 'Дальше: завершение тренировки', complete: 'Отличная работа. Схему можно запустить снова.' },
+          notify: { completeTitle: 'Тренировка завершена', completeBody: '{{name}}: {{count}} {{rounds}} выполнено.' },
+          messages: { soundSelected: 'Выбрано: {{sound}}', configSaved: 'Схема сохранена на этом устройстве', completedSaved: 'Тренировка сохранена в историю', reset: 'Таймер сброшен', presetSelected: 'Выбрано: {{preset}}', planFilled: 'Все подходы заполнены по базовой схеме', enableSound: 'Сначала включите звук', soundCheck: 'Проверка: старт подхода → переход в отдых', fullscreenUnavailable: 'Полноэкранный режим недоступен', notificationsUnsupported: 'Уведомления не поддерживаются браузером', notificationsOn: 'Уведомления включены', notificationDenied: 'Разрешение на уведомления не получено', historyCleared: 'История очищена', installed: 'Пульс установлен на устройство', installIos: 'На iPhone: «Поделиться» → «На экран Домой»' }
+        }
+      };
+      function t(key, values = {}) {
+        const text = key.split('.').reduce((item, part) => item?.[part], translations[appLanguage]) || key;
+        return String(text).replace(/{{(\w+)}}/g, (_, name) => values[name] ?? '');
+      }
+      function roundWord(value) { return plural(value, t('units.roundForms').split('|')); }
+      function localizedPreset(preset) { return { ...preset, name: t(`presets.${preset.id}`) }; }
+
       const presets = [
         { id: 'strength', icon: '🏋️', name: 'Сила', detail: '45с · 2:00 · ×5', work: 45, rest: 120, rounds: 5, longRest: 180, longRestEvery: 3, prep: 10 },
         { id: 'muscle', icon: '💪', name: 'Гипертрофия', detail: '40с · 1:30 · ×4', work: 40, rest: 90, rounds: 4, longRest: 120, longRestEvery: 2, prep: 10 },
@@ -440,7 +495,7 @@
       }
       function normalizeConfig(input = {}) {
         const config = { ...presets[0], ...input };
-        config.name = input.name || config.name || 'Моя тренировка';
+        config.name = input.name || config.name || t('setup.defaultWorkout');
         config.work = numberInRange(config.work, 5, 3600, 45);
         config.rest = numberInRange(config.rest, 0, 3600, 120);
         config.rounds = numberInRange(config.rounds, 1, 99, 5);
@@ -461,8 +516,13 @@
       }
 
       const storedConfig = JSON.parse(localStorage.getItem('pulse-config') || 'null');
+      // Переносимо лише стандартні старі пресети, але ніколи не змінюємо власну назву тренування користувача.
+      if (storedConfig && !localStorage.getItem('pulse-language') && Object.values(translations.ru.presets).includes(storedConfig.name)) {
+        storedConfig.name = t(`presets.${storedConfig.id || 'strength'}`);
+        localStorage.setItem('pulse-config', JSON.stringify(storedConfig));
+      }
       const state = {
-        config: normalizeConfig(storedConfig || { name: 'Силовая база', ...presets[0] }),
+        config: normalizeConfig(storedConfig || { ...presets[0], name: t('presets.strength') }),
         phase: 'ready',
         round: 1,
         secondsLeft: 45,
@@ -470,6 +530,7 @@
         endAt: null,
         timer: null,
         muted: localStorage.getItem('pulse-muted') === 'true',
+        language: appLanguage,
         soundProfile: localStorage.getItem('pulse-sound-profile') || 'ring',
         history: JSON.parse(localStorage.getItem('pulse-history') || '[]'),
         wakeLock: null,
@@ -479,18 +540,48 @@
 
       const el = (id) => document.getElementById(id);
       const fields = ['work', 'rest', 'rounds', 'longRest', 'longRestEvery', 'prep'];
-      const phaseMeta = {
-        ready: { label: 'готовность', tone: 'secondary' },
-        prep: { label: 'подготовка', tone: 'secondary' },
-        work: { label: 'подход', tone: 'accent' },
-        rest: { label: 'отдых', tone: 'secondary' },
-        complete: { label: 'готово', tone: 'accent' },
-      };
+      function phaseMeta(phase) {
+        const meta = {
+          ready: { label: t('phase.ready'), tone: 'secondary' },
+          prep: { label: t('phase.prep'), tone: 'secondary' },
+          work: { label: t('phase.work'), tone: 'accent' },
+          rest: { label: t('phase.rest'), tone: 'secondary' },
+          complete: { label: t('phase.complete'), tone: 'accent' },
+        };
+        return meta[phase] || meta.ready;
+      }
       const circumference = 2 * Math.PI * 140;
       let audioContext;
       let toastTimer;
       const activeSamples = new Set();
       const samplePools = new Map();
+
+      function applyLanguage() {
+        document.documentElement.lang = appLanguage;
+        document.title = t('meta.title');
+        document.querySelectorAll('[data-i18n]').forEach((node) => { node.textContent = t(node.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach((node) => { node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel)); });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => { node.setAttribute('placeholder', t(node.dataset.i18nPlaceholder)); });
+        const labels = {
+          soundToggle: 'aria.soundToggle', soundTestButton: 'aria.soundPicker', gestureToggle: 'aria.gesture',
+          installButton: 'aria.install', fullscreenButton: 'aria.focus', languageToggle: 'controls.language',
+        };
+        Object.entries(labels).forEach(([id, key]) => el(id)?.setAttribute('aria-label', t(key)));
+        el('soundTestButton').innerHTML = `🔔 <span>${t('controls.sounds')}</span>`;
+        el('installButton').innerHTML = `⇩ <span>${t('controls.install')}</span>`;
+        el('fullscreenButton').innerHTML = `⛶ <span>${t('controls.focus')}</span>`;
+        el('languageToggle').innerHTML = `🌐 <span>${appLanguage === 'uk' ? 'UA' : 'RU'}</span>`;
+      }
+      function switchLanguage() {
+        const previousLanguage = appLanguage;
+        appLanguage = appLanguage === 'uk' ? 'ru' : 'uk';
+        state.language = appLanguage;
+        const previousNames = Object.values(translations[previousLanguage].presets);
+        if (previousNames.includes(state.config.name)) state.config.name = t(`presets.${state.config.id || 'strength'}`);
+        localStorage.setItem('pulse-language', appLanguage);
+        localStorage.setItem('pulse-config', JSON.stringify(state.config));
+        applyLanguage(); setInputsFromConfig(); updateEstimate(); render(); renderHistory(); renderSoundOptions();
+      }
 
       function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
       function colorWithAlpha(hex, alpha) {
@@ -500,7 +591,11 @@
         const blue = parseInt(value.slice(4, 6), 16);
         return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
       }
-      function getSportTheme() { return sportThemes[state.config.id] || sportThemes.strength; }
+      function getSportTheme() {
+        const id = state.config.id || 'strength';
+        const theme = sportThemes[id] || sportThemes.strength;
+        return { ...theme, label: t(`presets.${id}`), motto: t(`themes.${id}`) };
+      }
       function applySportTheme() {
         const theme = getSportTheme();
         const rootStyle = document.documentElement.style;
@@ -513,10 +608,16 @@
         el('sportMotto').textContent = theme.motto;
         return theme;
       }
-      function getSoundProfile() { return soundProfiles.find((profile) => profile.id === state.soundProfile) || soundProfiles[0]; }
+      function getSoundProfile() {
+        const profile = soundProfiles.find((item) => item.id === state.soundProfile) || soundProfiles[0];
+        return { ...profile, name: t(`sound.${profile.id}`), detail: t(`sound.${profile.id}Detail`) };
+      }
       function renderSoundOptions() {
         const selected = getSoundProfile();
-        el('soundOptions').innerHTML = soundProfiles.map((profile) => `<button class="sound-option ${profile.id === selected.id ? 'active' : ''}" data-sound="${profile.id}"><span>${profile.icon}</span><strong>${profile.name}</strong><small>${profile.detail}</small></button>`).join('');
+        el('soundOptions').innerHTML = soundProfiles.map((profile) => {
+          const localized = { ...profile, name: t(`sound.${profile.id}`), detail: t(`sound.${profile.id}Detail`) };
+          return `<button class="sound-option ${profile.id === selected.id ? 'active' : ''}" data-sound="${profile.id}"><span>${localized.icon}</span><strong>${localized.name}</strong><small>${localized.detail}</small></button>`;
+        }).join('');
       }
       function selectSoundProfile(id) {
         if (!soundProfiles.some((profile) => profile.id === id)) return;
@@ -524,7 +625,7 @@
         localStorage.setItem('pulse-sound-profile', id);
         renderSoundOptions();
         if (!state.muted) { unlockSampleAudio(); previewSelectedSound(); }
-        showToast(`Выбрано: ${getSoundProfile().name}`);
+        showToast(t('messages.soundSelected', { sound: getSoundProfile().name }));
       }
       function previewSelectedSound() {
         beep('work');
@@ -583,8 +684,8 @@
         const supported = Boolean(navigator.mediaDevices?.getUserMedia) && window.isSecureContext;
         button.disabled = !supported;
         button.classList.toggle('is-active', state.gesture.enabled);
-        button.innerHTML = state.gesture.enabled ? '🖐 <span>Камера: вкл</span>' : '🖐 <span>Жест</span>';
-        button.title = supported ? 'Два быстрых взмаха рукой перед фронтальной камерой запускают или останавливают таймер' : 'Для жеста нужна камера и HTTPS-ссылка';
+        button.innerHTML = state.gesture.enabled ? `🖐 <span>${t('controls.gestureOn')}</span>` : `🖐 <span>${t('controls.gesture')}</span>`;
+        button.title = supported ? t('gesture.title') : t('gesture.unavailable');
       }
       function triggerCameraGesture() {
         const now = Date.now();
@@ -592,7 +693,7 @@
         state.gesture.lastTriggeredAt = now;
         const wasRunning = Boolean(state.timer);
         startOrPause();
-        showToast(wasRunning ? 'Таймер остановлен жестом' : 'Таймер запущен жестом');
+        showToast(wasRunning ? t('gesture.stopped') : t('gesture.started'));
       }
       function checkCameraGesture() {
         const { videoWidth, videoHeight, readyState } = el('gestureVideo');
@@ -629,10 +730,10 @@
         renderGestureToggle();
       }
       async function toggleCameraGesture() {
-        if (!navigator.mediaDevices?.getUserMedia || !window.isSecureContext) { showToast('Для жеста откройте HTTPS-ссылку в браузере телефона'); return; }
+        if (!navigator.mediaDevices?.getUserMedia || !window.isSecureContext) { showToast(t('gesture.https')); return; }
         if (state.gesture.enabled) {
           stopCameraGesture();
-          showToast('Управление жестом выключено');
+          showToast(t('gesture.disabled'));
           return;
         }
         try {
@@ -647,8 +748,8 @@
           el('gesturePanel').hidden = false;
           state.gesture.timer = setInterval(checkCameraGesture, 120);
           renderGestureToggle();
-          showToast('Камера включена: сделайте два взмаха рукой');
-        } catch (_) { showToast('Не удалось включить камеру для жеста'); }
+          showToast(t('gesture.cameraOn'));
+        } catch (_) { showToast(t('gesture.cameraError')); }
       }
       function formatTime(total) {
         total = Math.max(0, Math.ceil(total));
@@ -670,14 +771,14 @@
         return roundPlan.work;
       }
       function getNextText() {
-        if (state.phase === 'ready') return state.config.prep > 0 ? `Сначала: подготовка ${formatTime(state.config.prep)}` : 'Дальше: подход 1';
-        if (state.phase === 'prep') return 'Дальше: подход 1';
+        if (state.phase === 'ready') return state.config.prep > 0 ? t('next.prep', { time: formatTime(state.config.prep) }) : t('next.round', { round: 1 });
+        if (state.phase === 'prep') return t('next.round', { round: 1 });
         if (state.phase === 'work') {
-          if (state.round === state.config.rounds) return 'Дальше: завершение тренировки';
-          return `Дальше: пауза ${formatTime(phaseDuration('rest'))}`;
+          if (state.round === state.config.rounds) return t('next.finish');
+          return t('next.pause', { time: formatTime(phaseDuration('rest')) });
         }
-        if (state.phase === 'rest') return `Дальше: подход ${state.round + 1}`;
-        if (state.phase === 'complete') return 'Отличная работа. Схему можно запустить снова.';
+        if (state.phase === 'rest') return t('next.round', { round: state.round + 1 });
+        if (state.phase === 'complete') return t('next.complete');
         return '';
       }
       function setInputsFromConfig() {
@@ -686,7 +787,7 @@
         renderRoundPlan();
       }
       function basicConfigFromInputs() {
-        const config = { ...state.config, name: el('workoutName').value.trim() || 'Моя тренировка' };
+        const config = { ...state.config, name: el('workoutName').value.trim() || t('setup.defaultWorkout') };
         fields.forEach((key) => {
           const input = el(key);
           config[key] = clamp(Number(input.value) || 0, Number(input.min), Number(input.max));
@@ -714,7 +815,7 @@
         state.config.roundPlan = plan;
         el('roundPlan').innerHTML = plan.map((entry, index) => {
           const isLast = index === plan.length - 1;
-          return `<div class="plan-row"><div class="plan-name"><strong>Подход ${index + 1}</strong><span>${isLast ? 'завершение тренировки' : `пауза после ${index + 1}-го`}</span></div><label class="plan-field"><input data-plan="work" type="number" min="5" max="3600" step="5" value="${entry.work}" aria-label="Время работы, подход ${index + 1}" inputmode="numeric" /><span>сек</span></label>${isLast ? '<div class="plan-finish">финиш</div>' : `<label class="plan-field"><input data-plan="rest" type="number" min="0" max="3600" step="5" value="${entry.rest}" aria-label="Пауза после подхода ${index + 1}" inputmode="numeric" /><span>сек</span></label>`}</div>`;
+          return `<div class="plan-row"><div class="plan-name"><strong>${t('plan.round', { round: index + 1 })}</strong><span>${isLast ? t('plan.finish') : t('plan.pauseAfter', { round: index + 1 })}</span></div><label class="plan-field"><input data-plan="work" type="number" min="5" max="3600" step="5" value="${entry.work}" aria-label="${t('plan.workAria', { round: index + 1 })}" inputmode="numeric" /><span>${t('units.seconds')}</span></label>${isLast ? `<div class="plan-finish">${t('plan.finishShort')}</div>` : `<label class="plan-field"><input data-plan="rest" type="number" min="0" max="3600" step="5" value="${entry.rest}" aria-label="${t('plan.restAria', { round: index + 1 })}" inputmode="numeric" /><span>${t('units.seconds')}</span></label>`}</div>`;
         }).join('');
       }
       function resizeRoundPlan() {
@@ -743,7 +844,7 @@
         }).join('');
       }
       function render() {
-        const meta = phaseMeta[state.phase] || phaseMeta.ready;
+        const meta = phaseMeta(state.phase);
         const theme = applySportTheme();
         const phaseColor = meta.tone === 'secondary' ? theme.secondary : theme.accent;
         const duration = state.phaseDuration || 1;
@@ -758,30 +859,30 @@
         el('ringProgress').style.filter = `drop-shadow(0 0 9px ${colorWithAlpha(phaseColor, .64)})`;
         el('ringProgress').style.strokeDasharray = circumference;
         el('ringProgress').style.strokeDashoffset = circumference * (1 - progress);
-        el('roundDisplay').textContent = state.phase === 'ready' ? 'Нажмите «Старт»' : state.phase === 'prep' ? 'Приготовьтесь' : state.phase === 'complete' ? `${state.config.rounds} ${plural(state.config.rounds, ['подход', 'подхода', 'подходов'])} выполнено` : `Подход ${state.round} из ${state.config.rounds}`;
+        el('roundDisplay').textContent = state.phase === 'ready' ? t('timer.pressStart') : state.phase === 'prep' ? t('timer.getReady') : state.phase === 'complete' ? t('timer.completed', { count: state.config.rounds, rounds: roundWord(state.config.rounds) }) : t('timer.roundOf', { round: state.round, total: state.config.rounds });
         el('nextDisplay').textContent = getNextText();
-        el('startButton').textContent = state.phase === 'complete' ? '↻ Ещё раз' : state.timer ? 'Ⅱ Пауза' : state.phase === 'ready' ? '▶ Старт' : '▶ Продолжить';
+        el('startButton').textContent = state.phase === 'complete' ? `↻ ${t('actions.again')}` : state.timer ? `Ⅱ ${t('actions.pause')}` : state.phase === 'ready' ? `▶ ${t('actions.start')}` : `▶ ${t('actions.continue')}`;
         el('skipButton').disabled = state.phase === 'ready' || state.phase === 'complete';
         el('skipButton').style.opacity = state.phase === 'ready' || state.phase === 'complete' ? '.42' : '1';
-        el('footerHint').textContent = 'У каждого подхода — своё время работы и паузы. Меняйте план до старта.';
+        el('footerHint').textContent = t('timer.footer');
         el('soundDot').style.background = state.muted ? '#6e7788' : theme.accent;
         el('soundDot').style.boxShadow = state.muted ? 'none' : `0 0 12px ${theme.accent}`;
-        el('soundStatus').textContent = state.muted ? 'сигналы выключены' : `${getSoundProfile().name} · включён`;
-        el('soundToggle').innerHTML = state.muted ? '🔇 <span>Без звука</span>' : '🔊 <span>Звук</span>';
+        el('soundStatus').textContent = state.muted ? t('timer.soundOff') : t('timer.soundOn', { sound: getSoundProfile().name });
+        el('soundToggle').innerHTML = state.muted ? `🔇 <span>${t('controls.muted')}</span>` : `🔊 <span>${t('controls.sound')}</span>`;
         renderGestureToggle();
         renderProgress();
         renderPresetButtons();
       }
       function renderPresetButtons() {
-        el('presetGrid').innerHTML = presets.map((preset) => `<button class="preset ${state.activePreset === preset.id ? 'active' : ''}" data-preset="${preset.id}"><span class="emoji">${preset.icon}</span><strong>${preset.name}</strong><small>${preset.detail}</small></button>`).join('');
+        el('presetGrid').innerHTML = presets.map((preset) => `<button class="preset ${state.activePreset === preset.id ? 'active' : ''}" data-preset="${preset.id}"><span class="emoji">${preset.icon}</span><strong>${t(`presets.${preset.id}`)}</strong><small>${preset.detail}</small></button>`).join('');
       }
       function renderHistory() {
         const content = el('historyContent');
         if (!state.history.length) {
-          content.innerHTML = '<p class="history-empty">Завершённые тренировки будут появляться здесь. История хранится на этом устройстве.</p>';
+          content.innerHTML = `<p class="history-empty">${t('history.empty')}</p>`;
           return;
         }
-        content.innerHTML = `<div class="history-list">${state.history.slice(0, 5).map((item) => `<div class="history-item"><div><strong>${escapeHtml(item.name)}</strong><span>${item.rounds} ${plural(item.rounds, ['подход', 'подхода', 'подходов'])} · ${item.date}</span></div><time>${item.duration}</time></div>`).join('')}</div>`;
+        content.innerHTML = `<div class="history-list">${state.history.slice(0, 5).map((item) => `<div class="history-item"><div><strong>${escapeHtml(item.name)}</strong><span>${item.rounds} ${roundWord(item.rounds)} · ${item.date}</span></div><time>${item.duration}</time></div>`).join('')}</div>`;
       }
       function escapeHtml(value) { return value.replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#039;', '"':'&quot;' }[char])); }
       function showToast(message) {
@@ -793,7 +894,7 @@
       function saveConfig() {
         state.config = configFromInputs();
         localStorage.setItem('pulse-config', JSON.stringify(state.config));
-        showToast('Схема сохранена на этом устройстве');
+        showToast(t('messages.configSaved'));
         if (state.phase === 'ready' || state.phase === 'complete') resetTimer(false);
         else render();
       }
@@ -985,11 +1086,11 @@
         clearInterval(state.timer); state.timer = null;
         state.phase = 'complete'; state.secondsLeft = 0; state.phaseDuration = 1; state.endAt = null;
         beep('complete'); navigator.vibrate?.([100, 50, 100, 50, 180]);
-        notify('Тренировка завершена', `${state.config.name}: ${state.config.rounds} подходов выполнено.`);
-        state.history.unshift({ name: state.config.name, rounds: state.config.rounds, duration: formatTime(estimateWorkout()), date: new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
+        notify(t('notify.completeTitle'), t('notify.completeBody', { name: state.config.name, count: state.config.rounds, rounds: roundWord(state.config.rounds) }));
+        state.history.unshift({ name: state.config.name, rounds: state.config.rounds, duration: formatTime(estimateWorkout()), date: new Intl.DateTimeFormat(appLanguage === 'uk' ? 'uk-UA' : 'ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
         state.history = state.history.slice(0, 20);
         localStorage.setItem('pulse-history', JSON.stringify(state.history));
-        releaseWakeLock(); render(); renderHistory(); showToast('Тренировка сохранена в историю');
+        releaseWakeLock(); render(); renderHistory(); showToast(t('messages.completedSaved'));
       }
       function startOrPause() {
         if (state.phase === 'complete') { resetTimer(); return; }
@@ -1013,16 +1114,16 @@
         clearInterval(state.timer); state.timer = null; state.phase = 'ready'; state.round = 1;
         state.secondsLeft = state.config.roundPlan[0]?.work || state.config.work; state.phaseDuration = state.secondsLeft; state.endAt = null;
         releaseWakeLock(); render();
-        if (showMessage) showToast('Таймер сброшен');
+        if (showMessage) showToast(t('messages.reset'));
       }
       function applyPreset(id) {
         const preset = presets.find((item) => item.id === id);
         if (!preset) return;
-        state.config = normalizeConfig({ ...preset, name: preset.name });
+        state.config = normalizeConfig({ ...preset, name: localizedPreset(preset).name });
         state.activePreset = id;
         setInputsFromConfig();
         localStorage.setItem('pulse-config', JSON.stringify(state.config));
-        updateEstimate(); resetTimer(false); showToast(`Выбрано: ${preset.name}`);
+        updateEstimate(); resetTimer(false); showToast(t('messages.presetSelected', { preset: localizedPreset(preset).name }));
       }
       function adjustField(key, delta) {
         const input = el(key);
@@ -1040,7 +1141,7 @@
       }));
       el('workoutName').addEventListener('input', () => { state.activePreset = null; });
       el('roundPlan').addEventListener('input', () => { state.activePreset = null; state.config.roundPlan = configFromInputs().roundPlan; updateEstimate(); });
-      el('fillPlanButton').addEventListener('click', () => { state.activePreset = null; renderRoundPlan(true); updateEstimate(); showToast('Все подходы заполнены по базовой схеме'); });
+      el('fillPlanButton').addEventListener('click', () => { state.activePreset = null; renderRoundPlan(true); updateEstimate(); showToast(t('messages.planFilled')); });
       el('startButton').addEventListener('click', startOrPause);
       el('resetButton').addEventListener('click', () => resetTimer());
       el('skipButton').addEventListener('click', () => { if (state.phase !== 'ready' && state.phase !== 'complete') advancePhase(); });
@@ -1052,29 +1153,29 @@
       el('soundOpenButton').addEventListener('click', openSoundDialog);
       el('soundCloseButton').addEventListener('click', closeSoundDialog);
       el('soundPairTest').addEventListener('click', () => {
-        if (state.muted) { showToast('Сначала включите звук'); return; }
+        if (state.muted) { showToast(t('messages.enableSound')); return; }
         unlockSampleAudio();
         previewSelectedSound();
-        showToast('Проверка: старт подхода → переход в отдых');
+        showToast(t('messages.soundCheck'));
       });
       el('soundDialog').addEventListener('click', (event) => { if (event.target === el('soundDialog')) closeSoundDialog(); });
       el('gestureToggle').addEventListener('click', toggleCameraGesture);
       el('fullscreenButton').addEventListener('click', async () => {
-        try { if (document.fullscreenElement) await document.exitFullscreen(); else await el('timerCard').requestFullscreen(); } catch (_) { showToast('Полноэкранный режим недоступен'); }
+        try { if (document.fullscreenElement) await document.exitFullscreen(); else await el('timerCard').requestFullscreen(); } catch (_) { showToast(t('messages.fullscreenUnavailable')); }
       });
       el('notificationButton').addEventListener('click', async () => {
-        if (!('Notification' in window)) { showToast('Уведомления не поддерживаются браузером'); return; }
+        if (!('Notification' in window)) { showToast(t('messages.notificationsUnsupported')); return; }
         const permission = await Notification.requestPermission();
-        showToast(permission === 'granted' ? 'Уведомления включены' : 'Разрешение на уведомления не получено');
+        showToast(permission === 'granted' ? t('messages.notificationsOn') : t('messages.notificationDenied'));
       });
-      el('clearHistory').addEventListener('click', () => { state.history = []; localStorage.removeItem('pulse-history'); renderHistory(); showToast('История очищена'); });
+      el('clearHistory').addEventListener('click', () => { state.history = []; localStorage.removeItem('pulse-history'); renderHistory(); showToast(t('messages.historyCleared')); });
       document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && state.timer) tick(); });
-      document.addEventListener('fullscreenchange', () => { el('fullscreenButton').innerHTML = document.fullscreenElement ? '× <span>Выйти</span>' : '⛶ <span>Фокус</span>'; });
+      document.addEventListener('fullscreenchange', () => { el('fullscreenButton').innerHTML = document.fullscreenElement ? `× <span>${t('controls.exitFocus')}</span>` : `⛶ <span>${t('controls.focus')}</span>`; });
       let deferredInstallPrompt;
       window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstallPrompt = event; });
-      window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; showToast('Пульс установлен на устройство'); });
+      window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; showToast(t('messages.installed')); });
       el('installButton').addEventListener('click', async () => {
-        if (!deferredInstallPrompt) { showToast('На iPhone: «Поделиться» → «На экран Домой»'); return; }
+        if (!deferredInstallPrompt) { showToast(t('messages.installIos')); return; }
         deferredInstallPrompt.prompt();
         await deferredInstallPrompt.userChoice;
         deferredInstallPrompt = null;
@@ -1083,7 +1184,8 @@
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
       }
 
-      preloadSoundAssets(); renderSoundOptions(); setInputsFromConfig(); updateEstimate(); resetTimer(false); renderHistory();
+      el('languageToggle').addEventListener('click', switchLanguage);
+      applyLanguage(); preloadSoundAssets(); renderSoundOptions(); setInputsFromConfig(); updateEstimate(); resetTimer(false); renderHistory();
     </script>
   </body>
 </html>
