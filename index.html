@@ -119,6 +119,16 @@
       .action.primary { background: var(--accent); color: #07120d; border-color: var(--accent); box-shadow: 0 10px 26px rgba(var(--accent-rgb), .25); }
       .action.primary:hover { filter: brightness(1.1); }
       .timer-footnote { margin: 16px 2px 0; color: var(--muted); font-size: 12px; text-align: center; }
+      .live-cue { min-height: 38px; margin: 11px 0 -2px; padding: 9px 11px; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,.1); border-radius: 13px; background: rgba(4,8,13,.22); color: rgba(255,255,255,.9); font-size: 12px; line-height: 1.25; }
+      .live-cue .cue-icon { color: var(--accent); font-size: 15px; }
+      .live-cue strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .smart-rest { display: none; grid-template-columns: 1fr repeat(3, auto); align-items: center; gap: 7px; min-height: 47px; margin-top: 10px; padding: 7px; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; background: rgba(70,0,12,.2); }
+      .smart-rest.is-visible { display: grid; }
+      .smart-rest-copy { min-width: 0; padding-left: 4px; }
+      .smart-rest-copy strong { display: block; font-size: 11px; }
+      .smart-rest-copy span { display: block; margin-top: 2px; color: rgba(255,255,255,.68); font-size: 10px; }
+      .smart-rest button { min-width: 38px; min-height: 32px; border: 1px solid rgba(255,255,255,.14); border-radius: 10px; color: var(--text); background: rgba(255,255,255,.07); font-size: 11px; font-weight: 800; }
+      .smart-rest button:hover, .smart-rest button.active { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.17); }
 
       .setup-card { padding: 24px; }
       .section-heading { margin-bottom: 17px; }
@@ -153,12 +163,18 @@
       .plan-field input { min-width: 0; width: 100%; appearance: textfield; color: var(--text); border: 0; outline: 0; background: transparent; text-align: center; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
       .plan-field input::-webkit-inner-spin-button, .plan-field input::-webkit-outer-spin-button { appearance: none; margin: 0; }
       .plan-finish { padding: 8px; text-align: center; color: var(--muted); font-size: 11px; }
+      .plan-details { display: grid; grid-template-columns: minmax(0, 1.35fr) .55fr .55fr; gap: 7px; margin: -2px 4px 4px; }
+      .plan-detail-input { width: 100%; min-width: 0; min-height: 34px; padding: 8px 9px; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; color: var(--text); background: #10141e; font-size: 11px; outline: 0; }
+      .plan-detail-input:focus { border-color: rgba(var(--accent-rgb),.65); }
+      .plan-note { grid-column: 1 / -1; }
       .advanced { border-top: 1px solid var(--line); margin-top: 17px; padding-top: 16px; }
       .advanced-title { font-size: 12px; font-weight: 800; color: #dce1ea; letter-spacing: .02em; margin-bottom: 10px; }
       .estimate { padding: 11px 12px; background: rgba(144,195,255,.08); border: 1px solid rgba(144,195,255,.15); color: var(--blue); border-radius: 13px; font-size: 12px; }
       .estimate strong { color: #d8e9ff; font-size: 14px; font-variant-numeric: tabular-nums; }
       .save-button { margin-top: 14px; width: 100%; min-height: 44px; border: 1px solid rgba(144,195,255,.32); color: var(--blue); background: rgba(144,195,255,.08); border-radius: 13px; font-weight: 800; }
       .save-button:hover { background: rgba(144,195,255,.16); }
+      .coach-share-button { margin-top: 9px; width: 100%; min-height: 40px; border: 1px solid rgba(var(--accent-rgb),.3); color: var(--text); background: rgba(var(--accent-rgb),.08); border-radius: 13px; font-weight: 800; }
+      .coach-share-button:hover { background: rgba(var(--accent-rgb),.16); }
       .sound-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 11px; }
       .sound-option { min-height: 68px; padding: 10px; text-align: left; color: var(--text); background: rgba(255,255,255,.025); border: 1px solid var(--line); border-radius: 13px; transition: .18s ease; }
       .sound-option:hover, .sound-option.active { transform: translateY(-1px); background: rgba(var(--accent-rgb), .11); border-color: rgba(var(--accent-rgb), .58); }
@@ -199,6 +215,32 @@
       .history-item strong { display: block; font-size: 13px; }
       .history-item span { color: var(--muted); font-size: 11px; margin-top: 3px; display: block; }
       .history-item time { color: var(--accent); font-size: 12px; font-weight: 800; white-space: nowrap; }
+      .progress-dashboard, .pulse-check { margin-top: 20px; padding: 23px; }
+      .dashboard-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+      .dashboard-head h2, .pulse-check h2 { margin: 4px 0 0; font-size: 19px; letter-spacing: -.02em; }
+      .dashboard-copy, .pulse-copy { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+      .progress-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 16px; }
+      .progress-stat { min-height: 86px; padding: 13px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.03); }
+      .progress-stat strong { display: block; color: var(--accent); font-size: 27px; line-height: 1; letter-spacing: -.06em; }
+      .progress-stat span { display: block; margin-top: 7px; color: var(--muted); font-size: 10px; line-height: 1.25; }
+      .challenge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 14px; }
+      .challenge { min-height: 84px; padding: 11px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(145deg, rgba(var(--accent-rgb),.11), rgba(255,255,255,.02)); }
+      .challenge strong { display: block; font-size: 11px; }
+      .challenge span { display: block; margin-top: 7px; color: var(--muted); font-size: 10px; }
+      .challenge .challenge-progress { color: var(--accent); font-weight: 800; }
+      .pulse-check { position: relative; overflow: hidden; }
+      .pulse-check::after { content: ""; position: absolute; right: -70px; top: -90px; width: 230px; height: 230px; border-radius: 50%; background: radial-gradient(circle, rgba(255,79,105,.18), transparent 68%); pointer-events: none; }
+      .pulse-check > * { position: relative; z-index: 1; }
+      .pulse-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
+      .pulse-actions button { min-height: 40px; padding: 0 13px; border: 1px solid rgba(255,115,135,.35); border-radius: 12px; color: #ffdbe1; background: rgba(255,59,91,.12); font-weight: 800; }
+      .pulse-actions button:last-child { display: none; border-color: var(--line); color: var(--muted); background: rgba(255,255,255,.035); }
+      .pulse-check.measuring .pulse-actions button:last-child { display: inline-block; }
+      .pulse-check.measuring .pulse-actions button:first-child { display: none; }
+      .pulse-status { margin-top: 13px; color: #e3e8f3; font-size: 12px; line-height: 1.4; }
+      .pulse-result { display: none; margin-top: 11px; align-items: baseline; gap: 8px; }
+      .pulse-result.is-visible { display: flex; }
+      .pulse-result strong { color: #ff8293; font-size: 32px; letter-spacing: -.06em; }
+      .pulse-result span { color: var(--muted); font-size: 11px; }
       .toast { position: fixed; left: 50%; bottom: 23px; transform: translate(-50%, 90px); background: #edfdf4; color: #0b3320; border-radius: 99px; padding: 11px 15px; font-size: 13px; font-weight: 750; box-shadow: 0 12px 34px rgba(0,0,0,.3); transition: .22s ease; z-index: 4; }
       .toast.show { transform: translate(-50%, 0); }
       .sound-dialog { width: min(100% - 28px, 500px); padding: 0; color: var(--text); border: 1px solid rgba(255,255,255,.14); border-radius: 25px; background: #141925; box-shadow: 0 26px 90px rgba(0,0,0,.55); }
@@ -266,6 +308,7 @@
         </div>
         <div class="top-actions">
           <button class="icon-button" id="soundToggle" aria-label="Увімкнути або вимкнути звук" data-i18n-aria-label="aria.soundToggle">🔊 <span>Звук</span></button>
+          <button class="icon-button" id="voiceToggle" aria-label="Увімкнути або вимкнути голос тренера" data-i18n-aria-label="aria.voiceToggle">🗣 <span>Голос</span></button>
           <button class="icon-button" id="soundTestButton" aria-label="Відкрити вибір звуку" data-i18n-aria-label="aria.soundPicker">🔔 <span>Звуки</span></button>
           <button class="icon-button" id="gestureToggle" aria-label="Увімкнути безконтактне керування жестом перед камерою" data-i18n-aria-label="aria.gesture">🖐 <span>Жест</span></button>
           <button class="icon-button" id="languageToggle" aria-label="Змінити мову">🌐 <span>UA</span></button>
@@ -295,7 +338,9 @@
             <div class="sport-copy"><small data-i18n="timer.sportMode">СПОРТИВНИЙ РЕЖИМ</small><strong id="sportLabel">Сила</strong></div>
             <span class="sport-motto" id="sportMotto">Контроль ваги та тривале відновлення</span>
           </div>
+          <div class="live-cue" id="liveCue"><span class="cue-icon">✦</span><strong>Налаштуйте перший підхід — вправа, повтори та вага.</strong></div>
           <video class="gesture-video" id="gestureVideo" muted playsinline aria-hidden="true"></video>
+          <video class="gesture-video" id="pulseVideo" muted playsinline aria-hidden="true"></video>
 
           <div class="circle-wrap">
             <svg class="ring" viewBox="0 0 300 300" aria-hidden="true">
@@ -317,6 +362,7 @@
             <button class="action primary" id="startButton">▶ Старт</button>
             <button class="action" id="skipButton" data-i18n="actions.skip">Пропустити</button>
           </div>
+          <div class="smart-rest" id="smartRest" aria-live="polite"></div>
           <p class="timer-footnote" id="footerHint">У кожного підходу — свій час роботи та паузи. Змінюйте план до старту.</p>
         </section>
 
@@ -395,6 +441,7 @@
           <div class="advanced">
             <div class="estimate"><span data-i18n="setup.estimate">Орієнтовна тривалість</span><strong id="estimate">10:15</strong></div>
             <button class="save-button" id="saveButton" data-i18n="actions.savePlan">Зберегти цю схему</button>
+            <button class="coach-share-button" id="shareWorkoutButton" data-i18n="actions.sharePlan">↗ Надіслати тренування клієнту</button>
           </div>
         </section>
       </section>
@@ -414,6 +461,22 @@
         </div>
         <p class="saved-workouts-copy" data-i18n="cabinet.description">Збережіть свою схему — вона залишиться тут після перезавантаження застосунку.</p>
         <div id="savedWorkoutsContent"></div>
+      </section>
+
+      <section class="card progress-dashboard" id="progressCard">
+        <div class="dashboard-head"><div><div class="eyebrow" data-i18n="progress.eyebrow">МОЯ ДИНАМИКА</div><h2 data-i18n="progress.title">Результат и челленджи</h2></div></div>
+        <p class="dashboard-copy" data-i18n="progress.description">Выполняйте тренировки — прогресс и серии сохраняются на этом устройстве.</p>
+        <div class="progress-stats" id="progressStats"></div>
+        <div class="challenge-grid" id="challengeGrid"></div>
+      </section>
+
+      <section class="card pulse-check" id="pulseCard">
+        <div class="eyebrow" data-i18n="pulse.eyebrow">ВОССТАНОВЛЕНИЕ</div>
+        <h2 data-i18n="pulse.title">Проверка пульса камерой</h2>
+        <p class="pulse-copy" data-i18n="pulse.description">Закройте заднюю камеру пальцем и держите телефон неподвижно около 20 секунд. Результат ориентировочный, не медицинский.</p>
+        <div class="pulse-actions"><button id="pulseStartButton" data-i18n="actions.pulseStart">♥ Измерить пульс</button><button id="pulseStopButton" data-i18n="actions.pulseStop">Остановить</button></div>
+        <div class="pulse-status" id="pulseStatus" data-i18n="pulse.ready">Готово к проверке.</div>
+        <div class="pulse-result" id="pulseResult"><strong id="pulseValue">—</strong><span data-i18n="pulse.bpm">уд./мин · ориентировочно</span></div>
       </section>
 
       <section class="card history">
@@ -441,20 +504,26 @@
           meta: { title: 'Пульс — інтервальний таймер' },
           brand: { tagline: 'Інтервальний таймер для тренувань' },
           nav: { timer: 'Таймер', plan: 'План', presets: 'Пресети' },
-          aria: { navigation: 'Розділи застосунку', setup: 'Налаштування тренування', soundToggle: 'Увімкнути або вимкнути звук', soundPicker: 'Відкрити вибір звуку', gesture: 'Увімкнути безконтактне керування одним помахом перед камерою', install: 'Встановити застосунок на телефон', focus: 'Відкрити повноекранний режим' },
-          controls: { sound: 'Звук', muted: 'Без звуку', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: увімк.', install: 'Встановити', focus: 'Фокус', exitFocus: 'Вийти', language: 'Змінити мову' },
+          aria: { navigation: 'Розділи застосунку', setup: 'Налаштування тренування', soundToggle: 'Увімкнути або вимкнути звук', voiceToggle: 'Увімкнути або вимкнути голос тренера', soundPicker: 'Відкрити вибір звуку', gesture: 'Увімкнути безконтактне керування одним помахом перед камерою', install: 'Встановити застосунок на телефон', focus: 'Відкрити повноекранний режим' },
+          controls: { sound: 'Звук', muted: 'Без звуку', voice: 'Голос', voiceOff: 'Голос: викл.', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: увімк.', install: 'Встановити', focus: 'Фокус', exitFocus: 'Вийти', language: 'Змінити мову' },
           timer: { currentWorkout: 'Поточне тренування', sportMode: 'СПОРТИВНИЙ РЕЖИМ', progress: 'Прогрес підходів', ready: 'готовність', pressStart: 'Натисніть «Старт»', getReady: 'Приготуйтеся', completed: '{{count}} {{rounds}} виконано', roundOf: 'Підхід {{round}} з {{total}}', footer: 'У кожного підходу — свій час роботи та паузи. Змінюйте план до старту.', soundOn: '{{sound}} · увімкнено', soundOff: 'сигнали вимкнено' },
           phase: { ready: 'готовність', prep: 'підготовка', work: 'підхід', rest: 'відпочинок', complete: 'готово' },
           gesture: { activeTitle: 'Жест перед камерою ввімкнено', activeCopy: 'Проведіть рукою від одного краю телефона до іншого прямо перед камерою — таймер запуститься або зупиниться.', title: 'Один широкий прохід рукою перед фронтальною камерою запускає або зупиняє таймер', unavailable: 'Для жесту потрібен доступ до камери', stopped: 'Таймер зупинено жестом', started: 'Таймер запущено жестом', https: 'Для жесту потрібен доступ до камери', disabled: 'Керування жестом вимкнено', cameraOn: 'Камеру ввімкнено. Проведіть рукою через телефон від краю до краю — прев’ю не показується.', cameraError: 'Не вдалося ввімкнути камеру для жесту. Дозвольте доступ до камери в налаштуваннях iPhone.' },
           setup: { builder: 'Конструктор', title: 'Власна схема', workoutName: 'Назва тренування', workoutPlaceholder: 'Наприклад, ноги — сила', estimate: 'Орієнтовна тривалість', defaultWorkout: 'Моє тренування' },
           metrics: { work: 'Базовий підхід', rest: 'Базова пауза', rounds: 'Підходів', longRest: 'Довгий відпочинок', longRestEvery: 'Довгий після', prep: 'Підготовка' },
           units: { seconds: 'сек.', pieces: 'шт.', roundForms: 'підхід|підходи|підходів' },
-          plan: { title: 'Індивідуальні інтервали', description: 'Налаштуйте роботу та паузу після кожного підходу окремо. Це важливіше за загальну схему.', aria: 'Індивідуальні інтервали підходів', round: 'Підхід {{round}}', finish: 'завершення тренування', pauseAfter: 'пауза після {{round}}-го', workAria: 'Час роботи, підхід {{round}}', restAria: 'Пауза після підходу {{round}}', finishShort: 'фініш' },
-          actions: { reset: 'Скинути', start: 'Старт', pause: 'Пауза', continue: 'Продовжити', again: 'Ще раз', skip: 'Пропустити', remind: 'Нагадати', fillPlan: 'Заповнити за схемою', savePlan: 'Зберегти в мої тренування', clear: 'Очистити' },
+          plan: { title: 'Індивідуальні інтервали', description: 'Налаштуйте роботу та паузу після кожного підходу окремо. Додайте вправу, повтори, вагу та підказку тренера.', aria: 'Індивідуальні інтервали підходів', round: 'Підхід {{round}}', finish: 'завершення тренування', pauseAfter: 'пауза після {{round}}-го', workAria: 'Час роботи, підхід {{round}}', restAria: 'Пауза після підходу {{round}}', finishShort: 'фініш', exercise: 'Вправа', reps: 'Повт.', weight: 'Вага', note: 'Підказка тренера' },
+          actions: { reset: 'Скинути', start: 'Старт', pause: 'Пауза', continue: 'Продовжити', again: 'Ще раз', skip: 'Пропустити', remind: 'Нагадати', fillPlan: 'Заповнити за схемою', savePlan: 'Зберегти в мої тренування', sharePlan: '↗ Надіслати тренування клієнту', pulseStart: '♥ Виміряти пульс', pulseStop: 'Зупинити', clear: 'Очистити' },
           presets: { eyebrow: '10 спортивних сценаріїв', title: 'Швидкий старт під вид тренування', strength: 'Сила', muscle: 'Гіпертрофія', tabata: 'Табата', crossfit: 'Кросфіт', running: 'Біг', boxing: 'Бокс', swim: 'Плавання', cycling: 'Велосипед', tennis: 'Теніс', mobility: 'Мобільність' },
           cabinet: { eyebrow: 'МІЙ КАБІНЕТ', title: 'Мої збережені тренування', description: 'Збережіть свою схему — вона залишиться тут після перезавантаження застосунку.', empty: 'Тут з’являться ваші власні схеми. Задайте назву та натисніть «Зберегти в мої тренування».', summary: '{{rounds}} {{roundWord}} · {{duration}}', loadAria: 'Відкрити тренування «{{name}}»', removeAria: 'Видалити тренування «{{name}}»' },
           themes: { strength: 'Контроль ваги та тривале відновлення', muscle: 'Об’єм, темп і якісні повторення', tabata: 'Максимум потужності за короткий інтервал', crossfit: 'Робота на межі. Ритм вирішує все', running: 'Швидкість, дихання та рівний темп', boxing: 'Раунд за раундом. Тримайте темп', swim: 'Дистанція, техніка, чисте дихання', cycling: 'Каденс, потужність і відновлення', tennis: 'Реакція, ноги та наступний розіграш', mobility: 'Плавний рух і контроль тіла' },
           history: { eyebrow: 'Історія', title: 'Завершені тренування', empty: 'Завершені тренування з’являться тут. Історія зберігається на цьому пристрої.' },
+          smartRest: { title: 'Як навантаження?', copy: 'Скоригую наступну паузу', hard: 'Важко', normal: 'Норма', easy: 'Легко', added: 'Наступна пауза +30 сек.', reduced: 'Наступна пауза −15 сек.', unchanged: 'Наступна пауза без змін' },
+          progress: { eyebrow: 'МОЯ ДИНАМІКА', title: 'Результат і челенджі', description: 'Виконуйте тренування — прогрес і серії зберігаються на цьому пристрої.', streak: 'днів у серії', sessions: 'тренувань', minutes: 'хвилин руху', challengeStreak: 'Серія 3 дні', challengeSessions: '5 тренувань', challengeMinutes: '60 хвилин руху' },
+          pulse: { eyebrow: 'ВІДНОВЛЕННЯ', title: 'Перевірка пульсу камерою', description: 'Закрийте задню камеру пальцем і тримайте телефон нерухомо близько 20 секунд. Результат орієнтовний, не медичний.', ready: 'Готово до перевірки.', measuring: 'Зчитую пульсацію… тримайте палець нерухомо.', noSignal: 'Сигнал нечіткий. Щільніше закрийте задню камеру пальцем і спробуйте при яскравому світлі.', unavailable: 'Камера недоступна для перевірки пульсу.', stopped: 'Перевірку пульсу зупинено.', bpm: 'уд./хв · орієнтовно' },
+          coach: { shared: 'Посилання тренера готове — надішліть його клієнту.', copied: 'Посилання скопійовано. Надішліть його клієнту.', imported: 'Відкрито тренування від тренера.' },
+          live: { ready: 'Налаштуйте перший підхід — вправу, повтори та вагу.', work: '{{exercise}}{{detail}}', rest: 'Відновлення. Дихайте рівно — наступний підхід уже готовий.', prep: 'Приготуйтеся: {{exercise}}', complete: 'Тренування завершено. Збережіть відчуття та відновіться.' },
+          voice: { prep: 'Приготуйтеся. Далі {{exercise}}.', work: 'Старт. {{exercise}}.', rest: 'Відпочинок. Наступний підхід скоро.', complete: 'Тренування завершено. Гарна робота.', seconds: 'Залишилося {{seconds}} секунд.' },
           sound: { settings: 'НАЛАШТУВАННЯ ТАЙМЕРА', title: 'Оберіть справжній звук', close: 'Закрити вибір звуку', description: 'Це реальні аудіозаписи, а не короткий синтетичний писк. Натисніть на варіант — він відтворить старт підходу та перехід у відпочинок.', aria: 'Вибір звуку таймера', repeat: 'Повторити вибрану пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистий дзвін', ringDetail: 'справжній посилений дзвін · 1,7 сек.', gongDetail: 'справжній глибокий гонг · 5,6 сек.', whistleDetail: 'справжній довгий свист · 2,1 сек.', chimeDetail: 'посилений потрійний дзвін · 1,8 сек.' },
           next: { prep: 'Спочатку: підготовка {{time}}', round: 'Далі: підхід {{round}}', pause: 'Далі: пауза {{time}}', finish: 'Далі: завершення тренування', complete: 'Чудова робота. Схему можна запустити знову.' },
           notify: { completeTitle: 'Тренування завершено', completeBody: '{{name}}: виконано {{count}} {{rounds}}.' },
@@ -464,20 +533,26 @@
           meta: { title: 'Пульс — интервальный таймер' },
           brand: { tagline: 'Интервальный таймер для тренировок' },
           nav: { timer: 'Таймер', plan: 'План', presets: 'Пресеты' },
-          aria: { navigation: 'Разделы приложения', setup: 'Настройка тренировки', soundToggle: 'Включить или выключить звук', soundPicker: 'Открыть выбор звука', gesture: 'Включить бесконтактное управление одним взмахом перед камерой', install: 'Установить приложение на телефон', focus: 'Открыть полноэкранный режим' },
-          controls: { sound: 'Звук', muted: 'Без звука', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: вкл', install: 'Установить', focus: 'Фокус', exitFocus: 'Выйти', language: 'Сменить язык' },
+          aria: { navigation: 'Разделы приложения', setup: 'Настройка тренировки', soundToggle: 'Включить или выключить звук', voiceToggle: 'Включить или выключить голос тренера', soundPicker: 'Открыть выбор звука', gesture: 'Включить бесконтактное управление одним взмахом перед камерой', install: 'Установить приложение на телефон', focus: 'Открыть полноэкранный режим' },
+          controls: { sound: 'Звук', muted: 'Без звука', voice: 'Голос', voiceOff: 'Голос: выкл.', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: вкл', install: 'Установить', focus: 'Фокус', exitFocus: 'Выйти', language: 'Сменить язык' },
           timer: { currentWorkout: 'Текущая тренировка', sportMode: 'СПОРТИВНЫЙ РЕЖИМ', progress: 'Прогресс подходов', ready: 'готовность', pressStart: 'Нажмите «Старт»', getReady: 'Приготовьтесь', completed: '{{count}} {{rounds}} выполнено', roundOf: 'Подход {{round}} из {{total}}', footer: 'У каждого подхода — своё время работы и паузы. Меняйте план до старта.', soundOn: '{{sound}} · включён', soundOff: 'сигналы выключены' },
           phase: { ready: 'готовность', prep: 'подготовка', work: 'подход', rest: 'отдых', complete: 'готово' },
           gesture: { activeTitle: 'Жест перед камерой включён', activeCopy: 'Проведите рукой от одного края телефона до другого прямо перед камерой — таймер запустится или остановится.', title: 'Один широкий проход рукой перед фронтальной камерой запускает или останавливает таймер', unavailable: 'Для жеста нужен доступ к камере', stopped: 'Таймер остановлен жестом', started: 'Таймер запущен жестом', https: 'Для жеста нужен доступ к камере', disabled: 'Управление жестом выключено', cameraOn: 'Камера включена. Проведите рукой через телефон от края до края — превью не показывается.', cameraError: 'Не удалось включить камеру для жеста. Разрешите доступ к камере в настройках iPhone.' },
           setup: { builder: 'Конструктор', title: 'Своя схема', workoutName: 'Название тренировки', workoutPlaceholder: 'Например, ноги — сила', estimate: 'Примерная длительность', defaultWorkout: 'Моя тренировка' },
           metrics: { work: 'Базовый подход', rest: 'Базовая пауза', rounds: 'Подходов', longRest: 'Длинный отдых', longRestEvery: 'Длинный после', prep: 'Подготовка' },
           units: { seconds: 'сек.', pieces: 'шт.', roundForms: 'подход|подхода|подходов' },
-          plan: { title: 'Индивидуальные интервалы', description: 'Настройте работу и паузу после каждого подхода отдельно. Это важнее общей схемы.', aria: 'Индивидуальные интервалы подходов', round: 'Подход {{round}}', finish: 'завершение тренировки', pauseAfter: 'пауза после {{round}}-го', workAria: 'Время работы, подход {{round}}', restAria: 'Пауза после подхода {{round}}', finishShort: 'финиш' },
-          actions: { reset: 'Сбросить', start: 'Старт', pause: 'Пауза', continue: 'Продолжить', again: 'Ещё раз', skip: 'Пропустить', remind: 'Напомнить', fillPlan: 'Заполнить по схеме', savePlan: 'Сохранить в мои тренировки', clear: 'Очистить' },
+          plan: { title: 'Индивидуальные интервалы', description: 'Настройте работу и паузу после каждого подхода отдельно. Добавьте упражнение, повторы, вес и подсказку тренера.', aria: 'Индивидуальные интервалы подходов', round: 'Подход {{round}}', finish: 'завершение тренировки', pauseAfter: 'пауза после {{round}}-го', workAria: 'Время работы, подход {{round}}', restAria: 'Пауза после подхода {{round}}', finishShort: 'финиш', exercise: 'Упражнение', reps: 'Повт.', weight: 'Вес', note: 'Подсказка тренера' },
+          actions: { reset: 'Сбросить', start: 'Старт', pause: 'Пауза', continue: 'Продолжить', again: 'Ещё раз', skip: 'Пропустить', remind: 'Напомнить', fillPlan: 'Заполнить по схеме', savePlan: 'Сохранить в мои тренировки', sharePlan: '↗ Отправить тренировку клиенту', pulseStart: '♥ Измерить пульс', pulseStop: 'Остановить', clear: 'Очистить' },
           presets: { eyebrow: '10 спортивных сценариев', title: 'Быстрый старт под вид тренировки', strength: 'Сила', muscle: 'Гипертрофия', tabata: 'Табата', crossfit: 'Кроссфит', running: 'Бег', boxing: 'Бокс', swim: 'Плавание', cycling: 'Велосипед', tennis: 'Теннис', mobility: 'Мобилити' },
           cabinet: { eyebrow: 'МОЙ КАБИНЕТ', title: 'Мои сохранённые тренировки', description: 'Сохраните свою схему — она останется здесь после перезагрузки приложения.', empty: 'Здесь появятся ваши собственные схемы. Укажите название и нажмите «Сохранить в мои тренировки».', summary: '{{rounds}} {{roundWord}} · {{duration}}', loadAria: 'Открыть тренировку «{{name}}»', removeAria: 'Удалить тренировку «{{name}}»' },
           themes: { strength: 'Контроль веса и длинное восстановление', muscle: 'Объём, темп и качественные повторения', tabata: 'Максимум мощности за короткий интервал', crossfit: 'Работа на пределе. Ритм решает всё', running: 'Скорость, дыхание и ровный темп', boxing: 'Раунд за раундом. Держите темп', swim: 'Дистанция, техника, чистое дыхание', cycling: 'Каденс, мощность и восстановление', tennis: 'Реакция, ноги и следующий розыгрыш', mobility: 'Плавное движение и контроль тела' },
           history: { eyebrow: 'История', title: 'Завершённые тренировки', empty: 'Завершённые тренировки будут появляться здесь. История хранится на этом устройстве.' },
+          smartRest: { title: 'Как нагрузка?', copy: 'Скорректирую следующую паузу', hard: 'Тяжело', normal: 'Норма', easy: 'Легко', added: 'Следующая пауза +30 сек.', reduced: 'Следующая пауза −15 сек.', unchanged: 'Следующая пауза без изменений' },
+          progress: { eyebrow: 'МОЯ ДИНАМИКА', title: 'Результат и челленджи', description: 'Выполняйте тренировки — прогресс и серии сохраняются на этом устройстве.', streak: 'дней в серии', sessions: 'тренировок', minutes: 'минут движения', challengeStreak: 'Серия 3 дня', challengeSessions: '5 тренировок', challengeMinutes: '60 минут движения' },
+          pulse: { eyebrow: 'ВОССТАНОВЛЕНИЕ', title: 'Проверка пульса камерой', description: 'Закройте заднюю камеру пальцем и держите телефон неподвижно около 20 секунд. Результат ориентировочный, не медицинский.', ready: 'Готово к проверке.', measuring: 'Считываю пульсацию… держите палец неподвижно.', noSignal: 'Сигнал нечёткий. Плотнее закройте заднюю камеру пальцем и попробуйте при ярком свете.', unavailable: 'Камера недоступна для проверки пульса.', stopped: 'Проверка пульса остановлена.', bpm: 'уд./мин · ориентировочно' },
+          coach: { shared: 'Ссылка тренера готова — отправьте её клиенту.', copied: 'Ссылка скопирована. Отправьте её клиенту.', imported: 'Открыта тренировка от тренера.' },
+          live: { ready: 'Настройте первый подход — упражнение, повторы и вес.', work: '{{exercise}}{{detail}}', rest: 'Восстановление. Дышите ровно — следующий подход уже готов.', prep: 'Приготовьтесь: {{exercise}}', complete: 'Тренировка завершена. Сохраните ощущения и восстановитесь.' },
+          voice: { prep: 'Приготовьтесь. Дальше {{exercise}}.', work: 'Старт. {{exercise}}.', rest: 'Отдых. Следующий подход скоро.', complete: 'Тренировка завершена. Хорошая работа.', seconds: 'Осталось {{seconds}} секунд.' },
           sound: { settings: 'НАСТРОЙКИ ТАЙМЕРА', title: 'Выберите настоящий звук', close: 'Закрыть выбор звука', description: 'Это реальные аудиозаписи, а не короткий синтетический писк. Нажмите на вариант — он проиграет старт подхода и переход в отдых.', aria: 'Выбор звука таймера', repeat: 'Повторить выбранную пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистый колокол', ringDetail: 'реальный усиленный колокол · 1,7 сек.', gongDetail: 'настоящий глубокий гонг · 5,6 сек.', whistleDetail: 'настоящий длинный свист · 2,1 сек.', chimeDetail: 'усиленный тройной звон · 1,8 сек.' },
           next: { prep: 'Сначала: подготовка {{time}}', round: 'Дальше: подход {{round}}', pause: 'Дальше: пауза {{time}}', finish: 'Дальше: завершение тренировки', complete: 'Отличная работа. Схему можно запустить снова.' },
           notify: { completeTitle: 'Тренировка завершена', completeBody: '{{name}}: {{count}} {{rounds}} выполнено.' },
@@ -526,6 +601,7 @@
         const number = Number(value);
         return Number.isFinite(number) ? clamp(number, min, max) : fallback;
       }
+      function textInRange(value, max = 80) { return String(value ?? '').trim().slice(0, max); }
       function automaticRest(config, completedRound) {
         return config.longRest > 0 && config.longRestEvery > 0 && completedRound < config.rounds && completedRound % config.longRestEvery === 0 ? config.longRest : config.rest;
       }
@@ -533,6 +609,10 @@
         return Array.from({ length: config.rounds }, (_, index) => ({
           work: config.work,
           rest: index === config.rounds - 1 ? 0 : automaticRest(config, index + 1),
+          exercise: '',
+          reps: '',
+          weight: '',
+          note: '',
         }));
       }
       function normalizeConfig(input = {}) {
@@ -552,6 +632,10 @@
           return {
             work: numberInRange(saved.work, 5, 3600, fallback.work),
             rest: index === config.rounds - 1 ? 0 : numberInRange(saved.rest, 0, 3600, fallback.rest),
+            exercise: textInRange(saved.exercise, 64),
+            reps: textInRange(saved.reps, 20),
+            weight: textInRange(saved.weight, 20),
+            note: textInRange(saved.note, 120),
           };
         });
         return config;
@@ -597,6 +681,7 @@
         endAt: null,
         timer: null,
         muted: storedSettings.muted ?? localStorage.getItem('pulse-muted') === 'true',
+        voiceEnabled: storedSettings.voiceEnabled ?? true,
         language: appLanguage,
         soundProfile: storedSettings.soundProfile || localStorage.getItem('pulse-sound-profile') || 'ring',
         history: Array.isArray(storedHistory) ? storedHistory : [],
@@ -605,6 +690,9 @@
         wakeLock: null,
         activePreset: storedSettings.activePreset ?? storedConfig?.id ?? 'strength',
         gesture: { enabled: false, stream: null, timer: null, canvas: null, context: null, previousFrame: null, sweep: null, quietSince: 0, lastTriggeredAt: 0 },
+        smartRestFeedback: null,
+        voiceCountdownAt: null,
+        pulse: { measuring: false, stream: null, frame: null, canvas: null, context: null, samples: [], startedAt: 0, lastSampleAt: 0, result: null, statusKey: 'ready' },
       };
 
       const el = (id) => document.getElementById(id);
@@ -628,7 +716,7 @@
       const samplePools = new Map();
 
       function persistSettings() {
-        const settings = { version: 1, language: appLanguage, muted: state.muted, soundProfile: state.soundProfile, activePreset: state.activePreset, updatedAt: Date.now() };
+        const settings = { version: 2, language: appLanguage, muted: state.muted, voiceEnabled: state.voiceEnabled, soundProfile: state.soundProfile, activePreset: state.activePreset, updatedAt: Date.now() };
         localStorage.setItem('pulse-settings', JSON.stringify(settings));
         localStorage.setItem('pulse-language', appLanguage);
         localStorage.setItem('pulse-muted', String(state.muted));
@@ -693,11 +781,12 @@
         document.querySelectorAll('[data-i18n-aria-label]').forEach((node) => { node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel)); });
         document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => { node.setAttribute('placeholder', t(node.dataset.i18nPlaceholder)); });
         const labels = {
-          soundToggle: 'aria.soundToggle', soundTestButton: 'aria.soundPicker', gestureToggle: 'aria.gesture',
+          soundToggle: 'aria.soundToggle', voiceToggle: 'aria.voiceToggle', soundTestButton: 'aria.soundPicker', gestureToggle: 'aria.gesture',
           installButton: 'aria.install', fullscreenButton: 'aria.focus', languageToggle: 'controls.language',
         };
         Object.entries(labels).forEach(([id, key]) => el(id)?.setAttribute('aria-label', t(key)));
         el('soundTestButton').innerHTML = `🔔 <span>${t('controls.sounds')}</span>`;
+        el('voiceToggle').innerHTML = state.voiceEnabled ? `🗣 <span>${t('controls.voice')}</span>` : `🔇 <span>${t('controls.voiceOff')}</span>`;
         el('installButton').innerHTML = `⇩ <span>${t('controls.install')}</span>`;
         el('fullscreenButton').innerHTML = `⛶ <span>${t('controls.focus')}</span>`;
         el('languageToggle').innerHTML = `🌐 <span>${appLanguage === 'uk' ? 'UA' : 'RU'}</span>`;
@@ -710,7 +799,7 @@
         if (previousNames.includes(state.config.name)) state.config.name = t(`presets.${state.config.id || 'strength'}`);
         persistWorkoutConfig();
         persistSettings();
-        applyLanguage(); setInputsFromConfig(); updateEstimate(); render(); renderHistory(); renderSavedWorkouts(); renderSoundOptions();
+        applyLanguage(); setInputsFromConfig(); updateEstimate(); render(); renderHistory(); renderSavedWorkouts(); renderSoundOptions(); renderProgressDashboard(); renderPulseCheck();
       }
 
       function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
@@ -910,6 +999,127 @@
           showToast(t('gesture.cameraOn'));
         } catch (_) { showToast(t('gesture.cameraError')); }
       }
+      function estimatePulseBpm(samples) {
+        const stable = samples.filter((sample) => sample.time - samples[0]?.time > 3500).map((sample) => sample.value);
+        if (stable.length < 80) return null;
+        const average = stable.reduce((sum, value) => sum + value, 0) / stable.length;
+        const centered = stable.map((value) => value - average);
+        const smooth = centered.map((_, index) => {
+          const from = Math.max(0, index - 5), to = Math.min(centered.length, index + 6);
+          return centered.slice(from, to).reduce((sum, value) => sum + value, 0) / (to - from);
+        });
+        const baseline = smooth.map((_, index) => {
+          const from = Math.max(0, index - 24), to = Math.min(smooth.length, index + 25);
+          return smooth.slice(from, to).reduce((sum, value) => sum + value, 0) / (to - from);
+        });
+        const wave = smooth.map((value, index) => value - baseline[index]);
+        const deviation = Math.sqrt(wave.reduce((sum, value) => sum + value * value, 0) / wave.length);
+        if (!Number.isFinite(deviation) || deviation < .35) return null;
+        const peaks = [];
+        for (let index = 1; index < wave.length - 1; index += 1) {
+          if (wave[index] < deviation * .42 || wave[index] < wave[index - 1] || wave[index] < wave[index + 1]) continue;
+          const at = samples[index + (samples.length - stable.length)].time;
+          if (!peaks.length || at - peaks[peaks.length - 1] > 340) peaks.push(at);
+          else if (wave[index] > wave[index - 1]) peaks[peaks.length - 1] = at;
+        }
+        const intervals = peaks.slice(1).map((at, index) => at - peaks[index]).filter((interval) => interval >= 320 && interval <= 1500);
+        if (intervals.length < 4) return null;
+        const ordered = [...intervals].sort((a, b) => a - b);
+        const median = ordered[Math.floor(ordered.length / 2)];
+        const bpm = Math.round(60000 / median);
+        return bpm >= 40 && bpm <= 210 ? bpm : null;
+      }
+      function stopPulseMeasurement(statusKey = 'stopped', result = null) {
+        const pulse = state.pulse;
+        if (pulse.frame) cancelAnimationFrame(pulse.frame);
+        pulse.stream?.getTracks().forEach((track) => track.stop());
+        Object.assign(pulse, { measuring: false, stream: null, frame: null, canvas: null, context: null, samples: [], startedAt: 0, lastSampleAt: 0, result, statusKey });
+        el('pulseVideo').srcObject = null;
+        renderPulseCheck();
+      }
+      function samplePulseFrame(timestamp) {
+        const pulse = state.pulse;
+        if (!pulse.measuring) return;
+        const video = el('pulseVideo');
+        if (video.readyState >= 2 && video.videoWidth && video.videoHeight && timestamp - pulse.lastSampleAt > 55) {
+          pulse.lastSampleAt = timestamp;
+          pulse.context.drawImage(video, 0, 0, pulse.canvas.width, pulse.canvas.height);
+          const pixels = pulse.context.getImageData(0, 0, pulse.canvas.width, pulse.canvas.height).data;
+          let signal = 0;
+          for (let index = 0; index < pixels.length; index += 4) signal += pixels[index] / (pixels[index + 1] + pixels[index + 2] + 8) * 100;
+          pulse.samples.push({ time: Date.now(), value: signal / (pixels.length / 4) });
+        }
+        if (Date.now() - pulse.startedAt >= 22000) {
+          const result = estimatePulseBpm(pulse.samples);
+          stopPulseMeasurement(result ? 'ready' : 'noSignal', result);
+          return;
+        }
+        pulse.frame = requestAnimationFrame(samplePulseFrame);
+      }
+      async function startPulseMeasurement() {
+        if (!supportsCameraGesture()) { state.pulse.statusKey = 'unavailable'; renderPulseCheck(); return; }
+        if (state.gesture.enabled) stopCameraGesture();
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 30, max: 30 } }, audio: false });
+          const video = el('pulseVideo');
+          video.srcObject = stream;
+          await video.play();
+          const track = stream.getVideoTracks()[0];
+          const capabilities = track?.getCapabilities?.();
+          if (capabilities?.torch) track.applyConstraints({ advanced: [{ torch: true }] }).catch(() => {});
+          const canvas = document.createElement('canvas');
+          canvas.width = 48; canvas.height = 36;
+          Object.assign(state.pulse, { measuring: true, stream, canvas, context: canvas.getContext('2d', { willReadFrequently: true }), samples: [], startedAt: Date.now(), lastSampleAt: 0, result: null, statusKey: 'measuring' });
+          renderPulseCheck();
+          state.pulse.frame = requestAnimationFrame(samplePulseFrame);
+        } catch (_) {
+          state.pulse.statusKey = 'unavailable';
+          renderPulseCheck();
+        }
+      }
+      function toBase64Url(value) {
+        return btoa(unescape(encodeURIComponent(value))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+      }
+      function fromBase64Url(value) {
+        const normalized = String(value).replace(/-/g, '+').replace(/_/g, '/');
+        const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4);
+        return decodeURIComponent(escape(atob(padded)));
+      }
+      function createCoachLink() {
+        const config = configFromInputs();
+        const currentUrl = new URL(location.href);
+        const base = location.protocol === 'capacitor:' ? 'https://mgvipt.github.io/pulse-timer/' : `${currentUrl.origin}${currentUrl.pathname}`;
+        return `${base}?coach=${encodeURIComponent(toBase64Url(JSON.stringify({ version: 1, config })))}`;
+      }
+      async function shareWorkout() {
+        const link = createCoachLink();
+        try {
+          if (navigator.share) {
+            await navigator.share({ title: state.config.name || t('setup.defaultWorkout'), text: t('coach.shared'), url: link });
+            showToast(t('coach.shared'));
+            return;
+          }
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(link);
+            showToast(t('coach.copied'));
+            return;
+          }
+          window.prompt(t('coach.copied'), link);
+        } catch (_) { /* The user cancelled the share sheet or clipboard is unavailable. */ }
+      }
+      function importCoachWorkout() {
+        const encoded = new URLSearchParams(location.search).get('coach');
+        if (!encoded) return false;
+        try {
+          const payload = JSON.parse(fromBase64Url(encoded));
+          if (!payload?.config || typeof payload.config !== 'object') return false;
+          state.config = normalizeConfig(payload.config);
+          state.activePreset = null;
+          state.activeSavedWorkoutId = null;
+          history.replaceState({}, '', `${location.pathname}${location.hash}`);
+          return true;
+        } catch (_) { return false; }
+      }
       function formatTime(total) {
         total = Math.max(0, Math.ceil(total));
         const mins = Math.floor(total / 60).toString().padStart(2, '0');
@@ -958,8 +1168,19 @@
       function rawRoundPlanFromEditor() {
         const workInputs = el('roundPlan').querySelectorAll('[data-plan="work"]');
         const restInputs = el('roundPlan').querySelectorAll('[data-plan="rest"]');
+        const exerciseInputs = el('roundPlan').querySelectorAll('[data-plan="exercise"]');
+        const repsInputs = el('roundPlan').querySelectorAll('[data-plan="reps"]');
+        const weightInputs = el('roundPlan').querySelectorAll('[data-plan="weight"]');
+        const noteInputs = el('roundPlan').querySelectorAll('[data-plan="note"]');
         if (!workInputs.length) return [];
-        return Array.from(workInputs, (workInput, index) => ({ work: workInput.value, rest: restInputs[index]?.value ?? 0 }));
+        return Array.from(workInputs, (workInput, index) => ({
+          work: workInput.value,
+          rest: restInputs[index]?.value ?? 0,
+          exercise: exerciseInputs[index]?.value ?? '',
+          reps: repsInputs[index]?.value ?? '',
+          weight: weightInputs[index]?.value ?? '',
+          note: noteInputs[index]?.value ?? '',
+        }));
       }
       function planFromEditor(config) {
         const editorPlan = rawRoundPlanFromEditor();
@@ -975,7 +1196,7 @@
         state.config.roundPlan = plan;
         el('roundPlan').innerHTML = plan.map((entry, index) => {
           const isLast = index === plan.length - 1;
-          return `<div class="plan-row"><div class="plan-name"><strong>${t('plan.round', { round: index + 1 })}</strong><span>${isLast ? t('plan.finish') : t('plan.pauseAfter', { round: index + 1 })}</span></div><label class="plan-field"><input data-plan="work" type="number" min="5" max="3600" step="5" value="${entry.work}" aria-label="${t('plan.workAria', { round: index + 1 })}" inputmode="numeric" /><span>${t('units.seconds')}</span></label>${isLast ? `<div class="plan-finish">${t('plan.finishShort')}</div>` : `<label class="plan-field"><input data-plan="rest" type="number" min="0" max="3600" step="5" value="${entry.rest}" aria-label="${t('plan.restAria', { round: index + 1 })}" inputmode="numeric" /><span>${t('units.seconds')}</span></label>`}</div>`;
+          return `<div class="plan-row"><div class="plan-name"><strong>${t('plan.round', { round: index + 1 })}</strong><span>${isLast ? t('plan.finish') : t('plan.pauseAfter', { round: index + 1 })}</span></div><label class="plan-field"><input data-plan="work" type="number" min="5" max="3600" step="5" value="${entry.work}" aria-label="${t('plan.workAria', { round: index + 1 })}" inputmode="numeric" /><span>${t('units.seconds')}</span></label>${isLast ? `<div class="plan-finish">${t('plan.finishShort')}</div>` : `<label class="plan-field"><input data-plan="rest" type="number" min="0" max="3600" step="5" value="${entry.rest}" aria-label="${t('plan.restAria', { round: index + 1 })}" inputmode="numeric" /><span>${t('units.seconds')}</span></label>`}</div><div class="plan-details"><input class="plan-detail-input" data-plan="exercise" maxlength="64" value="${escapeHtml(entry.exercise)}" placeholder="${t('plan.exercise')}" /><input class="plan-detail-input" data-plan="reps" maxlength="20" value="${escapeHtml(entry.reps)}" placeholder="${t('plan.reps')}" /><input class="plan-detail-input" data-plan="weight" maxlength="20" value="${escapeHtml(entry.weight)}" placeholder="${t('plan.weight')}" /><input class="plan-detail-input plan-note" data-plan="note" maxlength="120" value="${escapeHtml(entry.note)}" placeholder="${t('plan.note')}" /></div>`;
         }).join('');
       }
       function resizeRoundPlan() {
@@ -1002,6 +1223,103 @@
           else if (state.phase === 'work' && position === state.round) className += ' current';
           return `<span class="${className}"></span>`;
         }).join('');
+      }
+      function currentRoundEntry() { return state.config.roundPlan[Math.max(0, state.round - 1)] || {}; }
+      function exerciseDetails(entry = currentRoundEntry()) {
+        const details = [];
+        if (entry.reps) details.push(`${entry.reps} ${t('plan.reps')}`);
+        if (entry.weight) details.push(entry.weight);
+        if (entry.note) details.push(entry.note);
+        return details.join(' · ');
+      }
+      function currentExercise(entry = currentRoundEntry()) { return entry.exercise || t(`presets.${state.config.id || 'strength'}`); }
+      function renderLiveCue() {
+        const cue = el('liveCue');
+        const entry = currentRoundEntry();
+        let text = t('live.ready');
+        if (state.phase === 'prep') text = t('live.prep', { exercise: currentExercise(entry) });
+        if (state.phase === 'work') text = t('live.work', { exercise: currentExercise(entry), detail: exerciseDetails(entry) ? ` · ${exerciseDetails(entry)}` : '' });
+        if (state.phase === 'rest') text = t('live.rest');
+        if (state.phase === 'complete') text = t('live.complete');
+        cue.innerHTML = `<span class="cue-icon">${state.phase === 'work' ? '✦' : state.phase === 'rest' ? '♥' : '◎'}</span><strong>${escapeHtml(text)}</strong>`;
+      }
+      function renderSmartRest() {
+        const panel = el('smartRest');
+        const isRest = state.phase === 'rest' && state.round < state.config.rounds;
+        panel.classList.toggle('is-visible', isRest);
+        if (!isRest) { panel.innerHTML = ''; return; }
+        const selected = state.smartRestFeedback;
+        panel.innerHTML = `<div class="smart-rest-copy"><strong>${t('smartRest.title')}</strong><span>${t('smartRest.copy')}</span></div>${['hard', 'normal', 'easy'].map((kind) => `<button type="button" data-smart-rest="${kind}" class="${selected === kind ? 'active' : ''}">${t(`smartRest.${kind}`)}</button>`).join('')}`;
+      }
+      function applySmartRestFeedback(kind) {
+        if (state.phase !== 'rest' || state.round >= state.config.rounds) return;
+        const adjustments = { hard: 30, normal: 0, easy: -15 };
+        if (!(kind in adjustments)) return;
+        const previous = adjustments[state.smartRestFeedback] || 0;
+        const entry = currentRoundEntry();
+        const nextRest = clamp((Number(entry.rest) || 0) + adjustments[kind] - previous, 0, 3600);
+        const applied = nextRest - (Number(entry.rest) || 0);
+        entry.rest = nextRest;
+        state.smartRestFeedback = kind;
+        state.phaseDuration = Math.max(.1, state.phaseDuration + applied);
+        state.secondsLeft = Math.max(0, state.secondsLeft + applied);
+        if (state.timer) state.endAt = Date.now() + state.secondsLeft * 1000;
+        persistWorkoutConfig(); persistActiveWorkout(true);
+        render(); setInputsFromConfig(); updateEstimate();
+        showToast(t(kind === 'hard' ? 'smartRest.added' : kind === 'easy' ? 'smartRest.reduced' : 'smartRest.unchanged'));
+        if (state.timer && state.secondsLeft <= 0) advancePhase();
+      }
+      function speakCoach(key, values = {}) {
+        if (!state.voiceEnabled || !('speechSynthesis' in window)) return;
+        try {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(t(`voice.${key}`, values));
+          utterance.lang = appLanguage === 'uk' ? 'uk-UA' : 'ru-RU';
+          utterance.rate = 1.02;
+          utterance.pitch = .96;
+          window.speechSynthesis.speak(utterance);
+        } catch (_) { /* Voice prompts are optional. */ }
+      }
+      function historySeconds(item) {
+        if (Number.isFinite(Number(item.seconds))) return Number(item.seconds);
+        const [minutes, seconds] = String(item.duration || '').split(':').map(Number);
+        return Number.isFinite(minutes) && Number.isFinite(seconds) ? minutes * 60 + seconds : 0;
+      }
+      function historyDay(item) {
+        const date = new Date(item.completedAt || item.date || 0);
+        if (Number.isNaN(date.getTime())) return null;
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+      }
+      function workoutStreak() {
+        const days = [...new Set(state.history.map(historyDay).filter(Boolean))].sort((a, b) => b - a);
+        if (!days.length) return 0;
+        const oneDay = 86400000;
+        let streak = 1;
+        for (let index = 1; index < days.length && days[index - 1] - days[index] === oneDay; index += 1) streak += 1;
+        return streak;
+      }
+      function renderProgressDashboard() {
+        const sessions = state.history.length;
+        const minutes = Math.round(state.history.reduce((total, item) => total + historySeconds(item), 0) / 60);
+        const streak = workoutStreak();
+        el('progressStats').innerHTML = [
+          [streak, t('progress.streak')],
+          [sessions, t('progress.sessions')],
+          [minutes, t('progress.minutes')],
+        ].map(([value, label]) => `<article class="progress-stat"><strong>${value}</strong><span>${label}</span></article>`).join('');
+        const challenges = [
+          [t('progress.challengeStreak'), streak, 3],
+          [t('progress.challengeSessions'), sessions, 5],
+          [t('progress.challengeMinutes'), minutes, 60],
+        ];
+        el('challengeGrid').innerHTML = challenges.map(([name, value, target]) => `<article class="challenge"><strong>${name}</strong><span class="challenge-progress">${Math.min(value, target)} / ${target}</span></article>`).join('');
+      }
+      function renderPulseCheck() {
+        const pulse = state.pulse;
+        el('pulseCard').classList.toggle('measuring', pulse.measuring);
+        el('pulseResult').classList.toggle('is-visible', Number.isFinite(pulse.result));
+        el('pulseValue').textContent = Number.isFinite(pulse.result) ? String(pulse.result) : '—';
+        el('pulseStatus').textContent = t(`pulse.${pulse.statusKey || 'ready'}`);
       }
       function render() {
         const meta = phaseMeta(state.phase);
@@ -1034,6 +1352,8 @@
         el('soundToggle').innerHTML = state.muted ? `🔇 <span>${t('controls.muted')}</span>` : `🔊 <span>${t('controls.sound')}</span>`;
         renderGestureToggle();
         renderProgress();
+        renderLiveCue();
+        renderSmartRest();
         renderPresetButtons();
       }
       function renderPresetButtons() {
@@ -1269,6 +1589,8 @@
       }
       function startPhase(phase, cueDelay = 0) {
         state.phase = phase;
+        state.smartRestFeedback = null;
+        state.voiceCountdownAt = null;
         state.phaseDuration = phaseDuration(phase);
         state.secondsLeft = state.phaseDuration;
         state.endAt = Date.now() + state.phaseDuration * 1000;
@@ -1287,10 +1609,19 @@
             if (state.phase === phase && state.timer) render();
           }, visualCueDelay);
         } else render();
+        const coachKey = phase === 'prep' ? 'prep' : phase === 'work' ? 'work' : phase === 'rest' ? 'rest' : null;
+        if (coachKey) setTimeout(() => {
+          if (state.phase === phase && state.timer) speakCoach(coachKey, { exercise: currentExercise() });
+        }, phase === 'prep' ? 120 : cueDelay + 1350);
         persistActiveWorkout(true);
       }
       function tick() {
         state.secondsLeft = Math.max(0, (state.endAt - Date.now()) / 1000);
+        const rounded = Math.ceil(state.secondsLeft);
+        if (['work', 'rest'].includes(state.phase) && rounded <= 10 && rounded > 0 && state.voiceCountdownAt !== 10) {
+          state.voiceCountdownAt = 10;
+          speakCoach('seconds', { seconds: 10 });
+        }
         render(); persistActiveWorkout();
         if (state.secondsLeft <= 0) advancePhase();
       }
@@ -1306,13 +1637,16 @@
       function completeWorkout() {
         clearInterval(state.timer); state.timer = null;
         state.phase = 'complete'; state.secondsLeft = 0; state.phaseDuration = 1; state.endAt = null;
+        state.smartRestFeedback = null;
         beep('complete'); navigator.vibrate?.([100, 50, 100, 50, 180]);
         notify(t('notify.completeTitle'), t('notify.completeBody', { name: state.config.name, count: state.config.rounds, rounds: roundWord(state.config.rounds) }));
-        state.history.unshift({ name: state.config.name, rounds: state.config.rounds, duration: formatTime(estimateWorkout()), date: new Intl.DateTimeFormat(appLanguage === 'uk' ? 'uk-UA' : 'ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
+        const totalSeconds = estimateWorkout();
+        state.history.unshift({ name: state.config.name, rounds: state.config.rounds, duration: formatTime(totalSeconds), seconds: totalSeconds, completedAt: Date.now(), date: new Intl.DateTimeFormat(appLanguage === 'uk' ? 'uk-UA' : 'ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date()) });
         state.history = state.history.slice(0, 20);
         localStorage.setItem('pulse-history', JSON.stringify(state.history));
         clearActiveWorkout();
-        releaseWakeLock(); render(); renderHistory(); showToast(t('messages.completedSaved'));
+        releaseWakeLock(); render(); renderHistory(); renderProgressDashboard(); showToast(t('messages.completedSaved'));
+        setTimeout(() => speakCoach('complete'), 1500);
       }
       function startOrPause() {
         if (state.phase === 'complete') { resetTimer(); return; }
@@ -1372,6 +1706,7 @@
       el('resetButton').addEventListener('click', () => resetTimer());
       el('skipButton').addEventListener('click', () => { if (state.phase !== 'ready' && state.phase !== 'complete') advancePhase(); });
       el('saveButton').addEventListener('click', saveConfig);
+      el('shareWorkoutButton').addEventListener('click', shareWorkout);
       el('presetGrid').addEventListener('click', (event) => { const button = event.target.closest('[data-preset]'); if (button) applyPreset(button.dataset.preset); });
       el('savedWorkoutsContent').addEventListener('click', (event) => {
         const deleteButton = event.target.closest('[data-delete-saved-workout]');
@@ -1380,6 +1715,7 @@
         if (loadButton) loadSavedWorkout(loadButton.dataset.savedWorkout);
       });
       el('soundToggle').addEventListener('click', () => { state.muted = !state.muted; persistSettings(); render(); });
+      el('voiceToggle').addEventListener('click', () => { state.voiceEnabled = !state.voiceEnabled; persistSettings(); applyLanguage(); });
       el('soundOptions').addEventListener('click', (event) => { const button = event.target.closest('[data-sound]'); if (button) selectSoundProfile(button.dataset.sound); });
       el('soundTestButton').addEventListener('click', openSoundDialog);
       el('soundOpenButton').addEventListener('click', openSoundDialog);
@@ -1392,6 +1728,9 @@
       });
       el('soundDialog').addEventListener('click', (event) => { if (event.target === el('soundDialog')) closeSoundDialog(); });
       el('gestureToggle').addEventListener('click', toggleCameraGesture);
+      el('smartRest').addEventListener('click', (event) => { const button = event.target.closest('[data-smart-rest]'); if (button) applySmartRestFeedback(button.dataset.smartRest); });
+      el('pulseStartButton').addEventListener('click', startPulseMeasurement);
+      el('pulseStopButton').addEventListener('click', () => stopPulseMeasurement());
       el('fullscreenButton').addEventListener('click', async () => {
         try { if (document.fullscreenElement) await document.exitFullscreen(); else await el('timerCard').requestFullscreen(); } catch (_) { showToast(t('messages.fullscreenUnavailable')); }
       });
@@ -1400,7 +1739,7 @@
         const permission = await Notification.requestPermission();
         showToast(permission === 'granted' ? t('messages.notificationsOn') : t('messages.notificationDenied'));
       });
-      el('clearHistory').addEventListener('click', () => { state.history = []; localStorage.removeItem('pulse-history'); renderHistory(); showToast(t('messages.historyCleared')); });
+      el('clearHistory').addEventListener('click', () => { state.history = []; localStorage.removeItem('pulse-history'); renderHistory(); renderProgressDashboard(); showToast(t('messages.historyCleared')); });
       document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && state.timer) tick(); });
       window.addEventListener('pagehide', () => {
         if (state.phase === 'ready' || state.phase === 'complete') state.config = configFromInputs();
@@ -1423,12 +1762,16 @@
       }
 
       el('languageToggle').addEventListener('click', switchLanguage);
-      const restoredActiveWorkout = restoreActiveWorkout();
+      const importedCoachWorkout = importCoachWorkout();
+      const restoredActiveWorkout = importedCoachWorkout ? false : restoreActiveWorkout();
       applyLanguage(); preloadSoundAssets(); renderSoundOptions(); setInputsFromConfig(); updateEstimate();
-      if (restoredActiveWorkout) { persistWorkoutConfig(); persistSettings(); render(); }
+      if (restoredActiveWorkout || importedCoachWorkout) { persistWorkoutConfig(); persistSettings(); render(); }
       else resetTimer(false);
       renderHistory();
       renderSavedWorkouts();
+      renderProgressDashboard();
+      renderPulseCheck();
+      if (importedCoachWorkout) showToast(t('coach.imported'));
     </script>
   </body>
 </html>
