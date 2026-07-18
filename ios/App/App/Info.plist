@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Камера нужна только для бесконтактного запуска и паузы тренировки жестом руки.</string>
+	<string>Камера используется по вашему действию для бесконтактного жеста или ориентировочной проверки пульса. Видео не записывается и не передаётся.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
