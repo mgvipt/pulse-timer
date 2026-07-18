@@ -167,13 +167,29 @@
       .sound-option small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; line-height: 1.2; }
 
       .presets { margin-top: 20px; padding: 23px; }
-      .presets h2, .history h2 { margin: 4px 0 0; font-size: 19px; letter-spacing: -.02em; }
+      .presets h2, .saved-workouts h2, .history h2 { margin: 4px 0 0; font-size: 19px; letter-spacing: -.02em; }
       .preset-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 9px; margin-top: 17px; }
       .preset { text-align: left; min-height: 78px; padding: 11px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,.025); color: var(--text); transition: .15s; }
       .preset:hover, .preset.active { transform: translateY(-1px); background: rgba(var(--accent-rgb),.11); border-color: rgba(var(--accent-rgb),.52); }
       .preset .emoji { font-size: 17px; margin-bottom: 6px; display: block; }
       .preset strong { display: block; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .preset small { display: block; color: var(--muted); font-size: 10px; margin-top: 3px; }
+
+      .saved-workouts { margin-top: 20px; padding: 23px; }
+      .saved-workouts-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+      .saved-workouts-copy { max-width: 560px; margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+      .saved-workout-list { display: grid; gap: 9px; margin-top: 17px; }
+      .saved-workout-item { display: grid; grid-template-columns: 1fr 40px; gap: 9px; align-items: stretch; padding: 7px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.025); transition: .18s ease; }
+      .saved-workout-item.active { border-color: rgba(var(--accent-rgb),.64); background: rgba(var(--accent-rgb),.09); }
+      .saved-workout-load { display: flex; align-items: center; min-width: 0; gap: 11px; padding: 6px 7px; border: 0; color: var(--text); text-align: left; background: transparent; }
+      .saved-workout-load:hover .saved-workout-name { color: var(--accent); }
+      .saved-workout-mark { width: 31px; height: 31px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 10px; color: var(--accent); background: rgba(var(--accent-rgb),.14); font-size: 15px; }
+      .saved-workout-copy { min-width: 0; }
+      .saved-workout-name { display: block; overflow: hidden; color: var(--text); font-size: 13px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; transition: color .18s ease; }
+      .saved-workout-detail { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+      .saved-workout-delete { width: 40px; border: 1px solid rgba(255,255,255,.09); border-radius: 11px; color: #aeb6c6; background: rgba(255,255,255,.035); font-size: 19px; line-height: 1; }
+      .saved-workout-delete:hover { color: #ff9aa5; border-color: rgba(255,120,135,.42); background: rgba(255,70,92,.1); }
+      .saved-workouts-empty { margin: 17px 0 2px; color: var(--muted); font-size: 13px; }
 
       .history { margin-top: 20px; padding: 23px; }
       .history-head { display: flex; align-items: center; justify-content: space-between; }
@@ -389,6 +405,17 @@
         <div class="preset-grid" id="presetGrid"></div>
       </section>
 
+      <section class="card saved-workouts" id="savedWorkoutsCard">
+        <div class="saved-workouts-head">
+          <div>
+            <div class="eyebrow" data-i18n="cabinet.eyebrow">МІЙ КАБІНЕТ</div>
+            <h2 data-i18n="cabinet.title">Мої збережені тренування</h2>
+          </div>
+        </div>
+        <p class="saved-workouts-copy" data-i18n="cabinet.description">Збережіть свою схему — вона залишиться тут після перезавантаження застосунку.</p>
+        <div id="savedWorkoutsContent"></div>
+      </section>
+
       <section class="card history">
         <div class="history-head"><div><div class="eyebrow" data-i18n="history.eyebrow">Історія</div><h2 data-i18n="history.title">Завершені тренування</h2></div><button class="small-button muted-button" id="clearHistory" data-i18n="actions.clear">Очистити</button></div>
         <div id="historyContent"></div>
@@ -423,14 +450,15 @@
           metrics: { work: 'Базовий підхід', rest: 'Базова пауза', rounds: 'Підходів', longRest: 'Довгий відпочинок', longRestEvery: 'Довгий після', prep: 'Підготовка' },
           units: { seconds: 'сек.', pieces: 'шт.', roundForms: 'підхід|підходи|підходів' },
           plan: { title: 'Індивідуальні інтервали', description: 'Налаштуйте роботу та паузу після кожного підходу окремо. Це важливіше за загальну схему.', aria: 'Індивідуальні інтервали підходів', round: 'Підхід {{round}}', finish: 'завершення тренування', pauseAfter: 'пауза після {{round}}-го', workAria: 'Час роботи, підхід {{round}}', restAria: 'Пауза після підходу {{round}}', finishShort: 'фініш' },
-          actions: { reset: 'Скинути', start: 'Старт', pause: 'Пауза', continue: 'Продовжити', again: 'Ще раз', skip: 'Пропустити', remind: 'Нагадати', fillPlan: 'Заповнити за схемою', savePlan: 'Зберегти цю схему', clear: 'Очистити' },
+          actions: { reset: 'Скинути', start: 'Старт', pause: 'Пауза', continue: 'Продовжити', again: 'Ще раз', skip: 'Пропустити', remind: 'Нагадати', fillPlan: 'Заповнити за схемою', savePlan: 'Зберегти в мої тренування', clear: 'Очистити' },
           presets: { eyebrow: '10 спортивних сценаріїв', title: 'Швидкий старт під вид тренування', strength: 'Сила', muscle: 'Гіпертрофія', tabata: 'Табата', crossfit: 'Кросфіт', running: 'Біг', boxing: 'Бокс', swim: 'Плавання', cycling: 'Велосипед', tennis: 'Теніс', mobility: 'Мобільність' },
+          cabinet: { eyebrow: 'МІЙ КАБІНЕТ', title: 'Мої збережені тренування', description: 'Збережіть свою схему — вона залишиться тут після перезавантаження застосунку.', empty: 'Тут з’являться ваші власні схеми. Задайте назву та натисніть «Зберегти в мої тренування».', summary: '{{rounds}} {{roundWord}} · {{duration}}', loadAria: 'Відкрити тренування «{{name}}»', removeAria: 'Видалити тренування «{{name}}»' },
           themes: { strength: 'Контроль ваги та тривале відновлення', muscle: 'Об’єм, темп і якісні повторення', tabata: 'Максимум потужності за короткий інтервал', crossfit: 'Робота на межі. Ритм вирішує все', running: 'Швидкість, дихання та рівний темп', boxing: 'Раунд за раундом. Тримайте темп', swim: 'Дистанція, техніка, чисте дихання', cycling: 'Каденс, потужність і відновлення', tennis: 'Реакція, ноги та наступний розіграш', mobility: 'Плавний рух і контроль тіла' },
           history: { eyebrow: 'Історія', title: 'Завершені тренування', empty: 'Завершені тренування з’являться тут. Історія зберігається на цьому пристрої.' },
           sound: { settings: 'НАЛАШТУВАННЯ ТАЙМЕРА', title: 'Оберіть справжній звук', close: 'Закрити вибір звуку', description: 'Це реальні аудіозаписи, а не короткий синтетичний писк. Натисніть на варіант — він відтворить старт підходу та перехід у відпочинок.', aria: 'Вибір звуку таймера', repeat: 'Повторити вибрану пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистий дзвін', ringDetail: 'справжній посилений дзвін · 1,7 сек.', gongDetail: 'справжній глибокий гонг · 5,6 сек.', whistleDetail: 'справжній довгий свист · 2,1 сек.', chimeDetail: 'посилений потрійний дзвін · 1,8 сек.' },
           next: { prep: 'Спочатку: підготовка {{time}}', round: 'Далі: підхід {{round}}', pause: 'Далі: пауза {{time}}', finish: 'Далі: завершення тренування', complete: 'Чудова робота. Схему можна запустити знову.' },
           notify: { completeTitle: 'Тренування завершено', completeBody: '{{name}}: виконано {{count}} {{rounds}}.' },
-          messages: { soundSelected: 'Обрано: {{sound}}', configSaved: 'Схему збережено на цьому пристрої', completedSaved: 'Тренування збережено в історію', reset: 'Таймер скинуто', presetSelected: 'Обрано: {{preset}}', planFilled: 'Усі підходи заповнено за базовою схемою', enableSound: 'Спочатку ввімкніть звук', soundCheck: 'Перевірка: старт підходу → перехід у відпочинок', fullscreenUnavailable: 'Повноекранний режим недоступний', notificationsUnsupported: 'Сповіщення не підтримуються браузером', notificationsOn: 'Сповіщення ввімкнено', notificationDenied: 'Дозвіл на сповіщення не отримано', historyCleared: 'Історію очищено', installed: 'Пульс встановлено на пристрій', installIos: 'На iPhone: «Поділитися» → «На початковий екран»' }
+          messages: { soundSelected: 'Обрано: {{sound}}', configSaved: 'Схему збережено на цьому пристрої', savedWorkoutCreated: 'Збережено в «Мої тренування»', savedWorkoutUpdated: 'Збережену схему оновлено', savedWorkoutLoaded: 'Відкрито: {{name}}', savedWorkoutDeleted: 'Схему видалено', completedSaved: 'Тренування збережено в історію', reset: 'Таймер скинуто', presetSelected: 'Обрано: {{preset}}', planFilled: 'Усі підходи заповнено за базовою схемою', enableSound: 'Спочатку ввімкніть звук', soundCheck: 'Перевірка: старт підходу → перехід у відпочинок', fullscreenUnavailable: 'Повноекранний режим недоступний', notificationsUnsupported: 'Сповіщення не підтримуються браузером', notificationsOn: 'Сповіщення ввімкнено', notificationDenied: 'Дозвіл на сповіщення не отримано', historyCleared: 'Історію очищено', installed: 'Пульс встановлено на пристрій', installIos: 'На iPhone: «Поділитися» → «На початковий екран»' }
         },
         ru: {
           meta: { title: 'Пульс — интервальный таймер' },
@@ -445,14 +473,15 @@
           metrics: { work: 'Базовый подход', rest: 'Базовая пауза', rounds: 'Подходов', longRest: 'Длинный отдых', longRestEvery: 'Длинный после', prep: 'Подготовка' },
           units: { seconds: 'сек.', pieces: 'шт.', roundForms: 'подход|подхода|подходов' },
           plan: { title: 'Индивидуальные интервалы', description: 'Настройте работу и паузу после каждого подхода отдельно. Это важнее общей схемы.', aria: 'Индивидуальные интервалы подходов', round: 'Подход {{round}}', finish: 'завершение тренировки', pauseAfter: 'пауза после {{round}}-го', workAria: 'Время работы, подход {{round}}', restAria: 'Пауза после подхода {{round}}', finishShort: 'финиш' },
-          actions: { reset: 'Сбросить', start: 'Старт', pause: 'Пауза', continue: 'Продолжить', again: 'Ещё раз', skip: 'Пропустить', remind: 'Напомнить', fillPlan: 'Заполнить по схеме', savePlan: 'Сохранить эту схему', clear: 'Очистить' },
+          actions: { reset: 'Сбросить', start: 'Старт', pause: 'Пауза', continue: 'Продолжить', again: 'Ещё раз', skip: 'Пропустить', remind: 'Напомнить', fillPlan: 'Заполнить по схеме', savePlan: 'Сохранить в мои тренировки', clear: 'Очистить' },
           presets: { eyebrow: '10 спортивных сценариев', title: 'Быстрый старт под вид тренировки', strength: 'Сила', muscle: 'Гипертрофия', tabata: 'Табата', crossfit: 'Кроссфит', running: 'Бег', boxing: 'Бокс', swim: 'Плавание', cycling: 'Велосипед', tennis: 'Теннис', mobility: 'Мобилити' },
+          cabinet: { eyebrow: 'МОЙ КАБИНЕТ', title: 'Мои сохранённые тренировки', description: 'Сохраните свою схему — она останется здесь после перезагрузки приложения.', empty: 'Здесь появятся ваши собственные схемы. Укажите название и нажмите «Сохранить в мои тренировки».', summary: '{{rounds}} {{roundWord}} · {{duration}}', loadAria: 'Открыть тренировку «{{name}}»', removeAria: 'Удалить тренировку «{{name}}»' },
           themes: { strength: 'Контроль веса и длинное восстановление', muscle: 'Объём, темп и качественные повторения', tabata: 'Максимум мощности за короткий интервал', crossfit: 'Работа на пределе. Ритм решает всё', running: 'Скорость, дыхание и ровный темп', boxing: 'Раунд за раундом. Держите темп', swim: 'Дистанция, техника, чистое дыхание', cycling: 'Каденс, мощность и восстановление', tennis: 'Реакция, ноги и следующий розыгрыш', mobility: 'Плавное движение и контроль тела' },
           history: { eyebrow: 'История', title: 'Завершённые тренировки', empty: 'Завершённые тренировки будут появляться здесь. История хранится на этом устройстве.' },
           sound: { settings: 'НАСТРОЙКИ ТАЙМЕРА', title: 'Выберите настоящий звук', close: 'Закрыть выбор звука', description: 'Это реальные аудиозаписи, а не короткий синтетический писк. Нажмите на вариант — он проиграет старт подхода и переход в отдых.', aria: 'Выбор звука таймера', repeat: 'Повторить выбранную пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистый колокол', ringDetail: 'реальный усиленный колокол · 1,7 сек.', gongDetail: 'настоящий глубокий гонг · 5,6 сек.', whistleDetail: 'настоящий длинный свист · 2,1 сек.', chimeDetail: 'усиленный тройной звон · 1,8 сек.' },
           next: { prep: 'Сначала: подготовка {{time}}', round: 'Дальше: подход {{round}}', pause: 'Дальше: пауза {{time}}', finish: 'Дальше: завершение тренировки', complete: 'Отличная работа. Схему можно запустить снова.' },
           notify: { completeTitle: 'Тренировка завершена', completeBody: '{{name}}: {{count}} {{rounds}} выполнено.' },
-          messages: { soundSelected: 'Выбрано: {{sound}}', configSaved: 'Схема сохранена на этом устройстве', completedSaved: 'Тренировка сохранена в историю', reset: 'Таймер сброшен', presetSelected: 'Выбрано: {{preset}}', planFilled: 'Все подходы заполнены по базовой схеме', enableSound: 'Сначала включите звук', soundCheck: 'Проверка: старт подхода → переход в отдых', fullscreenUnavailable: 'Полноэкранный режим недоступен', notificationsUnsupported: 'Уведомления не поддерживаются браузером', notificationsOn: 'Уведомления включены', notificationDenied: 'Разрешение на уведомления не получено', historyCleared: 'История очищена', installed: 'Пульс установлен на устройство', installIos: 'На iPhone: «Поделиться» → «На экран Домой»' }
+          messages: { soundSelected: 'Выбрано: {{sound}}', configSaved: 'Схема сохранена на этом устройстве', savedWorkoutCreated: 'Сохранено в «Мои тренировки»', savedWorkoutUpdated: 'Сохранённая схема обновлена', savedWorkoutLoaded: 'Открыто: {{name}}', savedWorkoutDeleted: 'Схема удалена', completedSaved: 'Тренировка сохранена в историю', reset: 'Таймер сброшен', presetSelected: 'Выбрано: {{preset}}', planFilled: 'Все подходы заполнены по базовой схеме', enableSound: 'Сначала включите звук', soundCheck: 'Проверка: старт подхода → переход в отдых', fullscreenUnavailable: 'Полноэкранный режим недоступен', notificationsUnsupported: 'Уведомления не поддерживаются браузером', notificationsOn: 'Уведомления включены', notificationDenied: 'Разрешение на уведомления не получено', historyCleared: 'История очищена', installed: 'Пульс установлен на устройство', installIos: 'На iPhone: «Поделиться» → «На экран Домой»' }
         }
       };
       function t(key, values = {}) {
@@ -528,6 +557,19 @@
         return config;
       }
 
+      function createSavedWorkoutId() {
+        return globalThis.crypto?.randomUUID?.() || `workout-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+      }
+      function normalizeSavedWorkout(input = {}) {
+        if (!input || typeof input !== 'object') return null;
+        const config = normalizeConfig(input.config || input);
+        return {
+          id: typeof input.id === 'string' && input.id ? input.id : createSavedWorkoutId(),
+          config,
+          savedAt: numberInRange(input.savedAt, 0, Number.MAX_SAFE_INTEGER, Date.now()),
+        };
+      }
+
       function readStoredJSON(key, fallback) {
         try {
           const value = JSON.parse(localStorage.getItem(key) || 'null');
@@ -540,6 +582,7 @@
       const storedSettings = readStoredJSON('pulse-settings', {});
       const storedSession = readStoredJSON('pulse-active-workout', null);
       const storedHistory = readStoredJSON('pulse-history', []);
+      const storedSavedWorkouts = readStoredJSON('pulse-saved-workouts', []);
       // Переносимо лише стандартні старі пресети, але ніколи не змінюємо власну назву тренування користувача.
       if (storedConfig && !localStorage.getItem('pulse-language') && Object.values(translations.ru.presets).includes(storedConfig.name)) {
         storedConfig.name = t(`presets.${storedConfig.id || 'strength'}`);
@@ -557,6 +600,8 @@
         language: appLanguage,
         soundProfile: storedSettings.soundProfile || localStorage.getItem('pulse-sound-profile') || 'ring',
         history: Array.isArray(storedHistory) ? storedHistory : [],
+        savedWorkouts: Array.isArray(storedSavedWorkouts) ? storedSavedWorkouts.map(normalizeSavedWorkout).filter(Boolean).slice(0, 30) : [],
+        activeSavedWorkoutId: null,
         wakeLock: null,
         activePreset: storedSettings.activePreset ?? storedConfig?.id ?? 'strength',
         gesture: { enabled: false, stream: null, timer: null, canvas: null, context: null, previousFrame: null, sweep: null, quietSince: 0, lastTriggeredAt: 0 },
@@ -591,6 +636,9 @@
       }
       function persistWorkoutConfig() {
         localStorage.setItem('pulse-config', JSON.stringify(state.config));
+      }
+      function persistSavedWorkouts() {
+        localStorage.setItem('pulse-saved-workouts', JSON.stringify(state.savedWorkouts));
       }
       function clearActiveWorkout() {
         localStorage.removeItem('pulse-active-workout');
@@ -662,7 +710,7 @@
         if (previousNames.includes(state.config.name)) state.config.name = t(`presets.${state.config.id || 'strength'}`);
         persistWorkoutConfig();
         persistSettings();
-        applyLanguage(); setInputsFromConfig(); updateEstimate(); render(); renderHistory(); renderSoundOptions();
+        applyLanguage(); setInputsFromConfig(); updateEstimate(); render(); renderHistory(); renderSavedWorkouts(); renderSoundOptions();
       }
 
       function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
@@ -985,6 +1033,21 @@
       function renderPresetButtons() {
         el('presetGrid').innerHTML = presets.map((preset) => `<button class="preset ${state.activePreset === preset.id ? 'active' : ''}" data-preset="${preset.id}"><span class="emoji">${preset.icon}</span><strong>${t(`presets.${preset.id}`)}</strong><small>${preset.detail}</small></button>`).join('');
       }
+      function renderSavedWorkouts() {
+        const content = el('savedWorkoutsContent');
+        if (!state.savedWorkouts.length) {
+          content.innerHTML = `<p class="saved-workouts-empty">${t('cabinet.empty')}</p>`;
+          return;
+        }
+        content.innerHTML = `<div class="saved-workout-list">${state.savedWorkouts.map((item) => {
+          const config = normalizeConfig(item.config);
+          const name = escapeHtml(config.name);
+          const id = escapeHtml(item.id);
+          const active = item.id === state.activeSavedWorkoutId ? ' active' : '';
+          const summary = t('cabinet.summary', { rounds: config.rounds, roundWord: roundWord(config.rounds), duration: formatTime(estimateWorkout(config)) });
+          return `<article class="saved-workout-item${active}"><button type="button" class="saved-workout-load" data-saved-workout="${id}" aria-label="${escapeHtml(t('cabinet.loadAria', { name: config.name }))}"><span class="saved-workout-mark">✦</span><span class="saved-workout-copy"><strong class="saved-workout-name">${name}</strong><span class="saved-workout-detail">${summary}</span></span></button><button type="button" class="saved-workout-delete" data-delete-saved-workout="${id}" aria-label="${escapeHtml(t('cabinet.removeAria', { name: config.name }))}">×</button></article>`;
+        }).join('')}</div>`;
+      }
       function renderHistory() {
         const content = el('historyContent');
         if (!state.history.length) {
@@ -993,7 +1056,7 @@
         }
         content.innerHTML = `<div class="history-list">${state.history.slice(0, 5).map((item) => `<div class="history-item"><div><strong>${escapeHtml(item.name)}</strong><span>${item.rounds} ${roundWord(item.rounds)} · ${item.date}</span></div><time>${item.duration}</time></div>`).join('')}</div>`;
       }
-      function escapeHtml(value) { return value.replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#039;', '"':'&quot;' }[char])); }
+      function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#039;', '"':'&quot;' }[char])); }
       function showToast(message) {
         clearTimeout(toastTimer);
         el('toast').textContent = message;
@@ -1002,12 +1065,47 @@
       }
       function saveConfig() {
         state.config = configFromInputs();
+        state.config.name = String(state.config.name || '').trim() || t('setup.defaultWorkout');
+        const currentSaved = state.savedWorkouts.find((item) => item.id === state.activeSavedWorkoutId);
+        const matchingName = currentSaved || state.savedWorkouts.find((item) => String(item.config.name || '').trim().toLocaleLowerCase() === state.config.name.toLocaleLowerCase());
+        const savedWorkout = {
+          id: matchingName?.id || createSavedWorkoutId(),
+          config: normalizeConfig(state.config),
+          savedAt: Date.now(),
+        };
+        state.activeSavedWorkoutId = savedWorkout.id;
+        state.savedWorkouts = [savedWorkout, ...state.savedWorkouts.filter((item) => item.id !== savedWorkout.id)].slice(0, 30);
         persistWorkoutConfig();
         persistSettings();
+        persistSavedWorkouts();
         persistActiveWorkout(true);
-        showToast(t('messages.configSaved'));
+        renderSavedWorkouts();
+        showToast(t(matchingName ? 'messages.savedWorkoutUpdated' : 'messages.savedWorkoutCreated'));
         if (state.phase === 'ready' || state.phase === 'complete') resetTimer(false);
         else render();
+      }
+      function loadSavedWorkout(id) {
+        const savedWorkout = state.savedWorkouts.find((item) => item.id === id);
+        if (!savedWorkout) return;
+        state.config = normalizeConfig(savedWorkout.config);
+        state.activePreset = null;
+        state.activeSavedWorkoutId = savedWorkout.id;
+        setInputsFromConfig();
+        persistWorkoutConfig();
+        persistSettings();
+        updateEstimate();
+        resetTimer(false);
+        renderSavedWorkouts();
+        showToast(t('messages.savedWorkoutLoaded', { name: state.config.name }));
+      }
+      function deleteSavedWorkout(id) {
+        const exists = state.savedWorkouts.some((item) => item.id === id);
+        if (!exists) return;
+        state.savedWorkouts = state.savedWorkouts.filter((item) => item.id !== id);
+        if (state.activeSavedWorkoutId === id) state.activeSavedWorkoutId = null;
+        persistSavedWorkouts();
+        renderSavedWorkouts();
+        showToast(t('messages.savedWorkoutDeleted'));
       }
       function prepareAudio() {
         audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
@@ -1242,9 +1340,10 @@
         if (!preset) return;
         state.config = normalizeConfig({ ...preset, name: localizedPreset(preset).name });
         state.activePreset = id;
+        state.activeSavedWorkoutId = null;
         setInputsFromConfig();
         persistWorkoutConfig(); persistSettings();
-        updateEstimate(); resetTimer(false); showToast(t('messages.presetSelected', { preset: localizedPreset(preset).name }));
+        updateEstimate(); resetTimer(false); renderSavedWorkouts(); showToast(t('messages.presetSelected', { preset: localizedPreset(preset).name }));
       }
       function adjustField(key, delta) {
         const input = el(key);
@@ -1268,6 +1367,12 @@
       el('skipButton').addEventListener('click', () => { if (state.phase !== 'ready' && state.phase !== 'complete') advancePhase(); });
       el('saveButton').addEventListener('click', saveConfig);
       el('presetGrid').addEventListener('click', (event) => { const button = event.target.closest('[data-preset]'); if (button) applyPreset(button.dataset.preset); });
+      el('savedWorkoutsContent').addEventListener('click', (event) => {
+        const deleteButton = event.target.closest('[data-delete-saved-workout]');
+        if (deleteButton) { deleteSavedWorkout(deleteButton.dataset.deleteSavedWorkout); return; }
+        const loadButton = event.target.closest('[data-saved-workout]');
+        if (loadButton) loadSavedWorkout(loadButton.dataset.savedWorkout);
+      });
       el('soundToggle').addEventListener('click', () => { state.muted = !state.muted; persistSettings(); render(); });
       el('soundOptions').addEventListener('click', (event) => { const button = event.target.closest('[data-sound]'); if (button) selectSoundProfile(button.dataset.sound); });
       el('soundTestButton').addEventListener('click', openSoundDialog);
@@ -1317,6 +1422,7 @@
       if (restoredActiveWorkout) { persistWorkoutConfig(); persistSettings(); render(); }
       else resetTimer(false);
       renderHistory();
+      renderSavedWorkouts();
     </script>
   </body>
 </html>
