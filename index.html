@@ -44,15 +44,22 @@
           var(--bg);
         transition: background .48s ease;
       }
-      body[data-timer-phase="prep"], body[data-timer-phase="work"] {
+      body[data-timer-phase="prep"] {
         background:
-          radial-gradient(circle at 50% -18%, rgba(126, 255, 185, .48), transparent 45rem),
-          linear-gradient(155deg, #062317 0%, #0b5d36 56%, #123c2b 100%);
+          radial-gradient(circle at 50% -22%, rgba(255,255,255,.055), transparent 38rem),
+          linear-gradient(155deg, #07100d 0%, #0a1612 56%, #07110e 100%);
+      }
+      body[data-timer-phase="work"] {
+        background:
+          radial-gradient(circle at 50% -18%, rgba(93, 255, 146, .86), transparent 43rem),
+          radial-gradient(circle at 10% 100%, rgba(0, 255, 112, .34), transparent 34rem),
+          linear-gradient(155deg, #004818 0%, #00a83e 53%, #006e2c 100%);
       }
       body[data-timer-phase="rest"] {
         background:
-          radial-gradient(circle at 50% -18%, rgba(255, 141, 151, .42), transparent 45rem),
-          linear-gradient(155deg, #311015 0%, #8b222c 56%, #45151b 100%);
+          radial-gradient(circle at 50% -18%, rgba(255, 99, 116, .9), transparent 43rem),
+          radial-gradient(circle at 10% 100%, rgba(255, 18, 54, .36), transparent 34rem),
+          linear-gradient(155deg, #65000e 0%, #d40f2b 53%, #8c0017 100%);
       }
       button, input { font: inherit; }
       button { cursor: pointer; }
@@ -73,8 +80,9 @@
       .card { border: 1px solid var(--line); background: var(--panel); box-shadow: 0 18px 70px rgba(0,0,0,.24); backdrop-filter: blur(16px); border-radius: var(--radius); }
 
       .timer-card { min-height: 625px; padding: 26px; position: relative; overflow: hidden; display: flex; flex-direction: column; background: linear-gradient(145deg, rgba(var(--accent-rgb), .17), transparent 46%), var(--panel); transition: background .5s ease, box-shadow .5s ease, border-color .5s ease; }
-      .timer-card.phase-work, .timer-card.phase-prep { background: linear-gradient(145deg, rgba(126, 255, 185, .34), rgba(9, 70, 40, .42) 53%, rgba(9, 20, 15, .8)), var(--panel); border-color: rgba(126, 255, 185, .55); box-shadow: 0 20px 76px rgba(26, 182, 98, .25); }
-      .timer-card.phase-rest { background: linear-gradient(145deg, rgba(255, 126, 137, .32), rgba(116, 22, 30, .42) 53%, rgba(27, 11, 13, .82)), var(--panel); border-color: rgba(255, 126, 137, .56); box-shadow: 0 20px 76px rgba(218, 54, 68, .27); }
+      .timer-card.phase-prep { background: linear-gradient(145deg, rgba(255,255,255,.055), rgba(11, 23, 18, .52) 53%, rgba(5, 12, 9, .88)), var(--panel); border-color: rgba(255,255,255,.13); box-shadow: 0 20px 76px rgba(0,0,0,.32); }
+      .timer-card.phase-work { background: linear-gradient(145deg, rgba(92, 255, 143, .58), rgba(0, 157, 57, .72) 53%, rgba(0, 57, 24, .9)), var(--panel); border-color: rgba(125, 255, 165, .92); box-shadow: 0 20px 82px rgba(0, 255, 104, .48); }
+      .timer-card.phase-rest { background: linear-gradient(145deg, rgba(255, 91, 111, .61), rgba(207, 8, 42, .76) 53%, rgba(92, 0, 17, .9)), var(--panel); border-color: rgba(255, 130, 143, .92); box-shadow: 0 20px 82px rgba(255, 15, 54, .48); }
       .timer-card::after { content: ""; position: absolute; width: 310px; height: 310px; right: -125px; bottom: -135px; border-radius: 50%; background: radial-gradient(circle, rgba(var(--accent-rgb), .25), transparent 66%); pointer-events: none; z-index: 0; transition: background .5s ease; }
       .timer-card > * { position: relative; z-index: 1; }
       .timer-heading, .section-heading, .estimate { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
@@ -944,7 +952,7 @@
       function render() {
         const meta = phaseMeta(state.phase);
         const theme = applySportTheme();
-        const phaseColor = state.phase === 'rest' ? '#ff7b86' : ['prep', 'work'].includes(state.phase) ? '#91ffc0' : meta.tone === 'secondary' ? theme.secondary : theme.accent;
+        const phaseColor = state.phase === 'work' ? '#39ff78' : state.phase === 'rest' ? '#ff3148' : meta.tone === 'secondary' ? theme.secondary : theme.accent;
         const duration = state.phaseDuration || 1;
         const progress = state.phase === 'ready' || state.phase === 'complete' ? 0 : clamp(1 - state.secondsLeft / duration, 0, 1);
         document.body.dataset.timerPhase = state.phase;
@@ -1169,7 +1177,13 @@
         }
         navigator.vibrate?.(phase === 'work' ? [85, 55, 105] : phase === 'rest' ? [120, 55, 120] : [70, 40, 70]);
         el('timerCard').classList.remove('flash'); void el('timerCard').offsetWidth; el('timerCard').classList.add('flash');
-        render(); persistActiveWorkout(true);
+        const visualCueDelay = phase === 'work' ? cueDelay + 70 : 0;
+        if (visualCueDelay) {
+          setTimeout(() => {
+            if (state.phase === phase && state.timer) render();
+          }, visualCueDelay);
+        } else render();
+        persistActiveWorkout(true);
       }
       function tick() {
         state.secondsLeft = Math.max(0, (state.endAt - Date.now()) / 1000);
