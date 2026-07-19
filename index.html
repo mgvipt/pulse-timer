@@ -308,7 +308,6 @@
         </div>
         <div class="top-actions">
           <button class="icon-button" id="soundToggle" aria-label="Увімкнути або вимкнути звук" data-i18n-aria-label="aria.soundToggle">🔊 <span>Звук</span></button>
-          <button class="icon-button" id="voiceToggle" aria-label="Увімкнути або вимкнути голос тренера" data-i18n-aria-label="aria.voiceToggle">🗣 <span>Голос</span></button>
           <button class="icon-button" id="soundTestButton" aria-label="Відкрити вибір звуку" data-i18n-aria-label="aria.soundPicker">🔔 <span>Звуки</span></button>
           <button class="icon-button" id="gestureToggle" aria-label="Увімкнути безконтактне керування жестом перед камерою" data-i18n-aria-label="aria.gesture">🖐 <span>Жест</span></button>
           <button class="icon-button" id="languageToggle" aria-label="Змінити мову">🌐 <span>UA</span></button>
@@ -504,8 +503,8 @@
           meta: { title: 'Пульс — інтервальний таймер' },
           brand: { tagline: 'Інтервальний таймер для тренувань' },
           nav: { timer: 'Таймер', plan: 'План', presets: 'Пресети' },
-          aria: { navigation: 'Розділи застосунку', setup: 'Налаштування тренування', soundToggle: 'Увімкнути або вимкнути звук', voiceToggle: 'Увімкнути або вимкнути голос тренера', soundPicker: 'Відкрити вибір звуку', gesture: 'Увімкнути безконтактне керування одним помахом перед камерою', install: 'Встановити застосунок на телефон', focus: 'Відкрити повноекранний режим' },
-          controls: { sound: 'Звук', muted: 'Без звуку', voice: 'Голос', voiceOff: 'Голос: викл.', voiceUnavailable: 'Лише сигнали', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: увімк.', install: 'Встановити', focus: 'Фокус', exitFocus: 'Вийти', language: 'Змінити мову' },
+          aria: { navigation: 'Розділи застосунку', setup: 'Налаштування тренування', soundToggle: 'Увімкнути або вимкнути звук', soundPicker: 'Відкрити вибір звуку', gesture: 'Увімкнути безконтактне керування одним помахом перед камерою', install: 'Встановити застосунок на телефон', focus: 'Відкрити повноекранний режим' },
+          controls: { sound: 'Звук', muted: 'Без звуку', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: увімк.', install: 'Встановити', focus: 'Фокус', exitFocus: 'Вийти', language: 'Змінити мову' },
           timer: { currentWorkout: 'Поточне тренування', sportMode: 'СПОРТИВНИЙ РЕЖИМ', progress: 'Прогрес підходів', ready: 'готовність', pressStart: 'Натисніть «Старт»', getReady: 'Приготуйтеся', completed: '{{count}} {{rounds}} виконано', roundOf: 'Підхід {{round}} з {{total}}', footer: 'У кожного підходу — свій час роботи та паузи. Змінюйте план до старту.', soundOn: '{{sound}} · увімкнено', soundOff: 'сигнали вимкнено' },
           phase: { ready: 'готовність', prep: 'підготовка', work: 'підхід', rest: 'відпочинок', complete: 'готово' },
           gesture: { activeTitle: 'Жест перед камерою ввімкнено', activeCopy: 'Проведіть рукою від одного краю телефона до іншого прямо перед камерою — таймер запуститься або зупиниться.', title: 'Один широкий прохід рукою перед фронтальною камерою запускає або зупиняє таймер', unavailable: 'Для жесту потрібен доступ до камери', stopped: 'Таймер зупинено жестом', started: 'Таймер запущено жестом', https: 'Для жесту потрібен доступ до камери', disabled: 'Керування жестом вимкнено', cameraOn: 'Камеру ввімкнено. Проведіть рукою через телефон від краю до краю — прев’ю не показується.', cameraError: 'Не вдалося ввімкнути камеру для жесту. Дозвольте доступ до камери в налаштуваннях iPhone.' },
@@ -523,7 +522,6 @@
           pulse: { eyebrow: 'ВІДНОВЛЕННЯ', title: 'Перевірка пульсу камерою', description: 'Закрийте задню камеру пальцем і тримайте телефон нерухомо близько 20 секунд. Результат орієнтовний, не медичний.', ready: 'Готово до перевірки.', measuring: 'Зчитую пульсацію… тримайте палець нерухомо.', noSignal: 'Сигнал нечіткий. Щільніше закрийте задню камеру пальцем і спробуйте при яскравому світлі.', unavailable: 'Камера недоступна для перевірки пульсу.', stopped: 'Перевірку пульсу зупинено.', bpm: 'уд./хв · орієнтовно' },
           coach: { shared: 'Посилання тренера готове — надішліть його клієнту.', copied: 'Посилання скопійовано. Надішліть його клієнту.', imported: 'Відкрито тренування від тренера.' },
           live: { ready: 'Налаштуйте перший підхід — вправу, повтори та вагу.', work: '{{exercise}}{{detail}}', rest: 'Відновлення. Дихайте рівно — наступний підхід уже готовий.', prep: 'Приготуйтеся: {{exercise}}', complete: 'Тренування завершено. Збережіть відчуття та відновіться.' },
-          voice: { prep: 'Приготуйтеся. Далі {{exercise}}.', work: 'Старт. {{exercise}}.', rest: 'Відпочинок. Наступний підхід скоро.', complete: 'Тренування завершено. Гарна робота.', seconds: 'Залишилося {{seconds}} секунд.' },
           sound: { settings: 'НАЛАШТУВАННЯ ТАЙМЕРА', title: 'Оберіть справжній звук', close: 'Закрити вибір звуку', description: 'Це реальні аудіозаписи, а не короткий синтетичний писк. Натисніть на варіант — він відтворить старт підходу та перехід у відпочинок.', aria: 'Вибір звуку таймера', repeat: 'Повторити вибрану пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистий дзвін', ringDetail: 'справжній посилений дзвін · 1,7 сек.', gongDetail: 'справжній глибокий гонг · 5,6 сек.', whistleDetail: 'справжній довгий свист · 2,1 сек.', chimeDetail: 'посилений потрійний дзвін · 1,8 сек.' },
           next: { prep: 'Спочатку: підготовка {{time}}', round: 'Далі: підхід {{round}}', pause: 'Далі: пауза {{time}}', finish: 'Далі: завершення тренування', complete: 'Чудова робота. Схему можна запустити знову.' },
           notify: { completeTitle: 'Тренування завершено', completeBody: '{{name}}: виконано {{count}} {{rounds}}.' },
@@ -533,8 +531,8 @@
           meta: { title: 'Пульс — интервальный таймер' },
           brand: { tagline: 'Интервальный таймер для тренировок' },
           nav: { timer: 'Таймер', plan: 'План', presets: 'Пресеты' },
-          aria: { navigation: 'Разделы приложения', setup: 'Настройка тренировки', soundToggle: 'Включить или выключить звук', voiceToggle: 'Включить или выключить голос тренера', soundPicker: 'Открыть выбор звука', gesture: 'Включить бесконтактное управление одним взмахом перед камерой', install: 'Установить приложение на телефон', focus: 'Открыть полноэкранный режим' },
-          controls: { sound: 'Звук', muted: 'Без звука', voice: 'Голос', voiceOff: 'Голос: выкл.', voiceUnavailable: 'Только сигналы', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: вкл', install: 'Установить', focus: 'Фокус', exitFocus: 'Выйти', language: 'Сменить язык' },
+          aria: { navigation: 'Разделы приложения', setup: 'Настройка тренировки', soundToggle: 'Включить или выключить звук', soundPicker: 'Открыть выбор звука', gesture: 'Включить бесконтактное управление одним взмахом перед камерой', install: 'Установить приложение на телефон', focus: 'Открыть полноэкранный режим' },
+          controls: { sound: 'Звук', muted: 'Без звука', sounds: 'Звуки', gesture: 'Жест', gestureOn: 'Жест: вкл', install: 'Установить', focus: 'Фокус', exitFocus: 'Выйти', language: 'Сменить язык' },
           timer: { currentWorkout: 'Текущая тренировка', sportMode: 'СПОРТИВНЫЙ РЕЖИМ', progress: 'Прогресс подходов', ready: 'готовность', pressStart: 'Нажмите «Старт»', getReady: 'Приготовьтесь', completed: '{{count}} {{rounds}} выполнено', roundOf: 'Подход {{round}} из {{total}}', footer: 'У каждого подхода — своё время работы и паузы. Меняйте план до старта.', soundOn: '{{sound}} · включён', soundOff: 'сигналы выключены' },
           phase: { ready: 'готовность', prep: 'подготовка', work: 'подход', rest: 'отдых', complete: 'готово' },
           gesture: { activeTitle: 'Жест перед камерой включён', activeCopy: 'Проведите рукой от одного края телефона до другого прямо перед камерой — таймер запустится или остановится.', title: 'Один широкий проход рукой перед фронтальной камерой запускает или останавливает таймер', unavailable: 'Для жеста нужен доступ к камере', stopped: 'Таймер остановлен жестом', started: 'Таймер запущен жестом', https: 'Для жеста нужен доступ к камере', disabled: 'Управление жестом выключено', cameraOn: 'Камера включена. Проведите рукой через телефон от края до края — превью не показывается.', cameraError: 'Не удалось включить камеру для жеста. Разрешите доступ к камере в настройках iPhone.' },
@@ -552,7 +550,6 @@
           pulse: { eyebrow: 'ВОССТАНОВЛЕНИЕ', title: 'Проверка пульса камерой', description: 'Закройте заднюю камеру пальцем и держите телефон неподвижно около 20 секунд. Результат ориентировочный, не медицинский.', ready: 'Готово к проверке.', measuring: 'Считываю пульсацию… держите палец неподвижно.', noSignal: 'Сигнал нечёткий. Плотнее закройте заднюю камеру пальцем и попробуйте при ярком свете.', unavailable: 'Камера недоступна для проверки пульса.', stopped: 'Проверка пульса остановлена.', bpm: 'уд./мин · ориентировочно' },
           coach: { shared: 'Ссылка тренера готова — отправьте её клиенту.', copied: 'Ссылка скопирована. Отправьте её клиенту.', imported: 'Открыта тренировка от тренера.' },
           live: { ready: 'Настройте первый подход — упражнение, повторы и вес.', work: '{{exercise}}{{detail}}', rest: 'Восстановление. Дышите ровно — следующий подход уже готов.', prep: 'Приготовьтесь: {{exercise}}', complete: 'Тренировка завершена. Сохраните ощущения и восстановитесь.' },
-          voice: { prep: 'Приготовьтесь. Дальше {{exercise}}.', work: 'Старт. {{exercise}}.', rest: 'Отдых. Следующий подход скоро.', complete: 'Тренировка завершена. Хорошая работа.', seconds: 'Осталось {{seconds}} секунд.' },
           sound: { settings: 'НАСТРОЙКИ ТАЙМЕРА', title: 'Выберите настоящий звук', close: 'Закрыть выбор звука', description: 'Это реальные аудиозаписи, а не короткий синтетический писк. Нажмите на вариант — он проиграет старт подхода и переход в отдых.', aria: 'Выбор звука таймера', repeat: 'Повторить выбранную пару', ring: 'Ринг', gong: 'Гонг', whistle: 'Свисток тренера', chime: 'Чистый колокол', ringDetail: 'реальный усиленный колокол · 1,7 сек.', gongDetail: 'настоящий глубокий гонг · 5,6 сек.', whistleDetail: 'настоящий длинный свист · 2,1 сек.', chimeDetail: 'усиленный тройной звон · 1,8 сек.' },
           next: { prep: 'Сначала: подготовка {{time}}', round: 'Дальше: подход {{round}}', pause: 'Дальше: пауза {{time}}', finish: 'Дальше: завершение тренировки', complete: 'Отличная работа. Схему можно запустить снова.' },
           notify: { completeTitle: 'Тренировка завершена', completeBody: '{{name}}: {{count}} {{rounds}} выполнено.' },
@@ -681,7 +678,6 @@
         endAt: null,
         timer: null,
         muted: storedSettings.muted ?? localStorage.getItem('pulse-muted') === 'true',
-        voiceEnabled: storedSettings.voiceEnabled ?? true,
         language: appLanguage,
         soundProfile: storedSettings.soundProfile || localStorage.getItem('pulse-sound-profile') || 'ring',
         history: Array.isArray(storedHistory) ? storedHistory : [],
@@ -691,7 +687,6 @@
         activePreset: storedSettings.activePreset ?? storedConfig?.id ?? 'strength',
         gesture: { enabled: false, stream: null, timer: null, canvas: null, context: null, previousFrame: null, sweep: null, quietSince: 0, lastTriggeredAt: 0 },
         smartRestFeedback: null,
-        voiceCountdownAt: null,
         pulse: { measuring: false, stream: null, frame: null, canvas: null, context: null, samples: [], startedAt: 0, lastSampleAt: 0, result: null, statusKey: 'ready' },
       };
 
@@ -714,10 +709,9 @@
       let lastSessionSaveAt = 0;
       const activeSamples = new Set();
       const samplePools = new Map();
-      const naturalVoiceName = /siri|enhanced|premium|natural|neural|google|microsoft/i;
 
       function persistSettings() {
-        const settings = { version: 2, language: appLanguage, muted: state.muted, voiceEnabled: state.voiceEnabled, soundProfile: state.soundProfile, activePreset: state.activePreset, updatedAt: Date.now() };
+        const settings = { version: 3, language: appLanguage, muted: state.muted, soundProfile: state.soundProfile, activePreset: state.activePreset, updatedAt: Date.now() };
         localStorage.setItem('pulse-settings', JSON.stringify(settings));
         localStorage.setItem('pulse-language', appLanguage);
         localStorage.setItem('pulse-muted', String(state.muted));
@@ -782,12 +776,11 @@
         document.querySelectorAll('[data-i18n-aria-label]').forEach((node) => { node.setAttribute('aria-label', t(node.dataset.i18nAriaLabel)); });
         document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => { node.setAttribute('placeholder', t(node.dataset.i18nPlaceholder)); });
         const labels = {
-          soundToggle: 'aria.soundToggle', voiceToggle: 'aria.voiceToggle', soundTestButton: 'aria.soundPicker', gestureToggle: 'aria.gesture',
+          soundToggle: 'aria.soundToggle', soundTestButton: 'aria.soundPicker', gestureToggle: 'aria.gesture',
           installButton: 'aria.install', fullscreenButton: 'aria.focus', languageToggle: 'controls.language',
         };
         Object.entries(labels).forEach(([id, key]) => el(id)?.setAttribute('aria-label', t(key)));
         el('soundTestButton').innerHTML = `🔔 <span>${t('controls.sounds')}</span>`;
-        renderCoachVoiceToggle();
         el('installButton').innerHTML = `⇩ <span>${t('controls.install')}</span>`;
         el('fullscreenButton').innerHTML = `⛶ <span>${t('controls.focus')}</span>`;
         el('languageToggle').innerHTML = `🌐 <span>${appLanguage === 'uk' ? 'UA' : 'RU'}</span>`;
@@ -801,28 +794,6 @@
         persistWorkoutConfig();
         persistSettings();
         applyLanguage(); setInputsFromConfig(); updateEstimate(); render(); renderHistory(); renderSavedWorkouts(); renderSoundOptions(); renderProgressDashboard(); renderPulseCheck();
-      }
-
-      // Дешёвый системный синтезатор звучит по-разному на каждом устройстве.
-      // Берём только голоса, помеченные ОС как качественные, без роботизированного fallback.
-      function naturalCoachVoice() {
-        if (!('speechSynthesis' in window)) return null;
-        const language = appLanguage === 'uk' ? 'uk' : 'ru';
-        const voices = window.speechSynthesis.getVoices().filter((voice) => voice.lang.toLowerCase().startsWith(language));
-        return voices.find((voice) => naturalVoiceName.test(`${voice.name} ${voice.voiceURI}`)) || null;
-      }
-      function renderCoachVoiceToggle() {
-        const button = el('voiceToggle');
-        if (!button) return;
-        const voiceAvailable = Boolean(naturalCoachVoice());
-        button.disabled = !voiceAvailable;
-        button.title = voiceAvailable ? t('aria.voiceToggle') : t('controls.voiceUnavailable');
-        button.innerHTML = !voiceAvailable
-          ? `🔔 <span>${t('controls.voiceUnavailable')}</span>`
-          : state.voiceEnabled ? `🗣 <span>${t('controls.voice')}</span>` : `🔇 <span>${t('controls.voiceOff')}</span>`;
-      }
-      function refreshNativeVoices() {
-        if (document.readyState !== 'loading') applyLanguage();
       }
 
       function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
@@ -1292,21 +1263,6 @@
         showToast(t(kind === 'hard' ? 'smartRest.added' : kind === 'easy' ? 'smartRest.reduced' : 'smartRest.unchanged'));
         if (state.timer && state.secondsLeft <= 0) advancePhase();
       }
-      function speakCoach(key, values = {}) {
-        if (!state.voiceEnabled || !('speechSynthesis' in window)) return;
-        const voice = naturalCoachVoice();
-        if (!voice) return;
-        try {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance(t(`voice.${key}`, values));
-          utterance.voice = voice;
-          utterance.lang = voice.lang;
-          utterance.volume = 1;
-          utterance.rate = key === 'work' ? .94 : .88;
-          utterance.pitch = 1;
-          window.speechSynthesis.speak(utterance);
-        } catch (_) { /* Voice prompts are optional. */ }
-      }
       function historySeconds(item) {
         if (Number.isFinite(Number(item.seconds))) return Number(item.seconds);
         const [minutes, seconds] = String(item.duration || '').split(':').map(Number);
@@ -1617,7 +1573,6 @@
       function startPhase(phase, cueDelay = 0) {
         state.phase = phase;
         state.smartRestFeedback = null;
-        state.voiceCountdownAt = null;
         state.phaseDuration = phaseDuration(phase);
         state.secondsLeft = state.phaseDuration;
         state.endAt = Date.now() + state.phaseDuration * 1000;
@@ -1636,19 +1591,10 @@
             if (state.phase === phase && state.timer) render();
           }, visualCueDelay);
         } else render();
-        const coachKey = phase === 'prep' ? 'prep' : phase === 'work' ? 'work' : phase === 'rest' ? 'rest' : null;
-        if (coachKey) setTimeout(() => {
-          if (state.phase === phase && state.timer) speakCoach(coachKey, { exercise: currentExercise() });
-        }, phase === 'prep' ? 120 : cueDelay + 1350);
         persistActiveWorkout(true);
       }
       function tick() {
         state.secondsLeft = Math.max(0, (state.endAt - Date.now()) / 1000);
-        const rounded = Math.ceil(state.secondsLeft);
-        if (['work', 'rest'].includes(state.phase) && rounded <= 10 && rounded > 0 && state.voiceCountdownAt !== 10) {
-          state.voiceCountdownAt = 10;
-          speakCoach('seconds', { seconds: 10 });
-        }
         render(); persistActiveWorkout();
         if (state.secondsLeft <= 0) advancePhase();
       }
@@ -1673,7 +1619,6 @@
         localStorage.setItem('pulse-history', JSON.stringify(state.history));
         clearActiveWorkout();
         releaseWakeLock(); render(); renderHistory(); renderProgressDashboard(); showToast(t('messages.completedSaved'));
-        setTimeout(() => speakCoach('complete'), 1500);
       }
       function startOrPause() {
         if (state.phase === 'complete') { resetTimer(); return; }
@@ -1742,7 +1687,6 @@
         if (loadButton) loadSavedWorkout(loadButton.dataset.savedWorkout);
       });
       el('soundToggle').addEventListener('click', () => { state.muted = !state.muted; persistSettings(); render(); });
-      el('voiceToggle').addEventListener('click', () => { state.voiceEnabled = !state.voiceEnabled; persistSettings(); applyLanguage(); });
       el('soundOptions').addEventListener('click', (event) => { const button = event.target.closest('[data-sound]'); if (button) selectSoundProfile(button.dataset.sound); });
       el('soundTestButton').addEventListener('click', openSoundDialog);
       el('soundOpenButton').addEventListener('click', openSoundDialog);
@@ -1786,10 +1730,6 @@
       });
       if ('serviceWorker' in navigator && window.isSecureContext) {
         window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
-      }
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.addEventListener?.('voiceschanged', refreshNativeVoices);
-        setTimeout(refreshNativeVoices, 350);
       }
 
       el('languageToggle').addEventListener('click', switchLanguage);
