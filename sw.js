@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pulse-timer-v13';
+const CACHE_NAME = 'pulse-timer-v14';
 const APP_SHELL = [
   './', './index.html', './privacy.html', './manifest.json', './icon.svg',
   './assets/boxing-start-loud.wav', './assets/boxing-rest-loud.wav', './assets/clear-bell-loud.wav',
